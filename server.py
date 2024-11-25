@@ -15,6 +15,8 @@ def home():
 def webhook():
     print("Received webhook")
     try:
+        print("Headers:", request.headers)
+        print("Body:", request.data)  # Log the raw body
         data = request.get_json()  # Extrae JSON
         print("With data:", data)
         if not data:
