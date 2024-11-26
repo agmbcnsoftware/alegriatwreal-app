@@ -34,17 +34,25 @@ def webhook():
         incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
         print(f"Message body: {incoming_message}, From: {from_number}")
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
+                {"role": "user", "content": incoming_message},
+            ]
+        )
+        #response_message = "¡Gracias por tu mensaje! Pronto te responderemos."
+        response_message = response['choices'][0]['message']['content'].strip()
 
         # Enviar respuesta automatizada
-        response_message = "¡Gracias por tu mensaje! Pronto te responderemos."
+        
         message = client.messages.create(
             from_=twilio_number,
             body=response_message,
             to=from_number
         )
-
         
-
         print(f"Sent message SID: {message.sid}")
 
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
