@@ -14,11 +14,12 @@ def home():
 @app.route("/webhook", methods=["POST"])
 def webhook():
     print("Received webhook")
+    print("Headers:", request.headers)
+    print("Body:", request.data)  # Log the raw body
     try:
-        print("Headers:", request.headers)
-        print("Body:", request.data)  # Log the raw body
-        data = request.get_json()  # Extrae JSON
-        print("With data:", data)
+        
+        data = request.get_json(force=True)  # Extrae JSON
+        print("Parser json:", data)
         if not data:
             return jsonify({"error": "No JSON received"}), 400
         return jsonify({"message": "Webhook received successfully!"}), 200
