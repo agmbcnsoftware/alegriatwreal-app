@@ -26,16 +26,14 @@ def webhook():
     print("Received webhook")
     try:
         data = request.form
-        print("With data:", data)
 
         if not data:
             return jsonify({"error": "No data received"}), 400
 
         # Extraer información del mensaje
-        message_body = data.get("Body")  # Mensaje recibido
+        incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
-
-        print(f"Message body: {message_body}, From: {from_number}")
+        print(f"Message body: {incoming_message}, From: {from_number}")
 
         # Enviar respuesta automatizada
         response_message = "¡Gracias por tu mensaje! Pronto te responderemos."
