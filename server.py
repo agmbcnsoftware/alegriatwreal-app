@@ -26,18 +26,25 @@ def home():
 @app.route("/webhook", methods=["POST"])
 def webhook():
     print("Received webhook")
-    print("Headers:", request.headers)
-    print("Body:", request.data)  # Muestra el cuerpo crudo para depuración
     try:
-        # Intenta cargar el JSON de la solicitud
-        data = request.get_json(force=True, silent=True)
-        print("Parsed JSON:", data)
+        # Procesa los datos URL-encoded enviados por Twilio
+        data = request.form
+        print("With data:", data)
+
         if not data:
-            return jsonify({"error": "No JSON received"}), 400
-        return jsonify({"message": "Webhook received successfully!"}), 200
+            return jsonify({"error": "No data received"}), 400
+
+        # Accede a parámetros específicos
+        message_body = data.get("Body")  # El contenido del mensaje
+        from_number = data.get("From")  # El número que envía el mensaje
+
+        print(f"Message body: {message_body}, From: {from_number}")
+
+        return jsonify({"message": "Webhook processed successfully!"}), 200
     except Exception as e:
-        print("Error while processing webhook:", e)
-        return jsonify({"error": "Invalid JSON"}), 400
+        print("Error:", e)
+        return jsonify({"error": "Invalid data"}), 400
+
 
   
 if __name__ == "__main__":
