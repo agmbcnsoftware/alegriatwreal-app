@@ -13,6 +13,9 @@ app = Flask(__name__)
 # Twilio credentials from environment
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+print("Datos para twilio")
+print(TWILIO_AUTH_TOKEN[0:5])
+print(TWILIO_ACCOUNT_SID[0:5])
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 @app.route("/")
