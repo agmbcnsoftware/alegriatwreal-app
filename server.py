@@ -4,6 +4,8 @@ from flask import request
 import model
 from twilio.rest import Client
 import os
+import sys
+print(f"Python version: {sys.version}")
 
 
 app = Flask(__name__)
