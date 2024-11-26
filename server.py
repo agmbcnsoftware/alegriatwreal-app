@@ -2,9 +2,16 @@ from flask import Flask, jsonify
 from flask import render_template
 from flask import request
 import model
+from twilio.rest import Client
+import os
 
 
 app = Flask(__name__)
+
+# Twilio credentials from environment
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 @app.route("/")
 def home():
@@ -13,19 +20,22 @@ def home():
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    print("Received webhook")
-    print("Headers:", request.headers)
-    print("Body:", request.data)  # Log the raw body
     try:
+        data = request.get_json()
+        print("Received data:", data)
         
-        data = request.get_json(force=True)  # Extrae JSON
-        print("Parser json:", data)
-        if not data:
-            return jsonify({"error": "No JSON received"}), 400
-        return jsonify({"message": "Webhook received successfully!"}), 200
+        # Responding to the sender using Twilio API
+        message = client.messages.create(
+            body="Thanks for your message!",
+            from_="+<your-twilio-number>",  # Replace with your Twilio number
+            to=data["from"]  # Assumes 'from' field contains sender's number
+        )
+        print("Message sent:", message.sid)
+
+        return jsonify({"message": "Webhook processed"}), 200
     except Exception as e:
         print("Error:", e)
-        return jsonify({"error": "Invalid JSON"}), 400
+        return jsonify({"error": "Failed to process webhook"}), 400
   
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=3000)
