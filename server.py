@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Configuración de Twilio
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-twilio_number = os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
+twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
 
 client = Client(account_sid, auth_token)
 
@@ -34,9 +34,9 @@ def webhook():
         # Enviar respuesta automatizada
         response_message = "¡Gracias por tu mensaje! Pronto te responderemos."
         message = client.messages.create(
-            from_=f"whatsapp:{twilio_number}",
-            to=f"whatsapp:{from_number}",
-            body=response_message
+            from_=twilio_number,
+            body=response_message,
+            to=from_number
         )
 
         
