@@ -35,15 +35,20 @@ def webhook():
         from_number = data.get("From")  # Número del remitente
         print(f"Message body: {incoming_message}, From: {from_number}")
         
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+        completion = client.chat.completions.create(
+            model="gpt-4o",
             messages=[
-                {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
-                {"role": "user", "content": incoming_message},
+                {"role": "system", "content": "You are a helpful assistant."},
+                {
+                    "role": "user",
+                    "content": "Write a haiku about recursion in programming."
+                }
             ]
         )
+
+        print(completion.choices[0].message)
         #response_message = "¡Gracias por tu mensaje! Pronto te responderemos."
-        response_message = response['choices'][0]['message']['content'].strip()
+        response_message = completion.choices[0].message
 
         # Enviar respuesta automatizada
         
