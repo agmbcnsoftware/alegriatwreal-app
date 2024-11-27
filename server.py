@@ -32,15 +32,22 @@ def webhook():
         from_number = data.get("From")  # Número del remitente
         print(f"Message body: {incoming_message}, From: {from_number}")
         
-        chat_completion = openai_client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
-                {"role": "user", "content": incoming_message},
-            ],
+        #response = openai_client.chat.completions.create(
+        #    messages=[
+        #        {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
+        #        {"role": "user", "content": incoming_message},
+        #    ],
+        #    model="gpt-3.5-turbo",
+        #)
+        response = openai_client.chat.completions.create(
             model="gpt-3.5-turbo",
+            messages=[
+            {"role": "user", "content": "Hola, ¿cómo estás?"}
+            ],
         )
-        response_message = chat_completion["choices"][0]["message"]["content"].strip()
-
+        #response_message = chat_completion["choices"][0]["message"]["content"].strip()
+        response_dict = response.to_dict_recursive()
+        response_message = (response_dict["choices"][0]["message"]["content"])
         # Enviar respuesta automatizada
         
         message = twilio_client.messages.create(
