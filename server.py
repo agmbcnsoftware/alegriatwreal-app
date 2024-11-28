@@ -41,13 +41,18 @@ def webhook():
         from_number = data.get("From")  # Número del remitente
         print(f"Message body: {incoming_message}, From: {from_number}")
         
-        messages=[{"role": "system", "content" : base_context}]
-        messages.append({"role": "user", "content": incoming_message})
+        
+        if from_number not in conversations:
+            messages=[{"role": "system", "content" : base_context}]
+            conversations[from_number] = messages # Incializamos el contexto
+        
+        
+        conversations[from_number].append({"role": "user", "content": incoming_message})
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
-        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
+        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
         for choice in response.choices:
-            messages.append({"role": "assistant", "content": choice.message.content})
+            conversations[from_number].append({"role": "assistant", "content": choice.message.content})
         
         response_message = response.choices[0].message.content
         
