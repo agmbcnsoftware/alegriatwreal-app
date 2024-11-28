@@ -10,9 +10,17 @@ app = Flask(__name__)
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
-
 twilio_client = Client(account_sid, auth_token)
+
+#Configuración de opeAI
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+#Obtengo la información específica que hay en ai-knowledge-base.txt
+with open("ai-knowledge-base.txt", "r") as file:
+    base_context = file.read()
+    
+    
+
 
 @app.route("/")
 def home():
@@ -32,24 +40,15 @@ def webhook():
         from_number = data.get("From")  # Número del remitente
         print(f"Message body: {incoming_message}, From: {from_number}")
         
-        #response = openai_client.chat.completions.create(
-        #    messages=[
-        #        {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
-        #        {"role": "user", "content": incoming_message},
-        #    ],
-        #    model="gpt-3.5-turbo",
-        #)
+        #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
-            {"role": "user", "content": "Hola, ¿cómo estás?"}
+            {"role": "user", "content": incoming_message}
             ],
         )
-        #response_message = chat_completion["choices"][0]["message"]["content"].strip()
-        response_dict = response.to_dict_recursive()
+        
         response_message = response.choices[0].message.content
-        response_message = (response_dict["choices"][0]["message"]["content"])
-        # Enviar respuesta automatizada
         
         message = twilio_client.messages.create(
             from_=twilio_number,
