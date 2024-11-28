@@ -16,7 +16,7 @@ twilio_client = Client(account_sid, auth_token)
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 #Obtengo la información específica que hay en ai-knowledge-base.txt
-with open("ai-knowledge-base.txt", "r") as file:
+with open("ai-info-base.txt", "r") as file:
     base_context = file.read()
     
     
