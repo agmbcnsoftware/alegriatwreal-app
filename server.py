@@ -6,13 +6,17 @@ import os
 
 app = Flask(__name__)
 
-# Configuración de Twilio
+# Configuración de los clientes de Twilio y openAI
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
-
 twilio_client = Client(account_sid, auth_token)
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# Leer la base de conocimiento de AI
+with open("ai-knowledge-base.txt", "r") as file:
+    base_context = file.read()
+
 
 @app.route("/")
 def home():
