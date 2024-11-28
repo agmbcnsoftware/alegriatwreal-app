@@ -45,7 +45,7 @@ def webhook():
             ] 
         # Añadir el mensaje del usuario al historial
         conversations[from_number].append({"role": "user", "content": user_message})
-    
+        
         # Obtener la respuesta de OpenAI
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
