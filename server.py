@@ -42,11 +42,6 @@ def webhook():
         print(f"Message body: {incoming_message}, From: {from_number}")
         
         
-        if from_number not in conversations:
-        conversations[from_number] = [
-            {"role": "system", "content": base_context}  # Contexto base
-        ]
-        
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
