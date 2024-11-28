@@ -47,6 +47,7 @@ def webhook():
         )
         #response_message = chat_completion["choices"][0]["message"]["content"].strip()
         response_dict = response.to_dict_recursive()
+        response_message = response.choices[0].message.content
         response_message = (response_dict["choices"][0]["message"]["content"])
         # Enviar respuesta automatizada
         
