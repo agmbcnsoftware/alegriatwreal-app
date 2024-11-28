@@ -50,18 +50,18 @@ def webhook():
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=conversations[from_number]
-            ],
         )
         
         ai_response = response.choices[0].message["content"]
-
+        print(ai_response)
+        #Esto es como lo hice la vez anterior
+        #response_message = response.choices[0].message.content
+        
         # Añadir la respuesta de la IA al historial
         conversations[from_number].append({"role": "assistant", "content": ai_response})
         
-        response_message = response.choices[0].message.content
-        print(ai_response)
-        # Enviar respuesta automatizada
         
+        # Enviar respuesta automatizada
         message = twilio_client.messages.create(
             from_=twilio_number,
             body=ai_response,
