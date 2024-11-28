@@ -40,9 +40,9 @@ def webhook():
             
         # Crear el historial si no existe
         if from_number not in conversations:
-          conversations[from_number] = [
-              {"role": "system", "content": base_context}  # Contexto base
-          ] 
+            conversations[from_number] = [
+                {"role": "system", "content": base_context}  # Contexto base
+            ] 
         # Añadir el mensaje del usuario al historial
         conversations[from_number].append({"role": "user", "content": user_message})
     
