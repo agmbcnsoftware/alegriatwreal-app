@@ -20,7 +20,8 @@ with open("ai-info-base.txt", "r") as file:
     base_context = file.read()
     
     
-
+# Diccionario para el historial de conversaciones
+conversations = {}
 
 @app.route("/")
 def home():
@@ -39,6 +40,12 @@ def webhook():
         incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
         print(f"Message body: {incoming_message}, From: {from_number}")
+        
+        
+        if from_number not in conversations:
+        conversations[from_number] = [
+            {"role": "system", "content": base_context}  # Contexto base
+        ]
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(
