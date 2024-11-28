@@ -17,6 +17,8 @@ openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 with open("ai-knowledge-base.txt", "r") as file:
     base_context = file.read()
 
+# Diccionario para el historial de conversaciones
+conversations = {}
 
 @app.route("/")
 def home():
@@ -32,32 +34,37 @@ def webhook():
             return jsonify({"error": "No data received"}), 400
 
         # Extraer información del mensaje
-        incoming_message = data.get("Body", "").strip()
+        user_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
-        print(f"Message body: {incoming_message}, From: {from_number}")
-        
-        #response = openai_client.chat.completions.create(
-        #    messages=[
-        #        {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
-        #        {"role": "user", "content": incoming_message},
-        #    ],
-        #    model="gpt-3.5-turbo",
-        #)
+        print(f"Message body: {user_message}, From: {from_number}")
+            
+        # Crear el historial si no existe
+        if from_number not in conversations:
+          conversations[from_number] = [
+              {"role": "system", "content": base_context}  # Contexto base
+          ] 
+        # Añadir el mensaje del usuario al historial
+        conversations[from_number].append({"role": "user", "content": user_message})
+    
+        # Obtener la respuesta de OpenAI
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[
-            {"role": "user", "content": incoming_message}
+            messages=conversations[from_number]
             ],
         )
-        #response_message = chat_completion["choices"][0]["message"]["content"].strip()
-        #response_dict = response.to_dict_recursive()
+        
+        ai_response = response.choices[0].message["content"]
+
+        # Añadir la respuesta de la IA al historial
+        conversations[from_number].append({"role": "assistant", "content": ai_response})
+        
         response_message = response.choices[0].message.content
-        print(response_message)
+        print(ai_response)
         # Enviar respuesta automatizada
         
         message = twilio_client.messages.create(
             from_=twilio_number,
-            body=response_message,
+            body=ai_response,
             to=from_number
         )
         
