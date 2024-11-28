@@ -44,8 +44,9 @@ def webhook():
         response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-            {"role": "user", "content": incoming_message}
-            ],
+                {"role": "system", "content" : base_context},
+                {"role": "user", "content": incoming_message}
+            ]
         )
         
         response_message = response.choices[0].message.content
