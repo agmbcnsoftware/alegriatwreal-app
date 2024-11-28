@@ -6,19 +6,13 @@ import os
 
 app = Flask(__name__)
 
-# Configuración de los clientes de Twilio y openAI
+# Configuración de Twilio
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
+
 twilio_client = Client(account_sid, auth_token)
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
-# Leer la base de conocimiento de AI
-with open("ai-knowledge-base.txt", "r") as file:
-    base_context = file.read()
-
-# Diccionario para el historial de conversaciones
-conversations = {}
 
 @app.route("/")
 def home():
@@ -34,45 +28,31 @@ def webhook():
             return jsonify({"error": "No data received"}), 400
 
         # Extraer información del mensaje
-        user_message = data.get("Body", "").strip()
+        incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
-        print(f"Message body: {user_message}, From: {from_number}")
-            
-        # Crear el historial si no existe
-        if from_number not in conversations:
-            conversations[from_number] = [
-                {"role": "system", "content": base_context}  # Contexto base
-            ] 
-        # Añadir el mensaje del usuario al historial
-        conversations[from_number].append({"role": "user", "content": user_message})
+        print(f"Message body: {incoming_message}, From: {from_number}")
         
-         response = openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=conversations[from_number]
+        #response = openai_client.chat.completions.create(
+        #    messages=[
+        #        {"role": "system", "content": "Eres un asistente útil que responde preguntas de WhatsApp."},
+        #        {"role": "user", "content": incoming_message},
+        #    ],
+        #    model="gpt-3.5-turbo",
+        #)
+        response = openai_client.chat.completions.create(
+            model="gpt-3.5-turbo",
             messages=[
-            {"role": "user", "content": incoming_message}
+            {"role": "user", "content": "Hola, ¿cómo estás?"}
             ],
         )
-        
-        # Obtener la respuesta de OpenAI
-        #response = openai_client.chat.completions.create(
-        #    model="gpt-4o-mini",
-        #    messages=conversations[from_number]
-        #)
-        
-        response = response.choices[0].message["content"]
-        print(ai_response)
-        #Esto es como lo hice la vez anterior
-        #response_message = response.choices[0].message.content
-        
-        # Añadir la respuesta de la IA al historial
-        conversations[from_number].append({"role": "assistant", "content": ai_response})
-        
-        
+        #response_message = chat_completion["choices"][0]["message"]["content"].strip()
+        response_dict = response.to_dict_recursive()
+        response_message = (response_dict["choices"][0]["message"]["content"])
         # Enviar respuesta automatizada
+        
         message = twilio_client.messages.create(
             from_=twilio_number,
-            body=ai_response,
+            body=response_message,
             to=from_number
         )
         
