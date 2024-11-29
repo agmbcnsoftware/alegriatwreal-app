@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from twilio.rest import Client
 from openai import OpenAI
+from cryptography.fernet import Fernet
 import os
 
 
@@ -11,13 +12,25 @@ account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
 twilio_client = Client(account_sid, auth_token)
+encryption_key = os.environ.get("AI_INFO_KEY")
+
 
 #Configuración de opeAI
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 #Obtengo la información específica que hay en ai-knowledge-base.txt
-with open("ai-info-base.txt", "r") as file:
-    base_context = file.read()
+cipher = Fernet(encryption_key.encode())
+
+# Leer y desencriptar el contenido del archivo
+with open("ai-info-base.txt", "r") as f:
+    encrypted_content = f.read()
+
+base_context = cipher.decrypt(encrypted_content).decode()
+
+print(base_context[0:20])
+
+#with open("ai-info-base.txt", "r") as file:
+#    base_context = file.read()
     
     
 # Diccionario para el historial de conversaciones
