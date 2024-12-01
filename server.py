@@ -24,10 +24,9 @@ cipher = Fernet(encryption_key.encode())
 # Leer y desencriptar el contenido del archivo
 with open("ai-info-base.txt", "r") as f:
     encrypted_content = f.read()
-
 base_context = cipher.decrypt(encrypted_content).decode()
 
-print(base_context[0:25])
+print(base_context[0:30])
 
 #with open("ai-info-base.txt", "r") as file:
 #    base_context = file.read()
