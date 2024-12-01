@@ -27,7 +27,7 @@ with open("ai-info-base.txt", "r") as f:
 
 base_context = cipher.decrypt(encrypted_content).decode()
 
-print(base_context[0:20])
+print(base_context[0:25])
 
 #with open("ai-info-base.txt", "r") as file:
 #    base_context = file.read()
