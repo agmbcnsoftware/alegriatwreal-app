@@ -87,7 +87,7 @@ def webhook():
         for choice in response.choices:
             conversations_control[from_number].append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content
-        print (response_massage)
+        print (response_message)
 
         
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
