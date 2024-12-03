@@ -34,6 +34,7 @@ print(base_context[0:30])
     
 # Diccionario para el historial de conversaciones
 conversations = {}
+conversations_control = {}
 
 @app.route("/")
 def home():
@@ -57,17 +58,20 @@ def webhook():
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]
             conversations[from_number] = messages # Incializamos el contexto
+            conversations_control[from_number] = messages
         
         
         conversations[from_number].append({"role": "user", "content": incoming_message})
+        conversations_control[from_number].append({"role": "user", "content": incoming_message})
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
         for choice in response.choices:
             conversations[from_number].append({"role": "assistant", "content": choice.message.content})
-        
+            conversations_control[from_number].append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content
         
+        #Mandamos la respuesta a través de Twilio
         message = twilio_client.messages.create(
             from_=twilio_number,
             body=response_message,
@@ -75,6 +79,9 @@ def webhook():
         )
         
         print(f"Sent message SID: {message.sid}")
+        
+        #Ahora vaos a chequear el estado de la conversación mandando una pregunta explicita a openAI
+        control_text = "¿La conversación ha llegado a un estado final? En caso afirmativo indícame si ha reservado clase de prueba, 
 
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:
