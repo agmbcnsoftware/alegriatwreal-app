@@ -81,8 +81,10 @@ def webhook():
         print(f"Sent message SID: {message.sid}")
         
         #Ahora vaos a chequear el estado de la conversación mandando una pregunta explicita a openAI
-        control_text = "¿La conversación ha llegado a un estado final? En caso afirmativo indícame si ha reservado clase de prueba, 
+        control_message = "¿La conversación ha llegado a un estado final? En caso afirmativo indícame si se ha reservado clase de prueba y para que fecha, se ha pedido una llamada telefónica o ninguna de las anteriore. En caso negativo dime siplemente: Conversación activa"
+        conversations_control[from_number].append({"role": "user", "content": control_message})
 
+        
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:
         print("Error:", e)
