@@ -96,12 +96,14 @@ def webhook():
         db.insert_message(user_id, from_number, profile_name, incoming_message, "user")     
         
         #if from_number not in conversations:
-        messages=[{"role": "system", "content" : base_context}]
+        messages = [{"role": "system", "content" : base_context}]
         #conversations[from_number] = messages # Incializamos el contexto
+        previous_messages = get_messages_by_user(from_number)
+        messages.append(previous_messages)
         
         
         #conversations[from_number].append({"role": "user", "content": incoming_message})
-        messages.append({"role": "user", "content": incoming_message})
+        #messages.append({"role": "user", "content": incoming_message})
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         #response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
         response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
