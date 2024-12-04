@@ -39,6 +39,23 @@ print(base_context[0:30])
 conversations = {}
 conversations_control = {}
 
+# El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
+# repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
+
+
+def start_web_server():
+    app.run(host='0.0.0.0', port=3000)
+
+def process_conversations():
+    print("Procesando conversaciones...")
+
+def start_cron_job():
+    schedule.every().day.at("18:00").do(process_conversations)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
 @app.route("/")
 def home():
     return "Hello World!"
