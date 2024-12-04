@@ -57,12 +57,16 @@ def notify_appointments():
     print("Conversaciones enviadas")
     
 def start_conversations_processing():
-    schedule.every().day.at("23:59").do(process_conversations)
+    print("Thread for conversation running: current time: ")
+    current_time = datetime.now.strftime("%H:%M:%S")
+    schedule.every().day.at("12:37").do(process_conversations)
     while True:
         schedule.run_pending()
         time.sleep(5)
+    
         
 def start_appointment_notifications():
+    print("Thread for notifications running")
     schedule.every().day.at("08:00").do(process_conversations)
     while True:
         schedule.run_pending()
@@ -133,6 +137,8 @@ def webhook():
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
-    threading.Thread(target=start_conversations_processing.start())
-    threading.Thread(target=start_appointment_notifications.start())
+    threading.Thread(target=start_conversations_processing).start()
+    threading.Thread(target=start_appointment_notifications).start()
+    print("Yeah")
+    
     
