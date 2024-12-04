@@ -7,8 +7,7 @@ import threading
 import schedule
 import time
 import datetime
-
-
+import messages_database
 
 app = Flask(__name__)
 
@@ -18,7 +17,6 @@ auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
 twilio_client = Client(account_sid, auth_token)
 encryption_key = os.environ.get("AI_INFO_KEY")
-
 
 #Configuración de opeAI
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -35,6 +33,7 @@ print(base_context[0:30])
 
 # Diccionario para el historial de conversaciones
 conversations = {}
+messages_database.initialize_database()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -92,6 +91,7 @@ def webhook():
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         #conversations[from_number] = getConversationsfromdb (from_number)
+        messages_database.get_or_create_user(from_number)
         
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]

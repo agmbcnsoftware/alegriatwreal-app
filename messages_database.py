@@ -41,6 +41,8 @@ def get_or_create_user(whatsapp_number, name=None):
         cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (whatsapp_number,))
         result = cursor.fetchone()
         if result:
+            print("Numero encontrado)")
+            print(result[0])
             return result[0]  # Devuelve el ID del usuario existente
         # Si no existe, lo crea
         cursor.execute("INSERT INTO users (whatsapp_number, name) VALUES (?, ?)", (whatsapp_number, name))
