@@ -92,11 +92,12 @@ def webhook():
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         #conversations[from_number] = getConversationsfromdb (from_number)
-        db.get_or_create_user(from_number)
-        # 
+        user_id = db.get_or_create_user(from_number)
+        db.insert_message(user_id, from_number, profile_name, incoming_message, "user")
         temp_msg = db.get_messages_by_user(from_number)
         print("Mensaje en base de datos")
         print (temp_msg)
+        
         
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]

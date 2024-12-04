@@ -43,7 +43,7 @@ def get_or_create_user(whatsapp_number, name=None):
         cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (whatsapp_number,))
         result = cursor.fetchone()
         if result:
-            print("Numero encontrado)")
+            print("Numero encontrado")
             print(result[0])
             return result[0]  # Devuelve el ID del usuario existente
         # Si no existe, lo crea
@@ -64,6 +64,8 @@ def insert_message(user_id, whatsapp_number, whatsapp_profile, message, sender):
                       
 # Obtiene el historial de mensajes de un usuario
 def get_messages_by_user(whatsapp_number):
+    print("Obteniendo mensajes del usuario")
+    
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
