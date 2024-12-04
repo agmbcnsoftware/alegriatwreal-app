@@ -91,8 +91,11 @@ def webhook():
         # Extraer información del mensaje
         incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
-        print(f"Message body: {incoming_message}, From: {from_number}")
+        profile_name = data.get("ProfileName", "").strip() # Nombre que se ha puesto en WhatsApp
+        print(f"Message body: {incoming_message}, From: {from_number}", "Profile": {profile_name})
         
+        #Tengo a este cliente en base de datos? busco conversaciones por su número
+        # Si lo tengo las cargo
         
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]
