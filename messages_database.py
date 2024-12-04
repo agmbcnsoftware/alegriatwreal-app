@@ -15,6 +15,9 @@ def update_db_structure():
 def initialize_database():
     with get_connection() as conn:
         cursor = conn.cursor()
+        #Eliminar tabla de usuarios
+        #cursor.execute("""DROP TABLE IF EXISTS users""")
+        #conn.commit()
         # Crear tabla de usuarios
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -23,6 +26,9 @@ def initialize_database():
             name TEXT
         )
         """)
+        #Eliminar tabla de usuarios
+        #cursor.execute("""DROP TABLE IF EXISTS messages""")
+        #conn.commit()
         # Crear tabla de mensajes
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS messages (
