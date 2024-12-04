@@ -7,6 +7,9 @@ DB_PATH = "GraciaBot.db"
 # Inicializa la conexión con la base de datos
 def get_connection():
     return sqlite3.connect(DB_PATH)
+  
+def update_db_structure():
+  print("Actualizando tablas")
 
 # Crea las tablas si no existen
 def initialize_database():
@@ -57,6 +60,9 @@ def insert_message(user_id, whatsapp_number, whatsapp_profile, message, sender):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM messages WHERE whatsapp_number = ?", (whatsapp_number,))
+        result = cursor.fetchone()
+        print("Obteniendo todo sobre mensajes")
+        print(result)
         cursor.execute("""
         INSERT INTO messages (user_id, whatsapp_number, whatsapp_profile, message, sender)
         VALUES (?, ?, ?, ?, ?)
