@@ -93,20 +93,20 @@ def webhook():
         # Si lo tengo las cargo
         #conversations[from_number] = getConversationsfromdb (from_number)
         user_id = db.get_or_create_user(from_number)
-        db.insert_message(user_id, from_number, profile_name, incoming_message, "user")
-        temp_msg = db.get_messages_by_user(from_number)
-        print("Mensaje en base de datos")
-        print (temp_msg)        
+        db.insert_message(user_id, from_number, profile_name, incoming_message, "user")     
         
-        if from_number not in conversations:
-            messages=[{"role": "system", "content" : base_context}]
-            conversations[from_number] = messages # Incializamos el contexto
+        #if from_number not in conversations:
+        messages=[{"role": "system", "content" : base_context}]
+        #conversations[from_number] = messages # Incializamos el contexto
         
         conversations[from_number].append({"role": "user", "content": incoming_message})
+        messages.append({"role": "user", "content": incoming_message})
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
-        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
+        #response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
+        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
         for choice in response.choices:
             conversations[from_number].append({"role": "assistant", "content": choice.message.content})
+            messages.append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content
         
         db.insert_message(user_id, from_number, profile_name, response_message, "assistant")
