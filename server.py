@@ -33,7 +33,8 @@ print(base_context[0:30])
 
 # Diccionario para el historial de conversaciones
 conversations = {}
-messages_database.initialize_database()
+db = messages_database
+db.initialize_database()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -91,7 +92,11 @@ def webhook():
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         #conversations[from_number] = getConversationsfromdb (from_number)
-        messages_database.get_or_create_user(from_number)
+        db.get_or_create_user(from_number)
+        # 
+        temp_msg = db.get_messages_by_user(from_number)
+        print("Mensaje en base de datos")
+        print (temp_msg)
         
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]
