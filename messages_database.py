@@ -25,6 +25,8 @@ def initialize_database():
         CREATE TABLE IF NOT EXISTS messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
+            whatsapp_number TEXT NOT NULL,
+            whatsapp_profile TEXT NOT_NULL,
             message TEXT NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             sender TEXT NOT NULL, -- 'user' o 'bot'
@@ -50,15 +52,16 @@ def get_or_create_user(whatsapp_number, name=None):
         return cursor.lastrowid  # Devuelve el ID del nuevo usuario
 
 # Inserta un nuevo mensaje
-def insert_message(user_id, message, sender):
+def insert_message(user_id, whatsapp_number, whatsapp_profile, message, sender):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO messages (user_id, message, sender)
-        VALUES (?, ?, ?)
-        """, (user_id, message, sender))
+        INSERT INTO messages (user_id, whatsapp_number, whatsapp_profile, message, sender)
+        VALUES (?, ?, ?, ?, ?)
+        """, (user_id, whatsapp_number, whatsapp_profile, message, sender))
         conn.commit()
 
+                      
 # Obtiene el historial de mensajes de un usuario
 def get_messages_by_user(whatsapp_number):
     with get_connection() as conn:
