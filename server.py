@@ -33,13 +33,8 @@ base_context = cipher.decrypt(encrypted_content).decode()
 
 print(base_context[0:30])
 
-#with open("ai-info-base.txt", "r") as file:
-#    base_context = file.read()
-    
-    
 # Diccionario para el historial de conversaciones
 conversations = {}
-conversations_control = {}
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -74,7 +69,6 @@ def start_appointment_notifications():
         time.sleep(5)
 
 
-
 @app.route("/")
 def home():
     return "Hello World!"
@@ -96,21 +90,18 @@ def webhook():
         
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
+        #conversations[from_number] = getConversationsfromdb (from_number)
         
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]
             conversations[from_number] = messages # Incializamos el contexto
-            conversations_control[from_number] = messages
-        
         
         conversations[from_number].append({"role": "user", "content": incoming_message})
-        conversations_control[from_number].append({"role": "user", "content": incoming_message})
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
         for choice in response.choices:
             conversations[from_number].append({"role": "assistant", "content": choice.message.content})
-            conversations_control[from_number].append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content
         
         #Mandamos la respuesta a través de Twilio
