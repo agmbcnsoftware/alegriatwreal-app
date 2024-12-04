@@ -89,9 +89,12 @@ def get_messages_by_user(whatsapp_number):
         WHERE u.whatsapp_number = ?
         ORDER BY m.timestamp ASC
         """, (whatsapp_number,))
-         # Construir la lista de mensajes en el formato requerido por OpenAI
-        messages = []
-        for message, sender, timestamp in cursor.fetchall():            
-            messages.append({"role": sneder, "content": message})
-            print("role": sneder, "content": message)
-        return messages
+        return cursor
+        # Construir la lista de mensajes en el formato requerido por OpenAI
+        #messages = []
+        #messages = [{"role": "system", "content" : base_context}]
+        #messages.append({"role": "user", "content": incoming_message})
+        #for message, sender, timestamp in cursor.fetchall():            
+        #    messages.append({"role": sender, "content": message})
+        #    print("role", sender, "content", message)
+        #return messages

@@ -98,7 +98,7 @@ def webhook():
         #if from_number not in conversations:
         messages = [{"role": "system", "content" : base_context}]
         #conversations[from_number] = messages # Incializamos el contexto
-        previous_messages = get_messages_by_user(from_number)
+        previous_messages = db.get_messages_by_user(from_number)
         messages.append(previous_messages)
         
         
