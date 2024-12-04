@@ -59,7 +59,7 @@ def notify_appointments():
     print("Conversaciones enviadas")
     
 def start_conversations_processing():
-    print("Thread for conversation running: current time: ")
+    print("Thread for conversation running")
     schedule.every().day.at("11:50").do(process_conversations)
     while True:
         schedule.run_pending()
@@ -120,13 +120,13 @@ def webhook():
         print(f"Sent message SID: {message.sid}")
         
         #Ahora vaos a chequear el estado de la conversación mandando una pregunta explicita a openAI
-        control_message = "¿La conversación ha llegado a un estado final? En caso afirmativo indícame si se ha reservado clase de prueba y para que fecha, si ha pedido una llamada telefónica o ninguna de las anteriore. En caso negativo dime siplemente: Conversación activa"
-        conversations_control[from_number].append({"role": "user", "content": control_message})
-        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
-        for choice in response.choices:
-            conversations_control[from_number].append({"role": "assistant", "content": choice.message.content})
-        response_message = response.choices[0].message.content
-        print (response_message)
+        #control_message = "¿La conversación ha llegado a un estado final? En caso afirmativo indícame si se ha reservado clase de prueba y para que fecha, si ha pedido una llamada telefónica o ninguna de las anteriore. En caso negativo dime siplemente: Conversación activa"
+        #conversations_control[from_number].append({"role": "user", "content": control_message})
+        #response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
+        #for choice in response.choices:
+        #    conversations_control[from_number].append({"role": "assistant", "content": choice.message.content})
+        #response_message = response.choices[0].message.content
+        #print (response_message)
 
         
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
