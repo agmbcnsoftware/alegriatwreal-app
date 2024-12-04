@@ -41,19 +41,33 @@ conversations_control = {}
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
-
+# se encargará de enviar notificaciones a las personas que han pedido una clase de prueba, para 
+# que no se olviden
 
 def start_web_server():
     app.run(host='0.0.0.0', port=3000)
 
 def process_conversations():
     print("Procesando conversaciones...")
+    time.sleep(3)
+    print("Conversaciones procesadas")
 
-def start_cron_job():
-    schedule.every().day.at("18:00").do(process_conversations)
+def notify_appointments():
+    print("Enviando notificaciones)") 
+    print("Conversaciones enviadas")
+    
+def start_conversations_processing():
+    schedule.every().day.at("23:59").do(process_conversations)
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(5)
+        
+def start_appointment_notifications():
+    schedule.every().day.at("08:00").do(process_conversations)
+    while True:
+        schedule.run_pending()
+        time.sleep(5)
+
 
 
 @app.route("/")
@@ -115,5 +129,10 @@ def webhook():
         print("Error:", e)
         return jsonify({"error": "An error occurred"}), 500
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3000)
+    # Inicia ambos hilos en paralelo
+    threading.Thread(target=start_web_server).start()
+    threading.Thread(target=start_conversations_processing.start())
+    threading.Thread(target=start_appointment_notifications.start())
+    
