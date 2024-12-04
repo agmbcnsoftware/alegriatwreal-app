@@ -86,7 +86,8 @@ def webhook():
         incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
         profile_name = data.get("ProfileName", "").strip() # Nombre que se ha puesto en WhatsApp
-        print(f"Message body: {incoming_message}, From: {from_number}", "Profile": {profile_name})
+        print(f"Message body: {incoming_message}, From: {from_number}, Profile: {profile_name}")
+        
         
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
@@ -94,10 +95,12 @@ def webhook():
         
         if from_number not in conversations:
             messages=[{"role": "system", "content" : base_context}]
+            print("Mensajes")
+            print(messages)
             conversations[from_number] = messages # Incializamos el contexto
         
         conversations[from_number].append({"role": "user", "content": incoming_message})
-        
+        print(conversations[from_number])
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
         for choice in response.choices:
