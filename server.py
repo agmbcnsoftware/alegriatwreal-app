@@ -6,6 +6,8 @@ import os
 import threading
 import schedule
 import time
+import datetime
+
 
 
 app = Flask(__name__)
@@ -58,12 +60,11 @@ def notify_appointments():
     
 def start_conversations_processing():
     print("Thread for conversation running: current time: ")
-    current_time = datetime.now.strftime("%H:%M:%S")
-    schedule.every().day.at("12:37").do(process_conversations)
+    schedule.every().day.at("11:50").do(process_conversations)
     while True:
         schedule.run_pending()
-        time.sleep(5)
-    
+        time.sleep(1)       
+        
         
 def start_appointment_notifications():
     print("Thread for notifications running")
