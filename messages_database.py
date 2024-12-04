@@ -16,8 +16,8 @@ def initialize_database():
     with get_connection() as conn:
         cursor = conn.cursor()
         #Eliminar tabla de usuarios
-        #cursor.execute("""DROP TABLE IF EXISTS users""")
-        #conn.commit()
+        cursor.execute("""DROP TABLE IF EXISTS users""")
+        conn.commit()
         # Crear tabla de usuarios
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -27,8 +27,8 @@ def initialize_database():
         )
         """)
         #Eliminar tabla de usuarios
-        #cursor.execute("""DROP TABLE IF EXISTS messages""")
-        #conn.commit()
+        cursor.execute("""DROP TABLE IF EXISTS messages""")
+        conn.commit()
         # Crear tabla de mensajes
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS messages (
