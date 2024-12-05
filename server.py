@@ -93,8 +93,10 @@ def webhook():
         from_number = data.get("From")  # Número del remitente
         profile_name = data.get("ProfileName", "").strip() # Nombre que se ha puesto en WhatsApp
         print(f"Message body: {incoming_message}, From: {from_number}, Profile: {profile_name}")
-        if (incoming_message = "Olvídame")
-        #    db.delete_messages_from_user(from_number)
+        # Si el mensaje tiene el literal Olvídame eliminamos todos los mensajes del usuario y ya está
+        if (incoming_message == "Olvídame"):
+            db.delete_messages_from_user(from_number)
+            return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)

@@ -93,3 +93,11 @@ def get_messages_by_user(whatsapp_number):
 # Elimina los mensajes de un usuario que lo ha solicitado
 
 def delete_messages_from_user(from_number):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        DELETE FROM messages
+        WHERE whatsapp_number = ?
+        """, (from_number,))
+        conn.commit()
+        print(f"Mensajes eliminados para el número: {from_number}")
