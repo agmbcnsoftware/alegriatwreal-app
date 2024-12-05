@@ -29,7 +29,7 @@ with open("ai-info-base.txt", "r") as f:
     encrypted_content = f.read()
 base_context = cipher.decrypt(encrypted_content).decode()
 
-print(base_context[0:30])
+print(base_context[0:40])
 
 # Diccionario para el historial de conversaciones
 conversations = {}
@@ -91,32 +91,24 @@ def webhook():
         
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
-        #conversations[from_number] = getConversationsfromdb (from_number)
         user_id = db.get_or_create_user(from_number)
         db.insert_message(user_id, from_number, profile_name, incoming_message, "user")     
         
-        #if from_number not in conversations:
+        #Cargo la información básica, el prompt pra la IA desde cero
         messages = [{"role": "system", "content" : base_context}]
-        #conversations[from_number] = messages # Incializamos el contexto
+        #Obtengo de la base de datos los mensajes del usuario
         cursor = db.get_messages_by_user(from_number)
         for message, sender, timestamp in cursor.fetchall():            
             messages.append({"role": sender, "content": message})
-            print(messages)
+            print(messages) 
         
-        #previous_messages = db.get_messages_by_user(from_number)
-        #messages.append(previous_messages)
-        
-        
-        #conversations[from_number].append({"role": "user", "content": incoming_message})
-        #messages.append({"role": "user", "content": incoming_message})
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
-        #response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = conversations[from_number])
         response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
         for choice in response.choices:
-            #conversations[from_number].append({"role": "assistant", "content": choice.message.content})
             messages.append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content
         
+        #Me guardo em mensaje de respuesta de la IA
         db.insert_message(user_id, from_number, profile_name, response_message, "assistant")
         
         #Mandamos la respuesta a través de Twilio
