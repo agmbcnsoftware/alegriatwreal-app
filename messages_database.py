@@ -90,3 +90,6 @@ def get_messages_by_user(whatsapp_number):
         """, (whatsapp_number,))
         return cursor
         
+# Elimina los mensajes de un usuario que lo ha solicitado
+
+def delete_messages_from_user(from_number):

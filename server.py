@@ -46,6 +46,12 @@ def start_web_server():
 
 def process_conversations():
     print("Procesando conversaciones...")
+    
+    
+    
+    
+    
+    
     time.sleep(3)
     print("Conversaciones procesadas")
 
@@ -87,8 +93,8 @@ def webhook():
         from_number = data.get("From")  # Número del remitente
         profile_name = data.get("ProfileName", "").strip() # Nombre que se ha puesto en WhatsApp
         print(f"Message body: {incoming_message}, From: {from_number}, Profile: {profile_name}")
-        
-        
+        if (incoming_message = "Olvídame")
+        #    db.delete_messages_from_user(from_number)
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)
