@@ -116,3 +116,19 @@ def delete_messages_from_user(from_number):
         """, (from_number,))
         conn.commit()
         print(f"Mensajes eliminados para el número: {from_number}")
+        
+def get_unprocessed_users():
+    """
+    Obtiene los números de WhatsApp de los usuarios que tienen mensajes pendientes de procesamiento.
+    """
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT DISTINCT m.whatsapp_number
+        FROM messages m
+        LEFT JOIN processed_user_messages p
+        ON m.whatsapp_number = p.whatsapp_number
+        WHERE p.last_processed IS NULL OR m.timestamp > p.last_processed
+        """)
+        # Devuelve una lista de números de WhatsApp con mensajes sin procesar
+        return cursor

@@ -47,9 +47,12 @@ def start_web_server():
 def process_conversations():
     print("Procesando conversaciones...")
     
-    
-    
-    
+    num_cursor = db.get_unprocessed_users()
+    for whatsapp_number in num_cursor.fetchall()
+        msg_cursor = db.get_messages_by_user(whatsapp_number)
+        for message, sender, timestamp in msg_cursor.fetchall():            
+            messages.append({"role": sender, "content": message})
+            print(messages) 
     
     
     time.sleep(3)
