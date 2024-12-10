@@ -17,6 +17,7 @@ auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
 twilio_client = Client(account_sid, auth_token)
 encryption_key = os.environ.get("AI_INFO_KEY")
+admin_number = "whatsapp:+34658595387"
 
 #Configuración de opeAI
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -48,6 +49,7 @@ def process_conversations():
     print("Procesando conversaciones...")
     num_cursor = db.get_unprocessed_users()
     for whatsapp_number in num_cursor.fetchall():
+        print ("Mensajes pendientes de procesar para ", whatsapp_number)
         #Inicializo messsages con con el prompt para la IA pidiendole  uun resumen
         summary_prompt = """Eres un asistente experto en procesar conversaciones. A continuación, recibirás una transcripción completa entre un usuario y un bot. 
         Tu tarea es resumir la conversación, incluyendo el nombre del usuario en el caso en que dispongas de él y analizar si el usuario ha reservado una clase de prueba. """         
@@ -65,7 +67,7 @@ def process_conversations():
         message = twilio_client.messages.create(
             from_=twilio_number,
             body=response_message,
-            to=admin_number
+            to=whatsapp_number
         )
     time.sleep(1)
     print("Conversaciones procesadas")
@@ -84,7 +86,7 @@ def start_conversations_processing():
         
         
 def start_appointment_notifications():
-    print("Thread for notifications running")
+    #print("Thread for notifications running")
     schedule.every().day.at("08:00").do(process_conversations)
     while True:
         schedule.run_pending()
@@ -108,7 +110,7 @@ def webhook():
         incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
         profile_name = data.get("ProfileName", "").strip() # Nombre que se ha puesto en WhatsApp
-        print(f"Message body: {incoming_message}, From: {from_number}, Profile: {profile_name}")
+        #print(f"Message body: {incoming_message}, From: {from_number}, Profile: {profile_name}")
         # Si el mensaje tiene el literal Olvídame eliminamos todos los mensajes del usuario y ya está
         if (incoming_message == "Olvidame"):
             db.delete_messages_from_user(from_number)
@@ -124,7 +126,7 @@ def webhook():
         cursor = db.get_messages_by_user(from_number)
         for message, sender, timestamp in cursor.fetchall():            
             messages.append({"role": sender, "content": message})
-            print(messages) 
+            #print(messages) 
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
         response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
