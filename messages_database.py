@@ -14,7 +14,11 @@ def update_db_structure():
 # Crea las tablas si no existen
 def initialize_database():
     with get_connection() as conn:
+        
+        #Eliminar tabla de mensajes procesados para los usuariois
         cursor = conn.cursor()
+        cursor.execute("""DROP TABLE IF EXISTS processed_user_messages""")
+        conn.commit()
         #Eliminar tabla de mensajes
         cursor.execute("""DROP TABLE IF EXISTS messages""")
         conn.commit()
@@ -53,7 +57,7 @@ def initialize_database():
             UNIQUE(whatsapp_number)
         )
         """)
-        conn.commit
+        conn.commit()
 
 # Inserta un nuevo usuario o recupera su ID si ya existe
 def get_or_create_user(whatsapp_number, name=None):
