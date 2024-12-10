@@ -50,7 +50,7 @@ def process_conversations():
     for whatsapp_number in num_cursor.fetchall():
         #Inicializo messsages con con el prompt para la IA pidiendole  uun resumen
         summary_prompt = """Eres un asistente experto en procesar conversaciones. A continuación, recibirás una transcripción completa entre un usuario y un bot. 
-        Tu tarea es resumir la conversación y analizar si el usuario ha reservado una clase de prueba. """         
+        Tu tarea es resumir la conversación, incluyendo el nombre del usuario en el caso en que dispongas de él y analizar si el usuario ha reservado una clase de prueba. """         
         messages = [{"role": "system", "content" : summary_prompt }]          
         msg_cursor = db.get_messages_by_user(whatsapp_number)
         for message, sender, timestamp in msg_cursor.fetchall():            
@@ -76,7 +76,8 @@ def notify_appointments():
     
 def start_conversations_processing():
     print("Thread for conversation running")
-    schedule.every().day.at("11:50").do(process_conversations)
+    #schedule.every().day.at("11:50").do(process_conversations)
+    schedule.every().minute.at(":23").do(process_conversations)
     while True:
         schedule.run_pending()
         time.sleep(1)       
