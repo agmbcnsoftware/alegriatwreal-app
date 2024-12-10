@@ -44,6 +44,16 @@ def initialize_database():
         )
         """)
         conn.commit()
+        
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS processed_user_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            whatsapp_number TEXT NOT NULL,
+            last_processed TIMESTAMP DEFAULT NULL,
+            UNIQUE(whatsapp_number)
+        )
+        """)
+        conn.commit
 
 # Inserta un nuevo usuario o recupera su ID si ya existe
 def get_or_create_user(whatsapp_number, name=None):
