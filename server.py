@@ -49,7 +49,9 @@ def process_conversations():
     num_cursor = db.get_unprocessed_users()
     for whatsapp_number in num_cursor.fetchall():
         #Inicializo messsages con con el prompt para la IA pidiendole  uun resumen
-        messages = [{"role": "system", "content" : "Hazme un reesumen de estas coversación"}]
+        summary_prompt = """Eres un asistente experto en procesar conversaciones. A continuación, recibirás una transcripción completa entre un usuario y un bot. 
+        Tu tarea es resumir la conversación y analizar si el usuario ha reservado una clase de prueba. """         
+        messages = [{"role": "system", "content" : summary_prompt }]          
         msg_cursor = db.get_messages_by_user(whatsapp_number)
         for message, sender, timestamp in msg_cursor.fetchall():            
             messages.append({"role": sender, "content": message})
@@ -58,7 +60,13 @@ def process_conversations():
         for choice in response.choices:
             messages.append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content   
-        #quedaa pediente nviar el mensaje a través deTwilio al teléfono del adminnistrador o guardarlo de algún moodo
+        print(response_message, "Número: ", whatsapp_numer)
+        #Mandamos la respuesta a través de Twilio al telefono del admin
+        message = twilio_client.messages.create(
+            from_=twilio_number,
+            body=response_message,
+            to=admin_number
+        )
     time.sleep(1)
     print("Conversaciones procesadas")
 
