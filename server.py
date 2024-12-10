@@ -46,16 +46,20 @@ def start_web_server():
 
 def process_conversations():
     print("Procesando conversaciones...")
-    
     num_cursor = db.get_unprocessed_users()
-    for whatsapp_number in num_cursor.fetchall()
+    for whatsapp_number in num_cursor.fetchall():
+        #Inicializo messsages con con el prompt para la IA pidiendole  uun resumen
+        messages = [{"role": "system", "content" : "Hazme un reesumen de estas coversación"}]
         msg_cursor = db.get_messages_by_user(whatsapp_number)
         for message, sender, timestamp in msg_cursor.fetchall():            
             messages.append({"role": sender, "content": message})
-            print(messages) 
-    
-    
-    time.sleep(3)
+            #print(messages)
+        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
+        for choice in response.choices:
+            messages.append({"role": "assistant", "content": choice.message.content})
+        response_message = response.choices[0].message.content   
+        #quedaa pediente nviar el mensaje a través deTwilio al teléfono del adminnistrador o guardarlo de algún moodo
+    time.sleep(1)
     print("Conversaciones procesadas")
 
 def notify_appointments():
