@@ -121,7 +121,7 @@ def insert_processed_messages(from_number):
       cursor.execute("""
           INSERT INTO processed_user_messages (whatsapp_number)
           VALUES (?)
-      """, (from_number))
+      """, (from_number,))
       conn.commit()
 
 def update_processed_messages(from_number):
@@ -134,7 +134,7 @@ def update_processed_messages(from_number):
       """, (from_number,))
       conn.commit()
       
-def set_user_messages_unprocessed(from_number):
+def set_user_messages_processed(from_number):
   with get_connection() as conn:
         cursor = conn.cursor()
         # Intenta buscar el usuario
@@ -159,9 +159,8 @@ def set_user_messages_unprocessed(from_number):
         # Si no existe, lo crea
         
 def get_unprocessed_users():
-    """
-    Obtiene los números de WhatsApp de los usuarios que tienen mensajes pendientes de procesamiento.
-    """
+    
+    #Obtiene los números de WhatsApp de los usuarios que tienen mensajes pendientes de procesamiento.
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""

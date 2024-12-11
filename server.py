@@ -78,8 +78,8 @@ def notify_appointments():
     
 def start_conversations_processing():
     print("Thread for conversation running")
-    #schedule.every().day.at("11:50").do(process_conversations)
-    schedule.every().minute.at(":23").do(process_conversations)
+    schedule.every().day.at("11:50").do(process_conversations)
+    #schedule.every().minute.at(":23").do(process_conversations)
     while True:
         schedule.run_pending()
         time.sleep(1)       
@@ -119,7 +119,7 @@ def webhook():
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)
         db.insert_message(user_id, from_number, profile_name, incoming_message, "user")     
-        db.set_user_messages_unprocessed(from_number)
+        #db.set_user_messages_unprocessed(from_number)
         #Cargo la información básica, el prompt pra la IA desde cero
         messages = [{"role": "system", "content" : base_context}]
         #Obtengo de la base de datos los mensajes del usuario
@@ -136,7 +136,7 @@ def webhook():
         
         #Me guardo em mensaje de respuesta de la IA
         db.insert_message(user_id, from_number, profile_name, response_message, "assistant")
-        db.set_user_messages_unprocessed(from_number)
+        #db.set_user_messages_unprocessed(from_number)
         #Mandamos la respuesta a través de Twilio
         message = twilio_client.messages.create(
             from_=twilio_number,
