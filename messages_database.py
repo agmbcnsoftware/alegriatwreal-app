@@ -102,7 +102,7 @@ def get_messages_by_user(whatsapp_number):
         JOIN users u ON m.user_id = u.id
         WHERE u.whatsapp_number = ?
         ORDER BY m.timestamp ASC
-        """, (whatsapp_number,))
+        """, (whatsapp_number))
         return cursor
         
 # Elimina los mensajes de un usuario que lo ha solicitado

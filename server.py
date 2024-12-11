@@ -62,7 +62,7 @@ def process_conversations():
         for choice in response.choices:
             messages.append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content   
-        print(response_message, "Número: ", whatsapp_numer)
+        print(response_message, "Número: ", whatsapp_number)
         #Mandamos la respuesta a través de Twilio al telefono del admin
         message = twilio_client.messages.create(
             from_=twilio_number,
