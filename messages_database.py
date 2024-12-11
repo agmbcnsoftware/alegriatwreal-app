@@ -60,17 +60,19 @@ def initialize_database():
         conn.commit()
 
 # Inserta un nuevo usuario o recupera su ID si ya existe
-def get_or_create_user(whatsapp_number, name=None):
+def get_or_create_user(from_number, name=None):
     with get_connection() as conn:
         cursor = conn.cursor()
         # Intenta buscar el usuario
-        cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (whatsapp_number,))
+        cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (from_number,))
         result = cursor.fetchone()
         if result:
             print("Numero encontrado")
             return result[0]  # Devuelve el ID del usuario existente
-        # Si no existe, lo crea
-        cursor.execute("INSERT INTO users (whatsapp_number, name) VALUES (?, ?)", (whatsapp_number, name))
+        # Si no existe, lo crea tanto en tabla de usuarios como tabla de usuarios con mensajes pendientes de procesar
+        cursor.execute("INSERT INTO processed_user_messages (whatsapp_number) VALUES (?)", (from_number,))
+        conn.commit()
+        cursor.execute("INSERT INTO users (whatsapp_number, name) VALUES (?, ?)", (from_number, name))
         conn.commit()
         return cursor.lastrowid  # Devuelve el ID del nuevo usuario
 
