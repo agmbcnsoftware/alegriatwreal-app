@@ -132,7 +132,7 @@ def update_processed_messages(from_number):
       cursor.execute("""
       UPDATE processed_user_messages 
       SET last_processed = CURRENT_TIMESTAMP 
-      WHERE whatapp_number = ?
+      WHERE whatsapp_number = ?
       """, (from_number,))
       conn.commit()
       

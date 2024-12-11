@@ -52,7 +52,7 @@ def process_conversations():
         print ("Mensajes pendientes de procesar para ", whatsapp_number)
         #Inicializo messsages con con el prompt para la IA pidiendole  uun resumen
         summary_prompt = """Eres un asistente experto en procesar conversaciones. A continuación, recibirás una transcripción completa entre un usuario y un bot. 
-        Tu tarea es resumir la conversación, incluyendo el nombre del usuario en el caso en que dispongas de él y analizar si el usuario ha reservado una clase de prueba. """         
+        Tu tarea es resumir la conversación, con mucha brevedad incluyendo el nombre del usuario en el caso en que dispongas de él y analizar si el usuario ha reservado una clase de prueba. """         
         messages = [{"role": "system", "content" : summary_prompt }]          
         msg_cursor = db.get_messages_by_user(whatsapp_number)
         for message, sender, timestamp in msg_cursor.fetchall():            
@@ -70,7 +70,7 @@ def process_conversations():
             to = admin_number
         )
         #Apunto que ya he procesado los mensajes de este usuario
-        db.set_user_messages_processed(whatsapp_number)
+        db.update_processed_messages(whatsapp_number)
         time.sleep(1)
     print("Conversaciones procesadas")
 
