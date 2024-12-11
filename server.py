@@ -48,7 +48,8 @@ def start_web_server():
 def process_conversations():
     print("Procesando conversaciones...")
     num_cursor = db.get_unprocessed_users()
-    for whatsapp_number in num_cursor.fetchall():
+    for row in num_cursor.fetchall():
+        whatsapp_number = row[0]
         print ("Mensajes pendientes de procesar para ", whatsapp_number)
         #Inicializo messsages con con el prompt para la IA pidiendole  uun resumen
         summary_prompt = """Eres un asistente experto en procesar conversaciones. A continuación, recibirás una transcripción completa entre un usuario y un bot. 
