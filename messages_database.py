@@ -67,7 +67,7 @@ def get_or_create_user(from_number, name=None):
         cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (from_number,))
         result = cursor.fetchone()
         if result:
-            print("Numero encontrado")
+            print("Numero encontrado, id: ", result[0])
             return result[0]  # Devuelve el ID del usuario existente
         # Si no existe, lo crea tanto en tabla de usuarios como tabla de usuarios con mensajes pendientes de procesar
         cursor.execute("INSERT INTO processed_user_messages (whatsapp_number) VALUES (?)", (from_number,))
@@ -77,23 +77,24 @@ def get_or_create_user(from_number, name=None):
         return cursor.lastrowid  # Devuelve el ID del nuevo usuario
 
 # Inserta un nuevo mensaje
-def insert_message(user_id, whatsapp_number, whatsapp_profile, message, sender):
-    print("Inserting message")
+def insert_message(user_id, from_number, whatsapp_profile, message, sender):
+    print("Inserting message. Whatsapp number: ",from_number )
+    print("and ")
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM messages WHERE whatsapp_number = ?", (whatsapp_number,))
+        cursor.execute("SELECT * FROM messages WHERE whatsapp_number = ?", (from_number,))
         result = cursor.fetchone()
         cursor.execute("""
         INSERT INTO messages (user_id, whatsapp_number, whatsapp_profile, message, sender)
         VALUES (?, ?, ?, ?, ?)
-        """, (user_id, whatsapp_number, whatsapp_profile, message, sender))
+        """, (user_id, from_number, whatsapp_profile, message, sender))
         conn.commit()
 
         
 # Obtiene el historial de mensajes de un usuario
-def get_messages_by_user(whatsapp_number):
+def get_messages_by_user(from_number):
     print("Obteniendo mensajes del usuario")
-    print(whatsapp_number)
+    print(from_number)
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
@@ -102,7 +103,7 @@ def get_messages_by_user(whatsapp_number):
         JOIN users u ON m.user_id = u.id
         WHERE u.whatsapp_number = ?
         ORDER BY m.timestamp ASC
-        """, (whatsapp_number))
+        """, (from_number,))
         return cursor
         
 # Elimina los mensajes de un usuario que lo ha solicitado
