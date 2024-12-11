@@ -53,7 +53,7 @@ def initialize_database():
             CREATE TABLE IF NOT EXISTS processed_user_messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             whatsapp_number TEXT NOT NULL,
-            last_processed TIMESTAMP DEFAULT NULL,
+            last_processed TIMESTAMP CURRENT_TIMESTAMP,
             UNIQUE(whatsapp_number)
         )
         """)
@@ -87,6 +87,10 @@ def insert_message(user_id, whatsapp_number, whatsapp_profile, message, sender):
         INSERT INTO messages (user_id, whatsapp_number, whatsapp_profile, message, sender)
         VALUES (?, ?, ?, ?, ?)
         """, (user_id, whatsapp_number, whatsapp_profile, message, sender))
+        #cursor.execute("""
+        #    INSER INTO processed_user_messages(id, whatsapp_number, lastprocessed)
+        #    VALUES (?,?,?)
+        #""", (user_id, whatsapp_number, ))
         conn.commit()
 
                       
