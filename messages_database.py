@@ -119,7 +119,7 @@ def insert_processed_messages(from_number):
     with get_connection() as conn:
       cursor = conn.cursor()
       cursor.execute("""
-          INSERT INTO processed_user_messages( whatsapp_number)
+          INSERT INTO processed_user_messages (whatsapp_number)
           VALUES (?)
       """, (from_number))
       conn.commit()
@@ -128,9 +128,9 @@ def update_processed_messages(from_number):
     with get_connection() as conn:
       cursor = conn.cursor()
       cursor.execute("""
-          UPDATE processed_user_messages 
-          SET last_processed = CURRENT_TIMESTAMP 
-          WHERE whatapp_number = ?
+      UPDATE processed_user_messages 
+      SET last_processed = CURRENT_TIMESTAMP 
+      WHERE whatapp_number = ?
       """, (from_number))
       conn.commit()
       
@@ -138,22 +138,22 @@ def set_user_messages_unprocessed(from_number):
   with get_connection() as conn:
         cursor = conn.cursor()
         # Intenta buscar el usuario
+        print(type(from_number), from_number)
         cursor.execute("SELECT id FROM processed_user_messages WHERE whatsapp_number = ?", (from_number,))
         result = cursor.fetchone()
         if result:
             print("Actualizamos mensajes no procesados")
             cursor.execute("""
-                UPDATE processed_user_messages 
-                SET last_processed = CURRENT_TIMESTAMP 
-                WHERE whatapp_number = ?
+            UPDATE processed_user_messages 
+            SET last_processed = CURRENT_TIMESTAMP 
+            WHERE whatsapp_number = ?
             """, (from_number))
             conn.commit()
         else:
             print("Creamos mensajes no procesados")
-            cursor.execute("""
-                INSERT INTO processed_user_messages (whatsapp_number)
-                VALUES (?)
-            """, (from_number))
+            print(from_number)
+            cursor.execute("INSERT INTO processed_user_messages (whatsapp_number) VALUES (?)", (from_number))
+            print("insertado antes del commit")
         conn.commit()  
             
         # Si no existe, lo crea
