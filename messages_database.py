@@ -115,18 +115,24 @@ def delete_messages_from_user(from_number):
         conn.commit()
         print(f"Mensajes eliminados para el número: {from_number}")
 
+def insert_processed_messages(from_number):
+    with get_connection() as conn:
+      cursor = conn.cursor()
+      cursor.execute("""
+          INSER INTO processed_user_messages( whatsapp_number)
+          VALUES (?)
+      """, (from_number))
+      conn.commit()
+
 def update_processed_messages(from_number):
     with get_connection() as conn:
       cursor = conn.cursor()
       cursor.execute("""
-          INSER INTO processed_user_messages(id, whatsapp_number, lastprocessed)
-          VALUES (?,?)
-      """, (user_id, whatsapp_number, ))
+          UPDATE processed_user_messages 
+          SET last_processed = CURRENT_TIMESTAMP 
+          WHERE whatapp_number = ?
+      """)
       conn.commit()
-      
-      #
-      #
-
         
 def get_unprocessed_users():
     """
