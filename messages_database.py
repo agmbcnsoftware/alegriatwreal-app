@@ -167,7 +167,7 @@ def get_unprocessed_users():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        SELECT DISTINCT m.whatsapp_number as whatsapp_num
+        SELECT DISTINCT m.whatsapp_number as whatsapp_number
         FROM messages m
         LEFT JOIN processed_user_messages p
         ON m.whatsapp_number = p.whatsapp_number
