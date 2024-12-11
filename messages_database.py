@@ -81,19 +81,13 @@ def insert_message(user_id, whatsapp_number, whatsapp_profile, message, sender):
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM messages WHERE whatsapp_number = ?", (whatsapp_number,))
         result = cursor.fetchone()
-        print("Obteniendo todo sobre mensajes")
-        #print(result)
         cursor.execute("""
         INSERT INTO messages (user_id, whatsapp_number, whatsapp_profile, message, sender)
         VALUES (?, ?, ?, ?, ?)
         """, (user_id, whatsapp_number, whatsapp_profile, message, sender))
-        #cursor.execute("""
-        #    INSER INTO processed_user_messages(id, whatsapp_number, lastprocessed)
-        #    VALUES (?,?,?)
-        #""", (user_id, whatsapp_number, ))
         conn.commit()
 
-                      
+        
 # Obtiene el historial de mensajes de un usuario
 def get_messages_by_user(whatsapp_number):
     print("Obteniendo mensajes del usuario")
@@ -120,6 +114,19 @@ def delete_messages_from_user(from_number):
         """, (from_number,))
         conn.commit()
         print(f"Mensajes eliminados para el número: {from_number}")
+
+def update_processed_messages(from_number):
+    with get_connection() as conn:
+      cursor = conn.cursor()
+      cursor.execute("""
+          INSER INTO processed_user_messages(id, whatsapp_number, lastprocessed)
+          VALUES (?,?)
+      """, (user_id, whatsapp_number, ))
+      conn.commit()
+      
+      #
+      #
+
         
 def get_unprocessed_users():
     """
