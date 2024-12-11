@@ -66,10 +66,12 @@ def process_conversations():
         #Mandamos la respuesta a través de Twilio al telefono del admin
         message = twilio_client.messages.create(
             from_=twilio_number,
-            body=response_message,
-            to=whatsapp_number
+            body = response_message,
+            to = admin_number
         )
-    time.sleep(1)
+        #Apunto que ya he procesado los mensajes de este usuario
+        db.set_user_messages_processed(whatsapp_number)
+        time.sleep(1)
     print("Conversaciones procesadas")
 
 def notify_appointments():
@@ -78,8 +80,8 @@ def notify_appointments():
     
 def start_conversations_processing():
     print("Thread for conversation running")
-    schedule.every().day.at("11:50").do(process_conversations)
-    #schedule.every().minute.at(":23").do(process_conversations)
+    #schedule.every().day.at("11:50").do(process_conversations)
+    schedule.every().minute.at(":23").do(process_conversations)
     while True:
         schedule.run_pending()
         time.sleep(1)       

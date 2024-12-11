@@ -144,7 +144,7 @@ def set_user_messages_processed(from_number):
         cursor.execute("SELECT id FROM processed_user_messages WHERE whatsapp_number = ?", (from_number,))
         result = cursor.fetchone()
         if result:
-            print("Actualizamos mensajes no procesados")
+            print("Actualizamos mensajes procesados")
             cursor.execute("""
             UPDATE processed_user_messages 
             SET last_processed = CURRENT_TIMESTAMP 
@@ -152,11 +152,11 @@ def set_user_messages_processed(from_number):
             """, (from_number,))
             conn.commit()
         else:
-            print("Creamos mensajes no procesados")
+            print("Creamos mensajes procesados")
             print(from_number)
             cursor.execute("INSERT INTO processed_user_messages (whatsapp_number) VALUES (?)", (from_number,))
             print("insertado antes del commit")
-        conn.commit()  
+            conn.commit()  
             
         # Si no existe, lo crea
         
