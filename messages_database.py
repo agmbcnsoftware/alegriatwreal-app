@@ -206,7 +206,7 @@ def print_all_reservations():
       """)
       reservations = cursor.fetchall()  
       for res in reservations:
-        reservation_id, whatsapp_number, class_type, class_date, class_time = res
+        whatsapp_number, class_type, class_date, class_time = res
         reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos!"
         print("Mensaje: ", reminder_message)
         
@@ -239,8 +239,8 @@ def insert_new_reservation(user_id, whatsapp_number, class_type, class_date, cla
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO trial_class_reservations (user_-id, whatsapp_number, class_type, class_date, class_time)
-        VALUES ( ?, ?, ?, ?)
+        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_type, class_date, class_time)
+        VALUES ( ?, ?, ?, ?, ?)
          """, (user_id, whatsapp_number, class_type, class_date, class_time))
         conn.commit()
   
