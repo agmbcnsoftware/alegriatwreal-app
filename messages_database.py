@@ -48,7 +48,7 @@ def initialize_database():
         )
         """)
         conn.commit()
-        
+        # Crear  tabla de mensajes procesados  y resumidoos
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS processed_user_messages (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,6 +58,7 @@ def initialize_database():
         )
         """)
         conn.commit()
+        #Crear tabla de recordatorios
 
 # Inserta un nuevo usuario o recupera su ID si ya existe
 def get_or_create_user(from_number, name=None):
