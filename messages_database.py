@@ -205,3 +205,20 @@ def get_today-reservations():
         """)
         
         return cursor
+      
+def set_reservation_to_sent(reservation_id):
+    cursor.conn.cursor()     
+    cursor.execute("""
+        UPDATE trial_class_reservations
+        SET reminder_sent = 1
+        WHERE id = ?;
+        """, (reservation_id,))
+    conn.commit()
+    
+def insert_new_reservation(whatsapp_number, class_type, class_date, class_time):
+    cursor =  conn.cursor()
+    cursor.execute("""
+    INSERT INTO trial_class_reservations VA
+    """)
+  
+  

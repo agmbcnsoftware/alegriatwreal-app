@@ -81,8 +81,15 @@ def notify_appointments():
     res_cursor  =  db.get_today-reservations()
     for reservation in res_cursor.fetchall()
         reservation_id, whatsapp_number, class_type, class_date, class_time = reservation
-    
-    print("Conversaciones enviadas")
+        reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos!"
+        print("Mensaje: "reminder_message)
+        message = twilio_client.messages.create(
+            from_=twilio_number,
+            body = remminder_message,
+            to = whatsaapp_number
+        )
+        db.set_reservation_to_sent(reservation_id)
+        
     
 def start_conversations_processing():
     print("Thread for conversation running")
