@@ -167,8 +167,8 @@ def webhook():
         #class_type (str): Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas').
         #class_date (str): Fecha de la clase en formato 'YYYY-MM-DD'.
         #class_time (str): Hora de la clase en formato 'HH:MM'.
-        insert_new_reservation(user_id, from_number, "Rumba", "2024-12-12", "20:00")
-        
+        db.insert_new_reservation(user_id, from_number, "Rumba", "2024-12-12", "20:00")
+        db.print_all_reservations()
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:
         print("Error:", e)

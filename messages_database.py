@@ -196,6 +196,21 @@ def get_unprocessed_users():
         """)
         # Devuelve una lista de números de WhatsApp con mensajes sin procesar
         return cursor
+      
+def print_all_reservations():
+  with get_connection() as conn:
+      cursor = conn.cursor()
+      # Obtener reservas del día actual sin recordatorio enviado
+      cursor.execute("""
+      SELECT whatsapp_number, class_type, class_date, class_time FROM trial_class_reservations
+      """)
+      reservations = cursor.fetchall()  
+      for res in reservations:
+        reservation_id, whatsapp_number, class_type, class_date, class_time = res
+        reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos!"
+        print("Mensaje: ", reminder_message)
+        
+  
 
 def get_today_reservations():
     with get_connection() as conn:
