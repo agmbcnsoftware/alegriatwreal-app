@@ -79,7 +79,7 @@ def notify_appointments():
     print("Enviando notificaciones)") 
     
     res_cursor  =  db.get_today_reservations()
-    reservations = cursor.fetchall()
+    reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, whatsapp_number, class_type, class_date, class_time = res
         reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos!"
@@ -105,7 +105,7 @@ def start_conversations_processing():
 def start_appointment_notifications():
     #print("Thread for notifications running")
     schedule.every().day.at("08:00").do(notify_appointments)
-    #schedule.every().minute.at(":23").do(notify_appointments)
+    schedule.every().minute.at(":23").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -167,7 +167,7 @@ def webhook():
         #class_type (str): Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas').
         #class_date (str): Fecha de la clase en formato 'YYYY-MM-DD'.
         #class_time (str): Hora de la clase en formato 'HH:MM'.
-        insert_new_reservation(user_id, from_number, "Rumba", "2024-01-22", "20:00")
+        insert_new_reservation(user_id, from_number, "Rumba", "2024-12-12", "20:00")
         
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:
