@@ -21,7 +21,7 @@ def initialize_database():
         conn.commit()
         #Eliminar tabla  de  recordatorios
         cursor = conn.cursor()
-        cursor.execute ("""DROP TABLE IF EXIST trial_class_reservations """)
+        cursor.execute ("""DROP TABLE IF EXIST trial_class_reservations""")
         #Eliminar tabla de mensajes
         cursor.execute("""DROP TABLE IF EXISTS messages""")
         conn.commit()
@@ -196,7 +196,7 @@ def get_unprocessed_users():
         # Devuelve una lista de números de WhatsApp con mensajes sin procesar
         return cursor
 
-def get_today-reservations():
+def get_today_reservations():
     with get_connection() as conn:
         cursor = conn.cursor()
         # Obtener reservas del día actual sin recordatorio enviado

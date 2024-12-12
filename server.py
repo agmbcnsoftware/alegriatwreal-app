@@ -35,7 +35,7 @@ print(base_context[0:40])
 # Diccionario para el historial de conversaciones
 conversations = {}
 db = messages_database
-#db.initialize_database()
+db.initialize_database()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -78,18 +78,20 @@ def process_conversations():
 def notify_appointments():
     print("Enviando notificaciones)") 
     
-    res_cursor  =  db.get_today-reservations()
-    for reservation in res_cursor.fetchall()
-        reservation_id, whatsapp_number, class_type, class_date, class_time = reservation
+    res_cursor  =  db.get_today_reservations()
+    reservations = cursor.fetchall()
+    for res in reservations:
+        reservation_id, whatsapp_number, class_type, class_date, class_time = res
         reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos!"
-        print("Mensaje: "reminder_message)
+        print("Mensaje: ", reminder_message)
         message = twilio_client.messages.create(
             from_=twilio_number,
             body = remminder_message,
             to = whatsaapp_number
         )
         db.set_reservation_to_sent(reservation_id)
-        
+        time.sleep(1) 
+    print("Notificaciones enviadas")   
     
 def start_conversations_processing():
     print("Thread for conversation running")
@@ -102,10 +104,11 @@ def start_conversations_processing():
         
 def start_appointment_notifications():
     #print("Thread for notifications running")
-    schedule.every().day.at("08:00").do(process_conversations)
+    schedule.every().day.at("08:00").do(notify_appointments)
+    #schedule.every().minute.at(":23").do(notify_appointments)
     while True:
         schedule.run_pending()
-        time.sleep(5)
+        time.sleep(1)
 
 
 @app.route("/")
@@ -164,7 +167,7 @@ def webhook():
         #class_type (str): Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas').
         #class_date (str): Fecha de la clase en formato 'YYYY-MM-DD'.
         #class_time (str): Hora de la clase en formato 'HH:MM'.
-        insert_new_reservation(user_id, from_number, "Rumba", "2024-01-22", "20:00"9
+        insert_new_reservation(user_id, from_number, "Rumba", "2024-01-22", "20:00")
         
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:
