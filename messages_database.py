@@ -21,7 +21,8 @@ def initialize_database():
         conn.commit()
         #Eliminar tabla  de  recordatorios
         cursor = conn.cursor()
-        cursor.execute ("""DROP TABLE IF EXIST trial_class_reservations""")
+        cursor.execute("""DROP TABLE IF EXISTS trial_class_reservations""")
+        conn.commit()
         #Eliminar tabla de mensajes
         cursor.execute("""DROP TABLE IF EXISTS messages""")
         conn.commit()
@@ -72,7 +73,7 @@ def initialize_database():
             class_time TIME NOT NULL,                    -- Hora de la clase
             reminder_sent BOOLEAN DEFAULT 0,             -- Indica si ya se envió el recordatorio (0 = No, 1 = Sí)
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora de creación del registro
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Última actualización del registro
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Última actualización del registro
             FOREIGN KEY(user_id) REFERENCES users(id)    -- Relación con la tabla de usuarios
         )
         """)
@@ -214,7 +215,7 @@ def set_reservation_to_sent(reservation_id):
         cursor = conn.cursor()     
         cursor.execute("""
         UPDATE trial_class_reservations
-        SET reminder_sent = 1
+        SET reminder_sent = 1, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?;
         """, (reservation_id,))
         conn.commit()

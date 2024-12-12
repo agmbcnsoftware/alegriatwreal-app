@@ -35,7 +35,7 @@ print(base_context[0:40])
 # Diccionario para el historial de conversaciones
 conversations = {}
 db = messages_database
-db.initialize_database()
+#db.initialize_database()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
