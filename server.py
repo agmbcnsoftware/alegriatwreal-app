@@ -81,8 +81,8 @@ def notify_appointments():
     
 def start_conversations_processing():
     print("Thread for conversation running")
-    #schedule.every().day.at("11:50").do(process_conversations)
-    schedule.every().minute.at(":23").do(process_conversations)
+    schedule.every().day.at("11:50").do(process_conversations)
+    #schedule.every().minute.at(":23").do(process_conversations)
     while True:
         schedule.run_pending()
         time.sleep(1)       
