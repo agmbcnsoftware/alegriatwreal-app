@@ -158,8 +158,13 @@ def webhook():
             body=response_message,
             to=from_number
         )
-        
-        print(f"Sent message SID: {message.sid}")
+        #Meto a piñon un recordatorio en base de datos con formato
+        #user_id (int): ID del usuario relacionado.
+        #whatsapp_number (str): Número de WhatsApp del usuario.
+        #class_type (str): Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas').
+        #class_date (str): Fecha de la clase en formato 'YYYY-MM-DD'.
+        #class_time (str): Hora de la clase en formato 'HH:MM'.
+        insert_new_reservation(user_id, from_number, "Rumba", "2024-01-22", "20:00"9
         
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:

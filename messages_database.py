@@ -19,6 +19,9 @@ def initialize_database():
         cursor = conn.cursor()
         cursor.execute("""DROP TABLE IF EXISTS processed_user_messages""")
         conn.commit()
+        #Eliminar tabla  de  recordatorios
+        cursor = conn.cursor()
+        cursor.execute ("""DROP TABLE IF EXIST trial_class_reservations """)
         #Eliminar tabla de mensajes
         cursor.execute("""DROP TABLE IF EXISTS messages""")
         conn.commit()
@@ -216,12 +219,12 @@ def set_reservation_to_sent(reservation_id):
         """, (reservation_id,))
         conn.commit()
     
-def insert_new_reservation(whatsapp_number, class_type, class_date, class_time):
+def insert_new_reservation(user_id, whatsapp_number, class_type, class_date, class_time):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO trial_class_reservations (whatsapp_number, class_type, class_date, class_time)
+        INSERT INTO trial_class_reservations (user_-id, whatsapp_number, class_type, class_date, class_time)
         VALUES ( ?, ?, ?, ?)
-         """, (whatsapp_number, class_type, class_date, class_time))
+         """, (user_id, whatsapp_number, class_type, class_date, class_time))
         conn.commit()
   
