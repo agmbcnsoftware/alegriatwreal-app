@@ -105,7 +105,7 @@ def start_conversations_processing():
 def start_appointment_notifications():
     #print("Thread for notifications running")
     schedule.every().day.at("08:00").do(notify_appointments)
-    schedule.every().minute.at(":23").do(notify_appointments)
+    #schedule.every().minute.at(":23").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
