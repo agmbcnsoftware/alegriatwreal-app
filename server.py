@@ -77,6 +77,11 @@ def process_conversations():
 
 def notify_appointments():
     print("Enviando notificaciones)") 
+    
+    res_cursor  =  db.get_today-reservations()
+    for reservation in res_cursor.fetchall()
+        reservation_id, whatsapp_number, class_type, class_date, class_time = reservation
+    
     print("Conversaciones enviadas")
     
 def start_conversations_processing():

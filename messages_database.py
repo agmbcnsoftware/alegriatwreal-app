@@ -59,6 +59,22 @@ def initialize_database():
         """)
         conn.commit()
         #Crear tabla de recordatorios
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS trial_class_reservations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,        -- Identificador único para cada reserva
+            user_id INTEGER NOT NULL,                    -- ID del usuario relacionado
+            whatsapp_number TEXT NOT NULL,               -- Número de WhatsApp del usuario
+            class_type TEXT NOT NULL,                    -- Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas')
+            class_date DATE NOT NULL,                    -- Fecha de la clase
+            class_time TIME NOT NULL,                    -- Hora de la clase
+            reminder_sent BOOLEAN DEFAULT 0,             -- Indica si ya se envió el recordatorio (0 = No, 1 = Sí)
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora de creación del registro
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Última actualización del registro
+            FOREIGN KEY(user_id) REFERENCES users(id)    -- Relación con la tabla de usuarios
+        )
+        """)
+        conn.commit()
+
 
 # Inserta un nuevo usuario o recupera su ID si ya existe
 def get_or_create_user(from_number, name=None):
@@ -175,4 +191,17 @@ def get_unprocessed_users():
         WHERE p.last_processed IS NULL OR m.timestamp > p.last_processed
         """)
         # Devuelve una lista de números de WhatsApp con mensajes sin procesar
+        return cursor
+
+def get_today-reservations():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Obtener reservas del día actual sin recordatorio enviado
+        cursor.execute("""
+        SELECT id, whatsapp_number, class_type, class_date, class_time
+        FROM trial_class_reservations
+        WHERE class_date = DATE('now')
+          AND reminder_sent = 0;
+        """)
+        
         return cursor
