@@ -23,6 +23,9 @@ twilio_client = Client(account_sid, auth_token)
 encryption_key = os.environ.get("AI_INFO_KEY")
 #admin_number = "whatsapp:+34651090177"
 admin_number = "whatsapp:+34658595387"
+email_server = os.getenv("EMAIL_SERVER")
+email_address = os.getenv("EMAIL_ADDRESS")
+email_pwd = os.getenv("EMAIL_PWD")
 
 #Configuración de opeAI
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
