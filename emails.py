@@ -16,7 +16,7 @@ def connect_to_email_server(email_server, email_address, password):
         return None
       
 # Obtener correos de una carpeta
-def fetch_emails(mail, folder="inbox"):
+def fetch_emails(mail, folder="Test"):
     try:
         mail.select(folder)  # Seleccionar la carpeta
         status, messages = mail.search(None, "ALL")  # Buscar todos los correos
