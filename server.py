@@ -8,9 +8,7 @@ import schedule
 import time
 import datetime
 import messages_database
-import imaplib
-import email
-from email.header import decode_header
+import emails
 
 
 app = Flask(__name__)
@@ -43,6 +41,7 @@ print(base_context[0:40])
 # Diccionario para el historial de conversaciones
 conversations = {}
 db = messages_database
+eml = emails
 #db.initialize_database()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
@@ -57,6 +56,17 @@ def start_web_server():
 def notify_appointments():
     
     #Obteniendo nuevos citas para clase de prueba desde correo electrónico
+    mail = eml.connect_to_email_server(email_server, email_address, email_pwd)
+    if mail:
+        emails = eml.fetch_emails(mail)
+        mail.logout()  # Cerrar la sesión
+        # Procesar los correos recuperados
+        for email_data in emails:
+            print(f"De: {email_data['from']}")
+            print(f"Asunto: {email_data['subject']}")
+            print(f"Cuerpo:\n{email_data['body']}")
+            print("-" * 50)
+    
     
     print("Enviando notificaciones)") 
     res_cursor  =  db.get_today_reservations()
@@ -77,7 +87,8 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    schedule.every().day.at("08:00").do(notify_appointments)
+    schedule.every().minute.at(":00").do(notify_appointments)
+    #schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)

@@ -3,7 +3,6 @@ import email
 from email.header import decode_header
 
 
-
 # Conexión al servidor IMAP
 def connect_to_email_server(email_server, email_address, password):
     try:
