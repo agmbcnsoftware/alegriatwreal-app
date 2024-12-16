@@ -98,8 +98,8 @@ def extract_info(email_body):
     patterns = {
         "Nombre": r"Nombre\s*[:\-]?\s*(.*)",
         "Teléfono": r"Tel[eé]fono\s*[:\-]?\s*(.*)",
-        "Correo Electrónico": r"(Correo Electr[oó]nico|Email)\s*[:\-]?\s*(.*)",
-        "Sesión": r"Sesión\s*[:\-]?\s*(.*)"
+        "Correo Electrónico": r"Email\s*[:\-]?\s*(.*)",
+        "Curso": r"Curso\s*[:\-]?\s*(.*)"
     }
 
     for key, pattern in patterns.items():
