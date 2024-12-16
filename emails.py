@@ -21,13 +21,12 @@ def fetch_emails(mail, folder="Test"):
         status, messages = mail.search(None, "ALL")  # Buscar todos los correos
         if status != "OK":
             print("No se pudieron recuperar los correos")
-            return []
-        
+            return []        
         email_ids = messages[0].split()  # IDs de los correos
-        emails = []
-
+        emails = []        
         for email_id in email_ids:
             # Recuperar el correo por ID
+            print("Loop de emails")
             status, msg_data = mail.fetch(email_id, "(RFC822)")
             if status != "OK":
                 print(f"No se pudo recuperar el correo con ID {email_id}")
