@@ -2,7 +2,7 @@ import imaplib
 import email
 from email.header import decode_header
 import chardet  # Biblioteca para detectar codificaciones (opcional)
-
+import re # Biblioteca para gestionar expresiones regulares
 
 # Conexión al servidor IMAP
 def connect_to_email_server(email_server, email_address, password):
@@ -89,3 +89,22 @@ def fetch_emails(mail, folder="Test"):
     except Exception as e:
         print(f"Error al recuperar los correos: {e}")
         return []
+
+      
+def extract_info(email_body):
+    extracted_data = {}
+
+    # Palabras clave y patrones asociados
+    patterns = {
+        "Nombre": r"Nombre\s*[:\-]?\s*(.*)",
+        "Teléfono": r"Tel[eé]fono\s*[:\-]?\s*(.*)",
+        "Correo Electrónico": r"(Correo Electr[oó]nico|Email)\s*[:\-]?\s*(.*)",
+        "Sesión": r"Sesión\s*[:\-]?\s*(.*)"
+    }
+
+    for key, pattern in patterns.items():
+        match = re.search(pattern, email_body, re.IGNORECASE)
+        if match:
+            extracted_data[key] = match.group(1).strip()
+
+    return extracted_data

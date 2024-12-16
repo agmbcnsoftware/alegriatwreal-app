@@ -61,10 +61,27 @@ def notify_appointments():
         emails = eml.fetch_emails(mail)
         mail.logout()  # Cerrar la sesión
         # Procesar los correos recuperados
+        # Integración con el bucle que recorre los correos
         for email_data in emails:
             print(f"De: {email_data['from']}")
             print(f"Asunto: {email_data['subject']}")
-            print(f"Cuerpo:\n{email_data['body']}")
+    
+            # Procesar el cuerpo del correo
+            email_body = email_data['body']
+            extracted_data = eml.extract_info(email_body)
+
+            # Extraer cada campo como variable
+            nombre = extracted_data.get("Nombre", "No especificado")
+            telefono = extracted_data.get("Teléfono", "No especificado")
+            correo = extracted_data.get("Correo Electrónico", "No especificado")
+            sesion = extracted_data.get("Sesión", "No especificado")
+
+            # Mostrar la información extraída
+            print("Información extraída:")
+            print(f"  Nombre: {nombre}")
+            print(f"  Teléfono: {telefono}")
+            print(f"  Correo Electrónico: {correo}")
+            print(f"  Sesión: {sesion}")
             print("-" * 50)
     
     
@@ -87,7 +104,7 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    #schedule.every().minute.at(":00").do(notify_appointments)
+    schedule.every().minute.at(":00").do(notify_appointments)
     #schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
