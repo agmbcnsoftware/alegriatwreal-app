@@ -34,7 +34,6 @@ def get_next_weekday_time(day_and_time):
                 "2025-06-09",
                 "2025-06-24"]  # Lista de festivos en formato 'YYYY-MM-DD'
 
-
     # Separar el día y la hora
     day, time = day_and_time.split()
     hour, minute = map(int, time.replace("h", "").split(":"))
