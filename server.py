@@ -72,9 +72,9 @@ def notify_appointments():
 
             # Extraer cada campo como variable
             nombre = extracted_data.get("Nombre", "No especificado")
-            telefono = extracted_data.get("Teléfono", "No especificado")
+            whatsapp_number = "whatsapp: " + extracted_data.get("Teléfono", "No especificado")
             correo = extracted_data.get("Correo Electrónico", "No especificado")
-            sesion = extracted_data.get("Sesión", "No especificado")
+            clase = extracted_data.get("Sesión", "No especificado")
 
             # Mostrar la información extraída
             print("Información extraída:")
@@ -83,7 +83,10 @@ def notify_appointments():
             print(f"  Correo Electrónico: {correo}")
             print(f"  Sesión: {sesion}")
             print("-" * 50)
-    
+            
+            # Inserto la información que me llega en los emails en base de datos
+            user_id = db. get_or_create_user(telefono, nombre)
+            db.insert_new_reservation(user_id, whatsapp_number, clase_name, class_date, class_time):
     
     print("Enviando notificaciones)") 
     res_cursor  =  db.get_today_reservations()
