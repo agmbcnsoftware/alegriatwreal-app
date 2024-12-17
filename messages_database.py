@@ -244,4 +244,15 @@ def insert_new_reservation(user_id, whatsapp_number, class_type, class_date, cla
          """, (user_id, whatsapp_number, class_type, class_date, class_time))
         conn.commit()
   
-  #def insert_new_reservation
+  def get_or_create_reservation(user_id, whatsapp_number, class_type, class_date, class_time)
+      with get_connection() as conn:
+        cursor = conn.cursor()
+        # Intenta buscar el usuario
+        cursor.execute("SELECT id from trial_class_reservations 
+            WHERE whatsapp_number = ?
+                       , class_type, class_date, class_time FROM users WHERE whatsapp_number = ?", (from_number,))
+        #cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (from_number,))
+        result = cursor.fetchone()
+        if result:
+            print("Numero encontrado, id: ", result[0])
+            return result[0] 
