@@ -9,6 +9,7 @@ import time
 import datetime
 import messages_database
 import emails
+import date_operations
 
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ print(base_context[0:40])
 conversations = {}
 db = messages_database
 eml = emails
+date_ops = date_operations
 #db.initialize_database()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
@@ -51,11 +53,9 @@ eml = emails
 
 def start_web_server():
     app.run(host='0.0.0.0', port=3000)
-
-
-def notify_appointments():
     
-    #Obteniendo nuevos citas para clase de prueba desde correo electrónico
+def get_appointments_from_mail():
+   #Obteniendo nuevos citas para clase de prueba desde correo electrónico
     mail = eml.connect_to_email_server(email_server, email_address, email_pwd)
     if mail:
         emails = eml.fetch_emails(mail)
@@ -86,8 +86,10 @@ def notify_appointments():
             
             # Inserto la información que me llega en los emails en base de datos
             user_id = db. get_or_create_user(telefono, nombre)
-            db.insert_new_reservation(user_id, whatsapp_number, clase_name, class_date, class_time):
+            db.insert_new_reservation(user_id, whatsapp_number, clase_name, class_date, class_time)
     
+
+def notify_appointments():   
     print("Enviando notificaciones)") 
     res_cursor  =  db.get_today_reservations()
     reservations = res_cursor.fetchall()
@@ -103,7 +105,6 @@ def notify_appointments():
         db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
-    
         
         
 def start_appointment_notifications():
