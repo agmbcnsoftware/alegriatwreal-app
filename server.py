@@ -71,25 +71,25 @@ def get_appointments_from_mail():
             extracted_data = eml.extract_info(email_body)
 
             # Extraer cada campo como variable
-            nombre = extracted_data.get("Nombre", "No especificado")
+            nombre = extracted_data.get("De", "No especificado")
             whatsapp_number = "whatsapp: " + extracted_data.get("Teléfono", "No especificado")
             correo = extracted_data.get("Correo Electrónico", "No especificado")
-            clase = extracted_data.get("Sesión", "No especificado")
+            clase = extracted_data.get("Curso", "No especificado")
 
             # Mostrar la información extraída
             print("Información extraída:")
             print(f"  Nombre: {nombre}")
             print(f"  Teléfono: {whatsapp_number}")
             print(f"  Correo Electrónico: {correo}")
-            print(f"  Sesión: {sesion}")
+            print(f"  Sesión: {clase}")
             print("-" * 50)
             # Ejemplo de uso
            
             class_date, class_time = date_ops.get_next_weekday_time("Lunes 20:00h") 
             
             # Inserto la información que me llega en los emails en base de datos
-            user_id = db. get_or_create_user(telefono, nombre)
-            db.insert_new_reservation(user_id, whatsapp_number, clase_name, class_date, class_time)
+            user_id = db. get_or_create_user(whatsapp_number, nombre)
+            db.insert_new_reservation(user_id, whatsapp_number, clase, class_date, class_time)
             db.print_all_reservations()
 
 def notify_appointments():   

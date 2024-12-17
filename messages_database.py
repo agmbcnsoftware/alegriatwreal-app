@@ -244,3 +244,4 @@ def insert_new_reservation(user_id, whatsapp_number, class_type, class_date, cla
          """, (user_id, whatsapp_number, class_type, class_date, class_time))
         conn.commit()
   
+  #def insert_new_reservation

@@ -96,7 +96,7 @@ def extract_info(email_body):
 
     # Palabras clave y patrones asociados
     patterns = {
-        "Nombre": r"Nombre\s*[:\-]?\s*(.*)",
+        "De": r"De\s*[:\-]?\s*(.*)",
         "Teléfono": r"Tel[eé]fono\s*[:\-]?\s*(.*)",
         "Correo Electrónico": r"Email\s*[:\-]?\s*(.*)",
         "Curso": r"Curso\s*[:\-]?\s*(.*)"
