@@ -85,9 +85,8 @@ def get_appointments_from_mail():
             print("-" * 50)
             # Ejemplo de uso
            
-            print(date_ops.get_next_weekday_time("Lunes 20:00h") 
-            print(date_ops.get_next_weekday_time("Miércoles 18:45h")
-
+            class_date, class_time = date_ops.get_next_weekday_time("Lunes 20:00h") 
+           
             
             # Inserto la información que me llega en los emails en base de datos
             user_id = db. get_or_create_user(telefono, nombre)
