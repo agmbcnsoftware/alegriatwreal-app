@@ -53,15 +53,15 @@ def initialize_database():
         """)
         conn.commit()
         # Crear  tabla de mensajes procesados  y resumidoos
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS processed_user_messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            whatsapp_number TEXT NOT NULL,
-            last_processed TIMESTAMP CURRENT_TIMESTAMP,
-            UNIQUE(whatsapp_number)
-        )
-        """)
-        conn.commit()
+        #cursor.execute("""
+        #    CREATE TABLE IF NOT EXISTS processed_user_messages (
+        #    id INTEGER PRIMARY KEY AUTOINCREMENT,
+        #    whatsapp_number TEXT NOT NULL,
+        #    last_processed TIMESTAMP CURRENT_TIMESTAMP,
+        #    UNIQUE(whatsapp_number)
+        #)
+        #""")
+        #conn.commit()
         #Crear tabla de recordatorios
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS trial_class_reservations (
