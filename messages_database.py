@@ -69,8 +69,8 @@ def initialize_database():
             user_id INTEGER NOT NULL,                    -- ID del usuario relacionado
             whatsapp_number TEXT NOT NULL,               -- Número de WhatsApp del usuario
             class_type TEXT NOT NULL,                    -- Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas')
-            class_date DATE NOT NULL,                    -- Fecha de la clase
-            class_time TIME NOT NULL,                    -- Hora de la clase
+            class_date DATE NOT NULL,                    -- Fecha de la clase, en formato 'YYYY-MM-DD'
+            class_time TIME NOT NULL,                    -- Hora de la clase, en formato 'HH:MM'
             reminder_sent BOOLEAN DEFAULT 0,             -- Indica si ya se envió el recordatorio (0 = No, 1 = Sí)
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora de creación del registro
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Última actualización del registro
