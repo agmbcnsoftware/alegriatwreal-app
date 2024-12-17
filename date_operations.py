@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-def get_next_weekday_time(day_and_time, holidays):
+def get_next_weekday_time(day_and_time):
     """
     Calcula la próxima fecha para un día y hora específicos, excluyendo días festivos.
 
@@ -13,7 +13,28 @@ def get_next_weekday_time(day_and_time, holidays):
         "Lunes": 0, "Martes": 1, "Miércoles": 2, "Miercoles": 2,
         "Jueves": 3, "Viernes": 4, "Sábado": 5, "Sabado": 5, "Domingo": 6
     }
-    
+    # Festivos del año
+    holidays = ["2024-12-24", 
+                "2024-12-25",
+                "2024-12-26",
+                "2024-12-27",
+                "2024-12-28",
+                "2024-12-29",
+                "2024-12-30",
+                "2024-12-31",
+                "2025-01-01",
+                "2025-01-02",
+                "2025-01-03",
+                "2025-01-04",
+                "2025-01-05",
+                "2025-01-06",
+                "2025-04-18",
+                "2025-04-21",
+                "2025-05-01",
+                "2025-06-09",
+                "2025-06-24"]  # Lista de festivos en formato 'YYYY-MM-DD'
+
+
     # Separar el día y la hora
     day, time = day_and_time.split()
     hour, minute = map(int, time.replace("h", "").split(":"))
@@ -42,7 +63,4 @@ def get_next_weekday_time(day_and_time, holidays):
     return date_str, time_str
 
 
-# Ejemplo de uso
-holidays = ["2024-06-03", "2024-06-10", "2024-06-17"]  # Lista de festivos en formato 'YYYY-MM-DD'
-print(get_next_weekday_time("Lunes 20:00h", holidays))  # Excluye festivos
-print(get_next_weekday_time("Miércoles 18:45h", holidays))
+
