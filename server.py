@@ -100,6 +100,8 @@ def notify_appointments():
         reservation_id, whatsapp_number, class_type, class_date, class_time = res
         reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos contentos!"
         print("Mensaje2: ", reminder_message)
+        # ATENCION PONGO A PINON MI NUMERO 
+        whatsapp_number = admin_number
         message = twilio_client.messages.create(
             from_=twilio_number,
             body = reminder_message,
@@ -112,7 +114,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":00").do(notify_appointments)
-    schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
