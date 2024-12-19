@@ -45,7 +45,7 @@ db = messages_database
 eml = emails
 date_ops = date_operations
 #db.initialize_database()
-print(date_ops.get_next_weekday_time("Martes de 16:15h a 17:15h"))
+#print(date_ops.get_next_weekday_time("Lunes de 16:15h a 17:15h"))
 
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
@@ -73,26 +73,30 @@ def get_appointments_from_mail():
             extracted_data = eml.extract_info(email_body)
 
             # Extraer cada campo como variable
-            nombre = extracted_data.get("De", "No especificado")
+            nombre = extracted_data.get("Nombre", "No especificado")
+            apellidos = extracted_data.get("Apellidos", "No especificado")
             whatsapp_number = "whatsapp: " + extracted_data.get("Teléfono", "No especificado")
-            correo = extracted_data.get("Correo Electrónico", "No especificado")
-            clase = extracted_data.get("Curso", "No especificado")
+            correo = extracted_data.get("Email", "No especificado")
+            horario = extracted_data.get("Horario", "No especificado")
+            clase = extracted_data.get("Clase", "No especificado")
 
             # Mostrar la información extraída
             print("Información extraída:")
             print(f"  Nombre: {nombre}")
+            print(f"  Apellidos: {apellidos}")
             print(f"  Teléfono: {whatsapp_number}")
             print(f"  Correo Electrónico: {correo}")
             print(f"  Sesión: {clase}")
+            print(f"  Horario: {horario}")
             print("-" * 50)
             # Ejemplo de uso
            
-            class_date, class_time = date_ops.get_next_weekday_time("Lunes 20:00h") 
+            #class_date, class_time = date_ops.get_next_weekday_time("Lunes 20:00h") 
             
             # Inserto la información que me llega en los emails en base de datos
-            user_id = db. get_or_create_user(whatsapp_number, nombre)
-            db.get_or_create_reservation(user_id, whatsapp_number, clase, class_date, class_time)
-            db.print_all_reservations()
+            #user_id = db. get_or_create_user(whatsapp_number, nombre)
+            #db.get_or_create_reservation(user_id, whatsapp_number, clase, class_date, class_time)
+            #db.print_all_reservations()
 
 def notify_appointments():   
     print("Enviando notificaciones)") 
@@ -116,7 +120,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":00").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
