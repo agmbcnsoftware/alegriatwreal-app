@@ -45,6 +45,8 @@ db = messages_database
 eml = emails
 date_ops = date_operations
 #db.initialize_database()
+print(date_ops.get_next_weekday_time("Martes de 16:15h a 17:15h"))
+
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
