@@ -203,11 +203,11 @@ def print_all_reservations():
       cursor = conn.cursor()
       # Obtener reservas del día actual sin recordatorio enviado
       cursor.execute("""
-      SELECT whatsapp_number, class_type, class_date, class_time FROM trial_class_reservations
+      SELECT whatsapp_number, class_type, class_weekday_hour, class_date, class_time FROM trial_class_reservations
       """)
       reservations = cursor.fetchall()  
       for res in reservations:
-        whatsapp_number, class_type, class_date, class_time = res
+        whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
         reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos!"
         print("Mensaje: ", reminder_message)
         
@@ -218,7 +218,7 @@ def get_today_reservations():
         cursor = conn.cursor()
         # Obtener reservas del día actual sin recordatorio enviado
         cursor.execute("""
-        SELECT id, whatsapp_number, class_type, class_date, class_time
+        SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
         WHERE class_date = DATE('now')
           AND reminder_sent = 0;
@@ -241,7 +241,7 @@ def insert_new_reservation(user_id, whatsapp_number, class_type, class_weekday_h
         cursor = conn.cursor()
         cursor.execute("""
         INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_weekday_hour, class_type, class_date, class_time)
-        VALUES ( ?, ?, ?, ?, ?,?)
+        VALUES ( ?, ?, ?, ?, ?, ?)
          """, (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
   
