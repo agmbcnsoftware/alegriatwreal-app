@@ -69,6 +69,7 @@ def initialize_database():
             user_id INTEGER NOT NULL,                    -- ID del usuario relacionado
             whatsapp_number TEXT NOT NULL,               -- Número de WhatsApp del usuario
             class_type TEXT NOT NULL,                    -- Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas')
+            class_weekday_hour TEXT NOT NULL,
             class_date DATE NOT NULL,                    -- Fecha de la clase, en formato 'YYYY-MM-DD'
             class_time TIME NOT NULL,                    -- Hora de la clase, en formato 'HH:MM'
             reminder_sent BOOLEAN DEFAULT 0,             -- Indica si ya se envió el recordatorio (0 = No, 1 = Sí)
@@ -235,16 +236,16 @@ def set_reservation_to_sent(reservation_id):
         """, (reservation_id,))
         conn.commit()
     
-def insert_new_reservation(user_id, whatsapp_number, class_type, class_date, class_time):
+def insert_new_reservation(user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_type, class_date, class_time)
-        VALUES ( ?, ?, ?, ?, ?)
-         """, (user_id, whatsapp_number, class_type, class_date, class_time))
+        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_weekday_hour, class_type, class_date, class_time)
+        VALUES ( ?, ?, ?, ?, ?,?)
+         """, (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
   
-def get_or_create_reservation(user_id, whatsapp_number, class_type, class_date, class_time):
+def get_or_create_reservation(user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
       with get_connection() as conn:
         cursor = conn.cursor()
         # Intenta buscar el usuario
@@ -257,8 +258,8 @@ def get_or_create_reservation(user_id, whatsapp_number, class_type, class_date, 
             print("Numero encontrado, id: ", result[0])
             return result[0] 
         cursor.execute("""
-        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_type, class_date, class_time)
-        VALUES ( ?, ?, ?, ?, ?)
-         """, (user_id, whatsapp_number, class_type, class_date, class_time))
+        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time)
+        VALUES ( ?, ?, ?, ?, ?, ?)
+         """, (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
         return cursor.lastrowid
