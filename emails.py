@@ -96,7 +96,7 @@ def extract_info(email_body):
 
     # Patrones mejorados para detectar palabras clave y capturar su contenido
     patterns = {
-        "Clase": r"clase gratuita de\s*(\w+)",  # Captura la clase, por ejemplo, "RUMBA"
+        "Clase": r"clase gratuita de\s*\*?(\w+)\*?",  # Maneja asteriscos alrededor de la clase
         "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|$))",
         "Nombre": r"Nombre\s*[:\-]?\s*(.+?)\s*(?=(Apellidos|Email|Teléfono|Fecha solicitud|$))",
         "Apellidos": r"Apellidos\s*[:\-]?\s*(.+?)\s*(?=(Email|Teléfono|Fecha solicitud|$))",

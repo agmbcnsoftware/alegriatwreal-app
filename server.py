@@ -67,7 +67,7 @@ def get_appointments_from_mail():
         for email_data in emails:
             print(f"De: {email_data['from']}")
             print(f"Asunto: {email_data['subject']}")
-    
+            print(f"Body: {email_data['body']}")
             # Procesar el cuerpo del correo
             email_body = email_data['body']
             extracted_data = eml.extract_info(email_body)
