@@ -96,14 +96,14 @@ def extract_info(email_body):
 
     # Palabras clave y patrones asociados
     patterns = {
-        "Nombre": r"Nombre\s*[:\-]?\s*(.*)",
-        "Apellidos": r"Apellidos\s*[:\-]?\s*(.*)",
-        "Teléfono": r"Tel[eé]fono\s*[:\-]?\s*(.*)",
-        "Email": r"Email\s*[:\-]?\s*(.*)",
-        "Horario": r"Horario\s*[:\-]?\s*(.*)",
-        "Clase": r"clase gratuita de\s*[:\-]?\s*(.*)"
+        "Clase": r"clase gratuita de\s*(\w+)",  # Captura la clase, por ejemplo, "RUMBA"
+        "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|$))",
+        "Nombre": r"Nombre\s*[:\-]?\s*(.+?)\s*(?=(Apellidos|Email|Teléfono|Fecha solicitud|$))",
+        "Apellidos": r"Apellidos\s*[:\-]?\s*(.+?)\s*(?=(Email|Teléfono|Fecha solicitud|$))",
+        "Email": r"Email\s*[:\-]?\s*(.+?)\s*(?=(Teléfono|Fecha solicitud|$))",
+        "Teléfono": r"Tel[eé]fono\s*[:\-]?\s*(.+?)\s*(?=(Fecha solicitud|$))",
+        "Fecha solicitud": r"Fecha solicitud\s*[:\-]?\s*(.+)"
     }
-
     for key, pattern in patterns.items():
         match = re.search(pattern, email_body, re.IGNORECASE)
         if match:

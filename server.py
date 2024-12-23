@@ -75,7 +75,7 @@ def get_appointments_from_mail():
             # Extraer cada campo como variable
             nombre = extracted_data.get("Nombre", "No especificado")
             apellidos = extracted_data.get("Apellidos", "No especificado")
-            whatsapp_number = "whatsapp: " + extracted_data.get("Teléfono", "No especificado")
+            whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
             correo = extracted_data.get("Email", "No especificado")
             horario = extracted_data.get("Horario", "No especificado")
             clase = extracted_data.get("Clase", "No especificado")
@@ -120,7 +120,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":00").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
