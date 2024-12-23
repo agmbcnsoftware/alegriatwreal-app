@@ -94,7 +94,7 @@ def fetch_emails(mail, folder="Test"):
 def extract_info(email_body):
     extracted_data = {}
 
-    # Palabras clave y patrones asociados
+    # Patrones mejorados para detectar palabras clave y capturar su contenido
     patterns = {
         "Clase": r"clase gratuita de\s*(\w+)",  # Captura la clase, por ejemplo, "RUMBA"
         "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|$))",
@@ -104,6 +104,8 @@ def extract_info(email_body):
         "Teléfono": r"Tel[eé]fono\s*[:\-]?\s*(.+?)\s*(?=(Fecha solicitud|$))",
         "Fecha solicitud": r"Fecha solicitud\s*[:\-]?\s*(.+)"
     }
+
+    # Buscar cada patrón en el cuerpo del correo
     for key, pattern in patterns.items():
         match = re.search(pattern, email_body, re.IGNORECASE)
         if match:

@@ -71,7 +71,9 @@ def get_appointments_from_mail():
             # Procesar el cuerpo del correo
             email_body = email_data['body']
             extracted_data = eml.extract_info(email_body)
-
+            #Compruebo lo ue he recibido
+            for key, value in extracted_data.items():
+                print(f"{key}: {value}")
             # Extraer cada campo como variable
             nombre = extracted_data.get("Nombre", "No especificado")
             apellidos = extracted_data.get("Apellidos", "No especificado")
