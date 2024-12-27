@@ -3,6 +3,7 @@ import email
 from email.header import decode_header
 import chardet  # Biblioteca para detectar codificaciones (opcional)
 import re # Biblioteca para gestionar expresiones regulares
+import html
 
 # Conexión al servidor IMAP
 def connect_to_email_server(email_server, email_address, password):
@@ -90,13 +91,30 @@ def fetch_emails(mail, folder="Test"):
         print(f"Error al recuperar los correos: {e}")
         return []
 
-      
+def clean_email_body(email_body):
+    """
+    Limpia el contenido del correo, eliminando caracteres invisibles y decodificando HTML si es necesario.
+    """
+    # Decodificar entidades HTML (&nbsp;, &lt;, etc.)
+    email_body = html.unescape(email_body)
+    
+    # Reemplazar caracteres no estándar y normalizar
+    email_body = email_body.replace("\xa0", " ")  # Espacio no estándar
+    email_body = email_body.replace("\r", "")    # Retornos de carro
+    
+    email_body = email_body.strip()              # Quitar espacios al principio y al final
+    
+    return email_body
+
 def extract_info(email_body):
+    """
+    Extrae información clave del cuerpo del correo.
+    """
     extracted_data = {}
 
-    # Patrones mejorados para detectar palabras clave y capturar su contenido
+    # Patrones mejorados para detectar palabras clave
     patterns = {
-        "Clase": r"clase gratuita de\s*\*?(\w+)\*?",  # Maneja asteriscos alrededor de la clase
+        "Clase": r"clase gratuita de\s*\*?(\w+)\*?",
         "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|$))",
         "Nombre": r"Nombre\s*[:\-]?\s*(.+?)\s*(?=(Apellidos|Email|Teléfono|Fecha solicitud|$))",
         "Apellidos": r"Apellidos\s*[:\-]?\s*(.+?)\s*(?=(Email|Teléfono|Fecha solicitud|$))",
@@ -112,3 +130,4 @@ def extract_info(email_body):
             extracted_data[key] = match.group(1).strip()
 
     return extracted_data
+
