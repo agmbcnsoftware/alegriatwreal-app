@@ -233,7 +233,7 @@ def get_today_afternoon_reservations():
         cursor.execute("""
         SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
-        WHERE class_date = DATE('now') AND class_time > 14:30:00
+        WHERE class_date = DATE('now') AND class_time > '14:30:00'
           AND reminder_sent = 0;
         """)
         
@@ -246,7 +246,7 @@ def get_tomorrow_morning_reservations():
         cursor.execute("""
         SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
-        WHERE class_date = DATE('now') AND class_time < 14:30:00
+        WHERE class_date = DATE('now', '+1 day') AND class_time < '14:30:00'
           AND reminder_sent = 0;
         """)
         
