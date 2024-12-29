@@ -106,7 +106,7 @@ def get_appointments_from_mail():
 
 def notify_appointments():   
     print("Enviando notificaciones)") 
-    res_cursor  =  db.get_today_reservations()
+    res_cursor  =  db.get_today_afternoon_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, whatsapp_number, class_type, class_date, class_time = res
@@ -125,7 +125,7 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    #schedule.every().minute.at(":00").do(notify_appointments)
+    schedule.every().minute.at(":00").do(notify_appointments)
     #schedule.every().minute.at(":00").do(get_appointments_from_mail)
     schedule.every().day.at("08:00").do(notify_appointments)
     while True:

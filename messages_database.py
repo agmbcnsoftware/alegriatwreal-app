@@ -225,7 +225,34 @@ def get_today_reservations():
         """)
         
         return cursor
-      
+ 
+def get_today_afternoon_reservations():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Obtener reservas del día actual sin recordatorio enviado
+        cursor.execute("""
+        SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
+        FROM trial_class_reservations
+        WHERE class_date = DATE('now') AND class_time > 14:30:00
+          AND reminder_sent = 0;
+        """)
+        
+        return cursor
+
+def get_tomorrow_morning_reservations():
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Obtener reservas del día actual sin recordatorio enviado
+        cursor.execute("""
+        SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
+        FROM trial_class_reservations
+        WHERE class_date = DATE('now') AND class_time < 14:30:00
+          AND reminder_sent = 0;
+        """)
+        
+        return cursor     
+
+
 def set_reservation_to_sent(reservation_id):
     with get_connection() as conn:
         cursor = conn.cursor()     
