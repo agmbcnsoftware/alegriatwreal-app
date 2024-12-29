@@ -93,12 +93,12 @@ def get_appointments_from_mail():
             print("-" * 50)
             # Ejemplo de uso
            
-            #class_date, class_time = date_ops.get_next_weekday_time("Lunes 20:00h") 
+            class_date, class_time = date_ops.get_next_weekday_time(horario) 
             
             # Inserto la información que me llega en los emails en base de datos
-            #user_id = db. get_or_create_user(whatsapp_number, nombre)
-            #db.get_or_create_reservation(user_id, whatsapp_number, clase, class_date, class_time)
-            #db.print_all_reservations()
+            user_id = db. get_or_create_user(whatsapp_number, nombre)
+            db.get_or_create_reservation(user_id, whatsapp_number, clase, horario, class_date, class_time)
+            db.print_all_reservations()
 
 def notify_appointments():   
     print("Enviando notificaciones)") 
@@ -122,7 +122,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":00").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
