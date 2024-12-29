@@ -43,7 +43,7 @@ conversations = {}
 db = messages_database
 eml = emails
 date_ops = date_operations
-db.initialize_database()
+#db.initialize_database()
 #print(date_ops.get_next_weekday_time("Lunes de 16:15h a 17:15h"))
 
 
@@ -115,10 +115,10 @@ def notify_appointments():
         #res_cursor  =  db.get_tomorrow_morning_reservations()
     #else:
         #res_cursor  =  db.get_today_afternoon_reservations()
-    res_cursor  =  db.get_today_reservations()
+    res_cursor  =  db.get_all_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
-        reservation_id, whatsapp_number, class_type, class_date, class_time = res
+        reservation_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
         reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos contentos!"
         print("Mensaje2: ", reminder_message)
         # ATENCION PONGO A PINON MI NUMERO 
@@ -128,14 +128,14 @@ def notify_appointments():
             body = reminder_message,
             to = whatsapp_number
         )
-        db.set_reservation_to_sent(reservation_id)
+        #db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
         
         
 def start_appointment_notifications():
-    schedule.every().minute.at(":00").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":20").do(notify_appointments)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
