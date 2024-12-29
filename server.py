@@ -107,15 +107,7 @@ def get_appointments_from_mail():
 def notify_appointments():   
     print("Enviando notificaciones)") 
     
-    now = datetime.datetime.now()
-    current_hour = now.hour
-
-    # Verificar si es antes o después de las 14:00
-    #if current_hour >= 14:
-        #res_cursor  =  db.get_tomorrow_morning_reservations()
-    #else:
-        #res_cursor  =  db.get_today_afternoon_reservations()
-    res_cursor  =  db.get_all_reservations()
+    res_cursor  =  db.get_tomorrow_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
@@ -128,7 +120,9 @@ def notify_appointments():
             body = reminder_message,
             to = whatsapp_number
         )
-        #db.set_reservation_to_sent(reservation_id)
+        #Queda pendiente avisar también al adminsitrador por whatsapp
+        # El mensaje sería "Avisado: nombre, numero de whatsapp y clase"
+        db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
         
@@ -136,7 +130,7 @@ def notify_appointments():
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
     #schedule.every().minute.at(":00").do(get_appointments_from_mail)
-    #schedule.every().day.at("08:00").do(notify_appointments)
+    #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
