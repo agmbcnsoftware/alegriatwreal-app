@@ -106,7 +106,16 @@ def get_appointments_from_mail():
 
 def notify_appointments():   
     print("Enviando notificaciones)") 
-    res_cursor  =  db.get_today_afternoon_reservations()
+    
+    now = datetime.datetime.now()
+    current_hour = now.hour
+
+    # Verificar si es antes o después de las 14:00
+    #if current_hour >= 14:
+        #res_cursor  =  db.get_tomorrow_morning_reservations()
+    #else:
+        #res_cursor  =  db.get_today_afternoon_reservations()
+    res_cursor  =  db.get_today_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, whatsapp_number, class_type, class_date, class_time = res
