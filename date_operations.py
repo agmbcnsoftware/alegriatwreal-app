@@ -32,14 +32,16 @@ def get_next_weekday_time(day_time_string):
     """
     # Cargar días festivos
     holidays = load_holidays()
-
+    
     # Parsear el día y la hora de inicio
     parts = day_time_string.split(" de ")
     day_of_week = parts[0].strip()  # 'Lunes'
-    start_time = parts[1].split(" a ")[0].strip()  # '16:15h'
+    start_time_part = parts[1].split(" a ")[0].strip()  # '16.15h'
+    
+    
 
     # Remover la 'h' final de la hora
-    start_time = start_time.replace('h', '')
+    start_time = start_time_part.replace('.', ':').replace('h', '')
 
     # Mapear nombres de días en español a índices de días de la semana
     weekdays = {
@@ -72,4 +74,3 @@ def get_next_weekday_time(day_time_string):
 
     # Formatear la fecha y hora
     return next_date.strftime('%Y-%m-%d %H:%M')
-

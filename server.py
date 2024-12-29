@@ -43,7 +43,7 @@ conversations = {}
 db = messages_database
 eml = emails
 date_ops = date_operations
-#db.initialize_database()
+db.initialize_database()
 #print(date_ops.get_next_weekday_time("Lunes de 16:15h a 17:15h"))
 
 
@@ -93,7 +93,11 @@ def get_appointments_from_mail():
             print("-" * 50)
             # Ejemplo de uso
            
-            class_date, class_time = date_ops.get_next_weekday_time(horario) 
+            result = date_ops.get_next_weekday_time(horario)
+            print(result)
+            class_date, class_time = result.split(" ")
+            print(class_date)
+            print(class_time)
             
             # Inserto la información que me llega en los emails en base de datos
             user_id = db. get_or_create_user(whatsapp_number, nombre)
@@ -123,7 +127,7 @@ def notify_appointments():
 def start_appointment_notifications():
     #schedule.every().minute.at(":00").do(notify_appointments)
     schedule.every().minute.at(":00").do(get_appointments_from_mail)
-    #schedule.every().day.at("08:00").do(notify_appointments)
+    schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
