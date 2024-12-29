@@ -11,6 +11,7 @@ def load_holidays():
         list: Lista de días festivos en formato 'YYYY-MM-DD'.
     """
     file_path = 'holidays.txt'
+    print('a')
     try:
         with open(file_path, 'r') as file:
             holidays = file.read().strip().split(',')
