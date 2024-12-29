@@ -11,7 +11,6 @@ import messages_database
 import emails
 import date_operations
 
-
 app = Flask(__name__)
 
 # Configuración de Twilio
