@@ -90,7 +90,7 @@ def get_appointments_from_mail():
                 
 def create_reminder_text(user_name, class_type, class_date, class_time):
     template = (
-        "¡Hola <user_name>!\n\n¿Cómo estas?😊\n\nTan sólo quería saludarte, y recordarte que te esperamos "
+        "¡Hola <user_name>!\n\n¿Cómo estas?\n\nTan sólo quería saludarte, y recordarte que te esperamos "
         "mañana <class_weekday> a las <class_time> para tu clase de prueba de <class_type>.\n\n"
         "Recuerda que si a la salida te apuntas, accederás a la oferta de matrícula a 20€ en lugar de 60.\n\n"
         "Si tienes cualquier consulta, no dudes en escribirme y estaré encantada de atenderte.\n\n"
@@ -146,8 +146,8 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    schedule.every().minute.at(":20").do(notify_appointments)
-    schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    #schedule.every().minute.at(":20").do(notify_appointments)
+    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
