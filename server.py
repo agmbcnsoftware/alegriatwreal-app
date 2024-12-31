@@ -69,21 +69,26 @@ def get_appointments_from_mail():
             email_body = email_data['body']
             clean_body = eml.clean_email_body(email_body)
             print(clean_body)
+            try:
             #Obtengo la información contenida y la inserto en variables
-            extracted_data = eml.extract_info(clean_body)
-            nombre = extracted_data.get("Nombre", "No especificado")
-            apellidos = extracted_data.get("Apellidos", "No especificado")
-            whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
-            correo = extracted_data.get("Email", "No especificado")
-            horario = extracted_data.get("Horario", "No especificado")
-            clase = extracted_data.get("Clase", "No especificado")
-            # A partir de la fecha reservada obtengo el día concreto en que se hará vendrá a probar
-            result = date_ops.get_next_weekday_time(horario)
-            class_date, class_time = result.split(" ")
-            # Inserto la información que me llega en los emails en base de datos
-            user_id = db. get_or_create_user(whatsapp_number, nombre)
-            db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
-
+                extracted_data = eml.extract_info(clean_body)
+                nombre = extracted_data.get("Nombre", "No especificado")
+                apellidos = extracted_data.get("Apellidos", "No especificado")
+                whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
+                correo = extracted_data.get("Email", "No especificado")
+                horario = extracted_data.get("Horario", "No especificado")
+                clase = extracted_data.get("Clase", "No especificado")
+                # A partir de la fecha reservada obtengo el día concreto en que se hará vendrá a probar
+                result = date_ops.get_next_weekday_time(horario)
+                class_date, class_time = result.split(" ")
+                # Inserto la información que me llega en los emails en base de datos
+                user_id = db. get_or_create_user(whatsapp_number, nombre)
+                db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
+            except Exception as e:
+            # Captura la excepción y muestra la traza
+                print(f"Se pudo gestionar el mail de:" nombre)
+                traceback.print_exc()
+                
 def create_reminder_text(user_name, class_type, class_date, class_time):
     template = (
         "Hola <user_name>, como estas? Tan sólo quería saludarte y recordarte que te esperamos "
