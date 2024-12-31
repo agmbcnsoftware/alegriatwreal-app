@@ -114,8 +114,8 @@ def extract_info(email_body):
 
     # Patrones mejorados para detectar palabras clave
     patterns = {
-        "Clase": r"clase gratuita de\s*\*?(\w+)\*?",
-        "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|$))",
+        "Clase": r"clase gratuita de\s*(\w+)",
+        "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|Nivel|$))",
         "Nombre": r"Nombre\s*[:\-]?\s*(.+?)\s*(?=(Apellidos|Email|Teléfono|Fecha solicitud|$))",
         "Apellidos": r"Apellidos\s*[:\-]?\s*(.+?)\s*(?=(Email|Teléfono|Fecha solicitud|$))",
         "Email": r"Email\s*[:\-]?\s*(.+?)\s*(?=(Teléfono|Fecha solicitud|$))",
