@@ -64,37 +64,19 @@ def get_appointments_from_mail():
         # Procesar los correos recuperados
         # Integración con el bucle que recorre los correos
         for email_data in emails:
-            #print(f"De: {email_data['from']}")
-            #print(f"Asunto: {email_data['subject']}")
-            #print(f"Body: {email_data['body']}")
-            # Procesar el cuerpo del correo
+            #Para cada mail, obtengo su contenido y lo "limpio" de caracteres que puedan dar problemas
             email_body = email_data['body']
             clean_body = eml.clean_email_body(email_body)
             extracted_data = eml.extract_info(clean_body)
-            #Compruebo lo ue he recibido
-            #for key, value in extracted_data.items():
-            #    print(f"{key}: {value}")
-            # Extraer cada campo como variable
+            #
             nombre = extracted_data.get("Nombre", "No especificado")
             apellidos = extracted_data.get("Apellidos", "No especificado")
             whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
             correo = extracted_data.get("Email", "No especificado")
             horario = extracted_data.get("Horario", "No especificado")
             clase = extracted_data.get("Clase", "No especificado")
-
-            # Mostrar la información extraída
-            print("Información extraída:")
-            print(f"  Nombre: {nombre}")
-            print(f"  Apellidos: {apellidos}")
-            print(f"  Teléfono: {whatsapp_number}")
-            print(f"  Correo Electrónico: {correo}")
-            print(f"  Sesión: {clase}")
-            print(f"  Horario: {horario}")
-            print("-" * 50)
-            # Ejemplo de uso
            
             result = date_ops.get_next_weekday_time(horario)
-            print(result)
             class_date, class_time = result.split(" ")
             print(class_date)
             print(class_time)
