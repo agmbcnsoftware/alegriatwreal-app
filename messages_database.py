@@ -219,7 +219,7 @@ def get_all_reservations():
         # Obtener reservas del día actual sin recordatorio enviado
         cursor.execute("""
         SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
-        FROM trial_class_reservations
+        FROM trial_class_reservations;
         """)
         
         return cursor  

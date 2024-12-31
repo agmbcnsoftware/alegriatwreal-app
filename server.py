@@ -83,26 +83,14 @@ def get_appointments_from_mail():
             db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
 
 def create_reminder_text(user_name, class_type, class_time):
-  def create_reminder_text(user_name, class_type, class_time):
-    """
-    Crea un mensaje personalizado basado en los parámetros recibidos.
-
-    Args:
-        user_name (str): Nombre del usuario.
-        class_type (str): Tipo de clase.
-        class_time (str): Hora de la clase.
-
-    Returns:
-        str: El mensaje personalizado con los valores insertados.
-    """
     template = (
         "Hola <user_name>, como estas? Tan sólo quería saludarte y recordarte que te esperamos "
         "mañana <class_time> para tu clase de prueba de <class_type>.\n\n"
         "Recuerda que si a la salida te apuntas, accederás a la oferta de matrícula a 20€ en lugar de 60€.\n\n"
         "Si tienes cualquier consulta no dudes en escribirme y estaré encantada de atenderte.\n\n"
-        "Un abrazo y hasta mañana. \ud83d\udc83\u2764\ufe0f\u2728"
+        "Un abrazo y hasta mañana."
     )
-
+    
     # Reemplazar las claves con los valores proporcionados
     message = (template
                .replace("<user_name>", user_name)
@@ -110,19 +98,12 @@ def create_reminder_text(user_name, class_type, class_time):
                .replace("<class_time>", class_time))
 
     return message
-
-# Ejemplo de uso
-user_name = "Carlos"
-class_type = "yoga"
-class_time = "a las 10:00 AM"
-print(create_reminder_text(user_name, class_type, class_time))
-
-    return("Te recordamos que mañana tienes tu clase de prueba en la escuela Gracia Flamenca")
-            
+           
 def notify_appointments():   
     print("Enviando notificaciones)") 
     
-    res_cursor  =  db.get_tomorrow_reservations()
+    #res_cursor  =  db.get_tomorrow_reservations()
+    res_cursor  =  db.get_all_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
@@ -143,8 +124,8 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    #schedule.every().minute.at(":20").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":20").do(notify_appointments)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
