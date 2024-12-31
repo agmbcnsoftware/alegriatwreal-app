@@ -83,6 +83,40 @@ def get_appointments_from_mail():
             db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
 
 def create_reminder_text(user_name, class_type, class_time):
+  def create_reminder_text(user_name, class_type, class_time):
+    """
+    Crea un mensaje personalizado basado en los parámetros recibidos.
+
+    Args:
+        user_name (str): Nombre del usuario.
+        class_type (str): Tipo de clase.
+        class_time (str): Hora de la clase.
+
+    Returns:
+        str: El mensaje personalizado con los valores insertados.
+    """
+    template = (
+        "Hola <user_name>, como estas? Tan sólo quería saludarte y recordarte que te esperamos "
+        "mañana <class_time> para tu clase de prueba de <class_type>.\n\n"
+        "Recuerda que si a la salida te apuntas, accederás a la oferta de matrícula a 20€ en lugar de 60€.\n\n"
+        "Si tienes cualquier consulta no dudes en escribirme y estaré encantada de atenderte.\n\n"
+        "Un abrazo y hasta mañana. \ud83d\udc83\u2764\ufe0f\u2728"
+    )
+
+    # Reemplazar las claves con los valores proporcionados
+    message = (template
+               .replace("<user_name>", user_name)
+               .replace("<class_type>", class_type)
+               .replace("<class_time>", class_time))
+
+    return message
+
+# Ejemplo de uso
+user_name = "Carlos"
+class_type = "yoga"
+class_time = "a las 10:00 AM"
+print(create_reminder_text(user_name, class_type, class_time))
+
     return("Te recordamos que mañana tienes tu clase de prueba en la escuela Gracia Flamenca")
             
 def notify_appointments():   
