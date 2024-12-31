@@ -80,17 +80,20 @@ def get_appointments_from_mail():
             class_date, class_time = result.split(" ")
             # Inserto la información que me llega en los emails en base de datos
             user_id = db. get_or_create_user(whatsapp_number, nombre)
-            db.get_or_create_reservation(user_id, whatsapp_number, clase, horario, class_date, class_time)
+            db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
 
+def create_reminder_text(user_name, class_type, class_time):
+    return("Te recordamos que mañana tienes tu clase de prueba en la escuela Gracia Flamenca")
+            
 def notify_appointments():   
     print("Enviando notificaciones)") 
     
     res_cursor  =  db.get_tomorrow_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
-        reservation_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
-        reminder_message = f"Hola! Te recordamos tu clase de prueba de {class_type} hoy a las {class_time}. ¡Te esperamos contentos!"
-        print("Mensaje2: ", reminder_message)
+        reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
+        #Creo el texto que voy a enviar poor whatsapp
+        reminder_message = create_reminder_text(user_name, class_type, class_time)
         # ATENCION PONGO A PINON MI NUMERO 
         whatsapp_number = admin_number
         message = twilio_client.messages.create(

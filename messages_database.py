@@ -218,7 +218,7 @@ def get_all_reservations():
         cursor = conn.cursor()
         # Obtener reservas del día actual sin recordatorio enviado
         cursor.execute("""
-        SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
+        SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
         """)
         
@@ -229,7 +229,7 @@ def get_today_reservations():
         cursor = conn.cursor()
         # Obtener reservas del día actual sin recordatorio enviado
         cursor.execute("""
-        SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
+        SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
         WHERE class_date = DATE('now')
           AND reminder_sent = 0;
@@ -242,7 +242,7 @@ def get_tomorrow_reservations():
         cursor = conn.cursor()
         # Obtener reservas del día actual sin recordatorio enviado
         cursor.execute("""
-        SELECT id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
+        SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
         WHERE class_date = DATE('now', '+1 day')
           AND reminder_sent = 0;
@@ -261,13 +261,13 @@ def set_reservation_to_sent(reservation_id):
         """, (reservation_id,))
         conn.commit()
     
-def insert_new_reservation(user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
+def insert_new_reservation(user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_weekday_hour, class_type, class_date, class_time)
-        VALUES ( ?, ?, ?, ?, ?, ?)
-         """, (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
+        INSERT INTO trial_class_reservations (user_id, user_name, user_surname, whatsapp_number, class_weekday_hour, class_type, class_date, class_time)
+        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)
+         """, (user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
   
 def get_or_create_reservation(user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
