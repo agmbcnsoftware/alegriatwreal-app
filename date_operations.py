@@ -32,7 +32,8 @@ def get_next_weekday_time(day_time_string):
     """
     # Cargar días festivos
     holidays = load_holidays()
-    
+    print("FEcha de la clase")
+    print(day_time_string)
     # Parsear el día y la hora de inicio
     parts = day_time_string.split(" de ")
     day_of_week = parts[0].strip()  # 'Lunes'
