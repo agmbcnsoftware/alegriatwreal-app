@@ -62,11 +62,13 @@ def initialize_database():
         #)
         #""")
         #conn.commit()
-        #Crear tabla de recordatorios
+        #Crear tabla de reservas 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS trial_class_reservations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,        -- Identificador único para cada reserva
             user_id INTEGER NOT NULL,                    -- ID del usuario relacionado
+            user_name TEXT NOT NULL,                     -- Nombre de la persona que ha hecho la reserva
+            user_surname TEXT NOT NULL,                  -- Apellidos  
             whatsapp_number TEXT NOT NULL,               -- Número de WhatsApp del usuario
             class_type TEXT NOT NULL,                    -- Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas')
             class_weekday_hour TEXT NOT NULL,
@@ -268,7 +270,7 @@ def insert_new_reservation(user_id, whatsapp_number, class_type, class_weekday_h
          """, (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
   
-def get_or_create_reservation(user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
+def get_or_create_reservation(user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time):
       with get_connection() as conn:
         cursor = conn.cursor()
         # Intenta buscar el usuario
@@ -281,8 +283,8 @@ def get_or_create_reservation(user_id, whatsapp_number, class_type, class_weekda
             print("Numero encontrado, id: ", result[0])
             return result[0] 
         cursor.execute("""
-        INSERT INTO trial_class_reservations (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time)
-        VALUES ( ?, ?, ?, ?, ?, ?)
-         """, (user_id, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
+        INSERT INTO trial_class_reservations (user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time)
+        VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)
+         """, (user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
         return cursor.lastrowid

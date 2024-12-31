@@ -67,24 +67,20 @@ def get_appointments_from_mail():
             #Para cada mail, obtengo su contenido y lo "limpio" de caracteres que puedan dar problemas
             email_body = email_data['body']
             clean_body = eml.clean_email_body(email_body)
+            #Obtengo la información contenida y la inserto en variables
             extracted_data = eml.extract_info(clean_body)
-            #
             nombre = extracted_data.get("Nombre", "No especificado")
             apellidos = extracted_data.get("Apellidos", "No especificado")
             whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
             correo = extracted_data.get("Email", "No especificado")
             horario = extracted_data.get("Horario", "No especificado")
             clase = extracted_data.get("Clase", "No especificado")
-           
+            # A partir de la fecha reservada obtengo el día concreto en que se hará vendrá a probar
             result = date_ops.get_next_weekday_time(horario)
             class_date, class_time = result.split(" ")
-            print(class_date)
-            print(class_time)
-            
             # Inserto la información que me llega en los emails en base de datos
             user_id = db. get_or_create_user(whatsapp_number, nombre)
             db.get_or_create_reservation(user_id, whatsapp_number, clase, horario, class_date, class_time)
-        #db.print_all_reservations()
 
 def notify_appointments():   
     print("Enviando notificaciones)") 
@@ -161,23 +157,13 @@ def webhook():
         
         #Me guardo em mensaje de respuesta de la IA
         db.insert_message(user_id, from_number, profile_name, response_message, "assistant")
-        #db.set_user_messages_unprocessed(from_number)
         #Mandamos la respuesta a través de Twilio
         message = twilio_client.messages.create(
             from_=twilio_number,
             body=response_message,
             to=from_number
         )
-        #Meto a piñon un recordatorio en base de datos con formato
-        #user_id (int): ID del usuario relacionado.
-        #whatsapp_number (str): Número de WhatsApp del usuario.
-        #class_type (str): Tipo de clase (e.g., 'Rumba', 'Flamenco', 'Sevillanas').
-        #class_date (str): Fecha de la clase en formato 'YYYY-MM-DD'.
-        #class_time (str): Hora de la clase en formato 'HH:MM'.
-        #print("inserto  una reserva a piñon2")
-        #db.insert_new_reservation(user_id, from_number, "Rumba", "2024-12-12", "20:00")
-        #print("imprimmo  reseva")
-        #db.print_all_reservations()
+        
         return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
     except Exception as e:
         print("Error:", e)
