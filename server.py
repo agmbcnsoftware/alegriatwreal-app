@@ -10,7 +10,7 @@ import datetime
 import messages_database
 import emails
 import date_operations
-import locale
+import traceback
 
 app = Flask(__name__)
 
@@ -86,7 +86,7 @@ def get_appointments_from_mail():
                 db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
             except Exception as e:
             # Captura la excepción y muestra la traza
-                print(f"Se pudo gestionar el mail de:" nombre)
+                print("No se pudo gestionar el mail de:" + nombre)
                 traceback.print_exc()
                 
 def create_reminder_text(user_name, class_type, class_date, class_time):
