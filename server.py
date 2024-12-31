@@ -45,8 +45,6 @@ db = messages_database
 eml = emails
 date_ops = date_operations
 #db.initialize_database()
-#print(date_ops.get_next_weekday_time("Lunes de 16:15h a 17:15h"))
-
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -72,6 +70,7 @@ def get_appointments_from_mail():
             try:
             #Obtengo la información contenida y la inserto en variables
                 extracted_data = eml.extract_info(clean_body)
+                print(extracted_data)
                 nombre = extracted_data.get("Nombre", "No especificado")
                 apellidos = extracted_data.get("Apellidos", "No especificado")
                 whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
@@ -100,13 +99,13 @@ def create_reminder_text(user_name, class_type, class_date, class_time):
     
     # Diccionario para traducir días de la semana
     days_translation = {
-        "Monday": "Lunes",
-        "Tuesday": "Martes",
-        "Wednesday": "Miércoles",
-        "Thursday": "Jueves",
-        "Friday": "Viernes",
-        "Saturday": "Sábado",
-        "Sunday": "Domingo"
+        "Monday": "lunes",
+        "Tuesday": "martes",
+        "Wednesday": "miércoles",
+        "Thursday": "jueves",
+        "Friday": "viernes",
+        "Saturday": "sábado",
+        "Sunday": "domingo"
     }
     
     date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
@@ -148,7 +147,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
