@@ -10,6 +10,7 @@ import datetime
 import messages_database
 import emails
 import date_operations
+import locale
 
 app = Flask(__name__)
 
@@ -90,14 +91,27 @@ def create_reminder_text(user_name, class_type, class_date, class_time):
         "Si tienes cualquier consulta no dudes en escribirme y estaré encantada de atenderte.\n\n"
         "Un abrazo y hasta mañana."
     )
+    
+    # Diccionario para traducir días de la semana
+    days_translation = {
+        "Monday": "Lunes",
+        "Tuesday": "Martes",
+        "Wednesday": "Miércoles",
+        "Thursday": "Jueves",
+        "Friday": "Viernes",
+        "Saturday": "Sábado",
+        "Sunday": "Domingo"
+    }
+    
     date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
-    class_weekday = date_object.strftime("%A")
+    class_weekday_eng = date_object.strftime("%A")
+    class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
     
     # Reemplazar las claves con los valores proporcionados
     message = (template
                .replace("<user_name>", user_name)
                .replace("<class_type>", class_type)
-               .replace("<class_weekday>", class_weekday)
+               .replace("<class_weekday>", class_weekday_spa)
                .replace("<class_time>", class_time))
 
     return message
@@ -127,7 +141,7 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    schedule.every().minute.at(":20").do(notify_appointments)
+    #schedule.every().minute.at(":20").do(notify_appointments)
     schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
