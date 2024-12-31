@@ -3,76 +3,68 @@ import re
 
 def load_holidays():
     """
-    Carga los días festivos desde un archivo de texto.
-
-    Args:
-        file_path (str): Ruta al archivo que contiene los días festivos.
-
-    Returns:
-        list: Lista de días festivos en formato 'YYYY-MM-DD'.
+    Carga una lista de días festivos desde un archivo proporcionado.
+    
+    :param holidays_file: Ruta al archivo que contiene las fechas de días festivos (formato YYYY-MM-DD, separados por comas).
+    :return: Lista de objetos date correspondientes a los días festivos.
     """
     file_path = 'holidays.txt'
-    try:
-        with open(file_path, 'r') as file:
-            holidays = file.read().strip().split(',')
-            return [date.strip() for date in holidays if date.strip()]
-    except FileNotFoundError:
-        print(f"Archivo {file_path} no encontrado. No se cargarán días festivos.")
-        return []
+    with open(file_path, 'r') as file:
+        holidays = file.read().split(',')
+        return [datetime.strptime(h.strip(), "%Y-%m-%d").date() for h in holidays]
 
-def get_next_weekday_time(day_time_string):
+def get_next_weekday_time(schedule_string, holidays_file=None):
     """
-    Calcula la próxima fecha y hora en que ocurre el día y hora especificado, excluyendo días festivos.
-
-    Args:
-        day_time_string (str): Cadena en el formato 'Día de HH:MMh a HH:MMh'.
-        holidays_file (str): Ruta al archivo de días festivos.
-
-    Returns:
-        str: La fecha y hora en formato 'YYYY-MM-DD HH:MM'.
+    Calcula la próxima fecha y hora basándose en un string de horario
+    soportando múltiples formatos.
     """
-    # Cargar días festivos
-    holidays = load_holidays()
-    print("Fecha de la clase")
-    print(day_time_string)
-    # Parsear el día y la hora de inicio
-    parts = day_time_string.split(" de ")
-    day_of_week = parts[0].strip()  # 'Lunes'
-    start_time_part = parts[1].split(" a ")[0].strip()  # '16.15h'
-    
-    
+    # Expresión regular para capturar los diferentes formatos
+    match = re.match(
+        r"(?i)(\w+)(?: de| a las)? (\d{1,2}[.:]\d{2})(?:h)?(?: a \d{1,2}[.:]\d{2}(?:h)?)?",
+        schedule_string
+    )
+    if not match:
+        raise ValueError(f"Formato de horario no válido: {schedule_string}")
 
-    # Remover la 'h' final de la hora
-    start_time = start_time_part.replace('.', ':').replace('h', '')
+    # Extraer el día y la hora de inicio
+    day_name, start_time = match.groups()
 
-    # Mapear nombres de días en español a índices de días de la semana
-    weekdays = {
-        'Lunes': 0,
-        'Martes': 1,
-        'Miércoles': 2,
-        'Jueves': 3,
-        'Viernes': 4,
-        'Sábado': 5,
-        'Domingo': 6,
+    # Reemplazar '.' con ':' en la hora, si es necesario
+    start_time = start_time.replace('.', ':')
+
+    # Mapear días a índices
+    days_of_week = {
+        "lunes": 0, "martes": 1, "miércoles": 2, "jueves": 3,
+        "viernes": 4, "sábado": 5, "domingo": 6
     }
+    day_name = day_name.lower()
+    if day_name not in days_of_week:
+        raise ValueError(f"Día de la semana no reconocido: {day_name}")
 
-    # Obtener el índice del día de la semana correspondiente
-    target_weekday = weekdays[day_of_week]
+    target_weekday = days_of_week[day_name]
 
     # Obtener la fecha y hora actual
     now = datetime.now()
 
-    # Calcular la próxima ocurrencia del día y hora objetivo
-    days_ahead = (target_weekday - now.weekday()) % 7
-    if days_ahead == 0 and now.time() > datetime.strptime(start_time, "%H:%M").time():
-        days_ahead = 7
+    # Calcular la fecha objetivo
+    current_weekday = now.weekday()
+    days_until_target = (target_weekday - current_weekday) % 7
+    if days_until_target == 0 and now.time() > datetime.strptime(start_time, "%H:%M").time():
+        days_until_target = 7
 
-    next_date = now + timedelta(days=days_ahead)
-    next_date = next_date.replace(hour=int(start_time.split(':')[0]), minute=int(start_time.split(':')[1]), second=0, microsecond=0)
+    next_date = now + timedelta(days=days_until_target)
 
-    # Verificar si la fecha calculada cae en un día festivo y ajustar
-    while next_date.strftime('%Y-%m-%d') in holidays:
-        next_date += timedelta(days=7)
+    # Combinar fecha y hora
+    next_datetime = datetime.strptime(f"{next_date.date()} {start_time}", "%Y-%m-%d %H:%M")
 
-    # Formatear la fecha y hora
-    return next_date.strftime('%Y-%m-%d %H:%M')
+    # Manejar festivos si se proporciona un archivo
+    
+    holidays = load_holidays()
+
+    while next_datetime.date() in holidays:
+        next_datetime += timedelta(days=7)
+
+    # Retornar en el formato deseado
+    return next_datetime.strftime("%Y-%m-%d"), next_datetime.strftime("%H:%M")
+
+
