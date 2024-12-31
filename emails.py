@@ -112,7 +112,7 @@ def extract_info(email_body):
     """
     extracted_data = {}
 
-    # Patrones mejorados para detectar palabras clave
+    # Patrones mejorados para detectar palabras clave y manejar posibles líneas intermedias
     patterns = {
         "Clase": r"clase gratuita de\s*(\w+)",
         "Horario": r"Horario\s*[:\-]?\s*(.+?)\s*(?=(Nombre|Apellidos|Email|Teléfono|Fecha solicitud|Nivel|$))",
@@ -130,4 +130,5 @@ def extract_info(email_body):
             extracted_data[key] = match.group(1).strip()
 
     return extracted_data
+
 

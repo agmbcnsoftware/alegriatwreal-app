@@ -79,8 +79,8 @@ def get_appointments_from_mail():
                 horario = extracted_data.get("Horario", "No especificado")
                 clase = extracted_data.get("Clase", "No especificado")
                 # A partir de la fecha reservada obtengo el día concreto en que se hará vendrá a probar
-                result = date_ops.get_next_weekday_time(horario)
-                class_date, class_time = result.split(" ")
+                class_date, class_time = date_ops.get_next_weekday_time(horario)
+                #class_date, class_time = result.split(" ")
                 # Inserto la información que me llega en los emails en base de datos
                 user_id = db. get_or_create_user(whatsapp_number, nombre)
                 db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
@@ -148,7 +148,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
-    schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
