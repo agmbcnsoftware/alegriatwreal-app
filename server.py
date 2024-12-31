@@ -68,6 +68,7 @@ def get_appointments_from_mail():
             #Para cada mail, obtengo su contenido y lo "limpio" de caracteres que puedan dar problemas
             email_body = email_data['body']
             clean_body = eml.clean_email_body(email_body)
+            print(clean_body)
             #Obtengo la información contenida y la inserto en variables
             extracted_data = eml.extract_info(clean_body)
             nombre = extracted_data.get("Nombre", "No especificado")
