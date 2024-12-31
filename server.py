@@ -127,7 +127,7 @@ def notify_appointments():
         reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
         #Creo el texto que voy a enviar poor whatsapp
         reminder_message = create_reminder_text(user_name, class_type, class_date, class_time)
-        # ATENCION PONGO A PINON MI NUMERO 
+        # ATENCION PONGO A PIÑON MI NUMERO 
         whatsapp_number = admin_number
         message = twilio_client.messages.create(
             from_=twilio_number,
@@ -142,7 +142,7 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    schedule.every().minute.at(":20").do(notify_appointments)
+    #schedule.every().minute.at(":20").do(notify_appointments)
     schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
