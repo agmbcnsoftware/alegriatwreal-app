@@ -54,8 +54,6 @@ def load_users_from_encrypted_file():
 
         # Parsear el contenido y llenar el diccionario USER_CREDENTIALS
         for line in decrypted_users.splitlines():
-            print("USUARIO")
-            print(line)
             user, password = line.split(":")
             USER_CREDENTIALS[user.strip()] = password.strip()
         print("Usuarios cargados exitosamente:", list(USER_CREDENTIALS.keys()))
