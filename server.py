@@ -66,7 +66,10 @@ def verify_password(username, password):
     # Verificar si el usuario existe y la contraseña coincide
     return USER_CREDENTIALS.get(username) == password  
   
-
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 # Diccionario para el historial de conversaciones
 conversations = {}
