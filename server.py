@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, send_file, render_template, Response
 from flask_httpauth import HTTPBasicAuth
 from twilio.rest import Client
 from openai import OpenAI
@@ -187,7 +187,20 @@ def start_appointment_notifications():
 @app.route("/")
 @auth.login_required
 def home():
-    return "<h1>Hola Mundo</h1>"
+    return render_template("index.html")  # Renderizar el archivo HTML
+  
+@app.route("/download", methods=["GET"])
+@auth.login_required
+def download_database():
+    database_path = "GraciaBot.db"  # Cambia al nombre de tu archivo SQLite
+    try:
+        return send_file(
+            database_path,
+            as_attachment=True,
+            attachment_filename="GraciaBot.db",  # Nombre del archivo que verá el usuario
+        )
+    except Exception as e:
+        return f"Error al descargar el archivo: {e}", 500
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
