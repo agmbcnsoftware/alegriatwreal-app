@@ -17,18 +17,8 @@ app = Flask(__name__)
 # Configurar autenticación básica
 auth = HTTPBasicAuth()
 
-# Credenciales (usuario: admin, contraseña: password)
-USERS = {
-    "admin": "password"
-}
 
-@auth.verify_password
-def verify_password(username, password):
-    if username in USERS and USERS[username] == password:
-        return username
-    return None
-
-# Configuración de Twilio
+# Cargo variable del entorno
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 twilio_number = 'whatsapp:' + os.getenv("TWILIO_NUMBER")  # Ejemplo: 'whatsapp:+14155238886'
@@ -50,8 +40,40 @@ cipher = Fernet(encryption_key.encode())
 with open("ai-info-base.txt", "r") as f:
     encrypted_content = f.read()
 base_context = cipher.decrypt(encrypted_content).decode()
-
 print(base_context[0:40])
+
+# Credenciales (usuario: admin, contraseña: password)
+USER_CREDENTIALS = {}
+
+def load_users_from_encrypted_file():
+    encryption_key = os.environ.get("AI_INFO_KEY")
+    if not encryption_key:
+        raise ValueError("La clave de encriptado (AI_INFO_KEY) no está definida en las variables de entorno.")
+
+    cipher = Fernet(encryption_key.encode())
+
+    # Leer y desencriptar el archivo
+    try:
+        with open("fichero_encriptado.txt", "r") as f:
+            encrypted_content = f.read()
+        decrypted_content = cipher.decrypt(encrypted_content.encode()).decode()
+
+        # Parsear el contenido y llenar el diccionario USER_CREDENTIALS
+        for line in decrypted_content.splitlines():
+            user, password = line.split(":")
+            USER_CREDENTIALS[user.strip()] = password.strip()
+
+        print("Usuarios cargados exitosamente:", list(USER_CREDENTIALS.keys()))
+    except Exception as e:
+        print("Error al cargar usuarios:", e)
+        raise
+
+@auth.verify_password
+def verify_password(username, password):
+    # Verificar si el usuario existe y la contraseña coincide
+    return USER_CREDENTIALS.get(username) == password  
+  
+
 
 # Diccionario para el historial de conversaciones
 conversations = {}
@@ -66,6 +88,7 @@ date_ops = date_operations
 # que no se olviden
 
 def start_web_server():
+    load_users_from_encrypted_file()
     app.run(host='0.0.0.0', port=3000)
     
 def get_appointments_from_mail():
