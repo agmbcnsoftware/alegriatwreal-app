@@ -14,7 +14,6 @@ def update_db_structure():
 # Crea las tablas si no existen
 def initialize_database():
     with get_connection() as conn:
-        
         #Eliminar tabla de mensajes procesados para los usuariois
         cursor = conn.cursor()
         cursor.execute("""DROP TABLE IF EXISTS processed_user_messages""")
