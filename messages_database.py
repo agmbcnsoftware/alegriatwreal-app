@@ -113,7 +113,7 @@ def insert_message(user_id, from_number, whatsapp_profile, message, sender):
         """, (user_id, from_number, whatsapp_profile, message, sender))
         conn.commit()
 
-def get_all_messages()
+def get_all_messages():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
@@ -121,10 +121,10 @@ def get_all_messages()
         FROM messages m
         JOIN users u ON m.user_id = u.id
         ORDER BY m.timestamp ASC
-        """
+        """)
         return cursor
         
-  def get_messages_from_dates(timestamp_ini, timestamp_end)
+def get_messages_from_dates(timestamp_ini, timestamp_end):
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""

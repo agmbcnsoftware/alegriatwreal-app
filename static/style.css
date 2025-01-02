@@ -52,3 +52,28 @@ th, td {
     padding: 8px;
     text-align: left;
 }
+
+* Estilo para la tabla de mensajes */
+.messages-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.messages-table th, .messages-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.messages-table th {
+    background-color: #f2f2f2;
+}
+
+.messages-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.messages-table tr:hover {
+    background-color: #f1f1f1;
+}

@@ -204,7 +204,15 @@ def reservations():
     reservations = db.get_all_reservations()  # Implementa esta función
     return render_template("reservations.html", reservations=reservations)
   
-@app.route("/download", methods=["GET"])
+  
+@app.route("/messages")
+@auth.login_required
+def messages():
+    # Suponemos que tienes una función para obtener los mensajes
+    cursor = db.get_all_messages()  # Ejecuta la consulta y obtiene los resultados
+    return render_template("messages.html", messages=messages)
+
+  @app.route("/download", methods=["GET"])
 @auth.login_required
 def download_database():
     database_path = "GraciaBot.db"  # Cambia al nombre de tu archivo SQLite

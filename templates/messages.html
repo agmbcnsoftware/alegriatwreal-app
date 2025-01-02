@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservas</title>
+    <title>Mensajes</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -21,27 +21,19 @@
             <table>
                 <thead>
                     <tr>
-                        <th>id</th>
                         <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Teléfono</th>
-                        <th>Clase</th>
-                        <th>Clase2</th>
-                        <th>Día</th>
-                        <th>Hora</th>
+                        <th>Mensaje</th>
+                        <th>Fecha</th>
+                        <th>Enviado por</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for reservation in reservations %}
                     <tr>
-                        <td>{{ reservation[0] }}</td>
-                        <td>{{ reservation[1] }}</td>
-                        <td>{{ reservation[2] }}</td>
-                        <td>{{ reservation[3] }}</td>
-                        <td>{{ reservation[4] }}</td>
-                        <td>{{ reservation[5] }}</td>
-                        <td>{{ reservation[6] }}</td>
-                        <td>{{ reservation[7] }}</td>
+                        <td>{{ message[0] }}</td>
+                        <td>{{ message[1] }}</td>
+                        <td>{{ message[2] }}</td>
+                        <td>{{ message[3] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
