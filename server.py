@@ -217,27 +217,6 @@ def download_database():
     except Exception as e:
         return f"Error al descargar el archivo: {e}", 500
 
-@app.route("/initialize_db", methods=["POST"])
-@auth.login_required
-def initialize_database():
-    from flask import request, jsonify
-
-    # Obtener los datos del formulario enviado desde el cliente
-    data = request.json
-    username = data.get("username")
-    password = data.get("password")
-
-    # Verificar las credenciales
-    if USER_CREDENTIALS.get(username) != password:
-        return jsonify({"error": "Credenciales incorrectas"}), 401
-
-    try:
-        #db.initialize_db()
-        print ("PEdido inicializar base de datos")
-        return jsonify({"message": "Base de datos inicializada correctamente"}), 200
-    except Exception as e:
-        return jsonify({"error": f"Error al inicializar la base de datos: {e}"}), 500
-      
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
