@@ -113,6 +113,28 @@ def insert_message(user_id, from_number, whatsapp_profile, message, sender):
         """, (user_id, from_number, whatsapp_profile, message, sender))
         conn.commit()
 
+def get_all_messages()
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT u.name, m.message, m.timestamp, m.sender
+        FROM messages m
+        JOIN users u ON m.user_id = u.id
+        ORDER BY m.timestamp ASC
+        """
+        return cursor
+        
+  def get_messages_from_dates(timestamp_ini, timestamp_end)
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT u.name, m.message, m.timestamp, m.sender
+        FROM messages m
+        JOIN users u ON m.user_id = u.id
+        WHERE m.timestamp =< ? and m.timestamp >= ? 
+        ORDER BY m.timestamp ASC
+        """, (timestamp_end,timestamp_ini))
+        return cursor
         
 # Obtiene el historial de mensajes de un usuario
 def get_messages_by_user(from_number):
