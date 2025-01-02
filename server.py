@@ -180,8 +180,9 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
-    schedule.every().minute.at(":00").do(get_appointments_from_mail)
-    #schedule.every().day.at("09:00").do(notify_appointments)
+    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every(3).minutes.do(get_appointments_from_mail)
+    schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -203,7 +204,6 @@ def reservations():
     # Suponemos que `get_all_reservations` devuelve un cursor iterable
     reservations = db.get_all_reservations()  # Implementa esta función
     return render_template("reservations.html", reservations=reservations)
-  
   
 @app.route("/messages")
 @auth.login_required
