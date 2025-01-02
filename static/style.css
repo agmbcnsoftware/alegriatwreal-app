@@ -1,24 +1,54 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
 }
 
-h1 {
-    color: #444;
+.container {
+    display: flex;
+    height: 100vh;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
+.sidebar {
+    width: 20%;
+    background: #2c3e50;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 15px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar ul li a:hover {
+    text-decoration: underline;
+}
+
+.main-content {
+    width: 80%;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
 }

@@ -189,6 +189,18 @@ def start_appointment_notifications():
 def home():
     return render_template("index.html")  # Renderizar el archivo HTML
   
+@app.route("/database")
+@auth.login_required
+def database():
+    return render_template("database.html")
+  
+@app.route("/reservations")
+@auth.login_required
+def reservations():
+    # Suponemos que `get_all_reservations` devuelve un cursor iterable
+    reservations = db.get_all_reservations()  # Implementa esta función
+    return render_template("reservations.html", reservations=reservations)
+  
 @app.route("/download", methods=["GET"])
 @auth.login_required
 def download_database():

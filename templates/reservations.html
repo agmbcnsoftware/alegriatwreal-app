@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/reservations">Reservas</a></li>
+                <li><a href="/database">Base de Datos</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Reservas</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Clase</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation[0] }}</td>
+                        <td>{{ reservation[1] }}</td>
+                        <td>{{ reservation[2] }}</td>
+                        <td>{{ reservation[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
