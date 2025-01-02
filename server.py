@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
+from flask_httpauth import HTTPBasicAuth
 from twilio.rest import Client
 from openai import OpenAI
 from cryptography.fernet import Fernet
@@ -13,6 +14,19 @@ import date_operations
 import traceback
 
 app = Flask(__name__)
+# Configurar autenticación básica
+auth = HTTPBasicAuth()
+
+# Credenciales (usuario: admin, contraseña: password)
+USERS = {
+    "admin": "password"
+}
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in USERS and USERS[username] == password:
+        return username
+    return None
 
 # Configuración de Twilio
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
@@ -155,8 +169,9 @@ def start_appointment_notifications():
 
 
 @app.route("/")
+@auth.login_required
 def home():
-    return "Hello World!"
+    return "<h1>Hola Mundo</h1>"
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
