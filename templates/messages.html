@@ -28,12 +28,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for reservation in reservations %}
+                    {% for messages in messages %}
                     <tr>
-                        <td>{{ message[0] }}</td>
-                        <td>{{ message[1] }}</td>
-                        <td>{{ message[2] }}</td>
-                        <td>{{ message[3] }}</td>
+                        <td>{{ messages[0] }}</td>
+                        <td>{{ messages[1] }}</td>
+                        <td>{{ messages[2] }}</td>
+                        <td>{{ messages[3] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

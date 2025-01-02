@@ -180,7 +180,7 @@ def notify_appointments():
         
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
-    #schedule.every().minute.at(":00").do(get_appointments_from_mail)
+    schedule.every().minute.at(":00").do(get_appointments_from_mail)
     #schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
@@ -209,10 +209,10 @@ def reservations():
 @auth.login_required
 def messages():
     # Suponemos que tienes una función para obtener los mensajes
-    cursor = db.get_all_messages()  # Ejecuta la consulta y obtiene los resultados
+    messages = db.get_all_messages()  # Ejecuta la consulta y obtiene los resultados
     return render_template("messages.html", messages=messages)
 
-  @app.route("/download", methods=["GET"])
+@app.route("/download", methods=["GET"])
 @auth.login_required
 def download_database():
     database_path = "GraciaBot.db"  # Cambia al nombre de tu archivo SQLite
