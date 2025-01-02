@@ -46,23 +46,18 @@ print(base_context[0:40])
 USER_CREDENTIALS = {}
 
 def load_users_from_encrypted_file():
-    encryption_key = os.environ.get("AI_INFO_KEY")
-    if not encryption_key:
-        raise ValueError("La clave de encriptado (AI_INFO_KEY) no está definida en las variables de entorno.")
-
-    cipher = Fernet(encryption_key.encode())
-
     # Leer y desencriptar el archivo
     try:
-        with open("fichero_encriptado.txt", "r") as f:
-            encrypted_content = f.read()
-        decrypted_content = cipher.decrypt(encrypted_content.encode()).decode()
+        with open("users.txt", "r") as f:
+            encrypted_users = f.read()
+        decrypted_users = cipher.decrypt(encrypted_users.encode()).decode()
 
         # Parsear el contenido y llenar el diccionario USER_CREDENTIALS
-        for line in decrypted_content.splitlines():
+        for line in decrypted_users.splitlines():
+            print("USUARIO")
+            print(line)
             user, password = line.split(":")
             USER_CREDENTIALS[user.strip()] = password.strip()
-
         print("Usuarios cargados exitosamente:", list(USER_CREDENTIALS.keys()))
     except Exception as e:
         print("Error al cargar usuarios:", e)
