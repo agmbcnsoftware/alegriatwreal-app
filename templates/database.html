@@ -20,7 +20,69 @@
             <form action="/download" method="get">
                 <button type="submit">Descargar Base de Datos</button>
             </form>
+            <button id="initialize-btn" class="warning-btn">Inicializar Base de Datos</button>
         </div>
     </div>
+
+    <!-- Modal para confirmar la inicialización -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmación requerida</h2>
+            <p>Estás seguro de que deseas inicializar la base de datos? Se perderán todos los datos actuales.</p>
+            <form id="modal-form">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div class="modal-actions">
+                    <button type="submit" class="confirm-btn">Confirmar</button>
+                    <button type="button" id="cancel-btn" class="cancel-btn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const initializeBtn = document.getElementById('initialize-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const modalForm = document.getElementById('modal-form');
+
+        // Mostrar el modal al hacer clic en "Inicializar Base de Datos"
+        initializeBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        // Ocultar el modal al hacer clic en "Cancelar"
+        cancelBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Manejar el envío del formulario
+        modalForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/initialize_db', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Base de datos inicializada correctamente.");
+                        modal.style.display = 'none';
+                    } else {
+                        return response.json().then(data => { throw new Error(data.error); });
+                    }
+                })
+                .catch(error => {
+                    alert("Error: " + error.message);
+                });
+        });
+    </script>
 </body>
 </html>

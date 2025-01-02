@@ -76,7 +76,7 @@ conversations = {}
 db = messages_database
 eml = emails
 date_ops = date_operations
-#db.initialize_database()
+#db.initialize_db()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -232,7 +232,8 @@ def initialize_database():
         return jsonify({"error": "Credenciales incorrectas"}), 401
 
     try:
-        db.initialize_db()
+        #db.initialize_db()
+        print ("PEdido inicializar base de datos")
         return jsonify({"message": "Base de datos inicializada correctamente"}), 200
     except Exception as e:
         return jsonify({"error": f"Error al inicializar la base de datos: {e}"}), 500

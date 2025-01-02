@@ -12,7 +12,7 @@ def update_db_structure():
   print("Actualizando tablas")
 
 # Crea las tablas si no existen
-def initialize_database():
+def initialize_db():
     with get_connection() as conn:
         #Eliminar tabla de mensajes procesados para los usuariois
         cursor = conn.cursor()
