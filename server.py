@@ -303,7 +303,7 @@ if __name__ == "__main__":
     threading.Thread(target=start_web_server).start()
     #threading.Thread(target=start_conversations_processing).start()
     threading.Thread(target=start_appointment_notifications).start()
-    threading.Thread(target=send_first_message_to_admin).start()
+    #threading.Thread(target=send_first_message_to_admin).start()
     
     print("Yeah")
     
