@@ -201,8 +201,8 @@ def send_first_message_to_admin():
     #Send a first message
     message = twilio_client.messages.create(
     to="whatsapp:+34658595387",
-    from_="whatsapp:+34609959967",
-    body="Hello there! Just started to work",
+    from_= twilio_number,
+    body ="Hello there! Just started to work",
     )
 
     print(message.body)
