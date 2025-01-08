@@ -199,12 +199,13 @@ def start_appointment_notifications():
 
 def send_first_message_to_admin():
     #Send a first message
+    print("Voy a nenviar mensaje")
     message = twilio_client.messages.create(
     to="whatsapp:+34658595387",
     from_= twilio_number,
     body ="Hello there! Just started to work",
     )
-
+    print()"Enviado mensajeeeeeeeeeeeeeeeeeeeeeeeee")
     print(message.body)
      
       
@@ -303,7 +304,7 @@ if __name__ == "__main__":
     threading.Thread(target=start_web_server).start()
     #threading.Thread(target=start_conversations_processing).start()
     threading.Thread(target=start_appointment_notifications).start()
-    #threading.Thread(target=send_first_message_to_admin).start()
+    threading.Thread(target=send_first_message_to_admin).start()
     
     print("Yeah")
     
