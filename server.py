@@ -12,6 +12,8 @@ import messages_database
 import emails
 import date_operations
 import traceback
+import json
+
 
 app = Flask(__name__)
 # Configurar autenticación básica
@@ -135,7 +137,12 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
     date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
     class_weekday_eng = date_object.strftime("%A")
     class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
-    
+    variables = {
+        "user_name": user_id,
+        "class_weekday": class_weekday,
+        "class_time": class_time,
+        "class_type": class_type
+    }
     content_variables = {
     "user_name": "Marta",           # Nombre
     "class_weekday": "jueves",      # Día de la semana
@@ -147,10 +154,25 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
       from_=twilio_number,
       content_sid='HXee3cf6439091a385009b6bb7a5314ded',
       content_variables = content_variables,
-      to='whatsapp:+34658595387'
+      to=whatsapp_number
     ) 
 
-def send_test_reminder(user_id, class_weekday, )    
+def send_test_reminder(user_id, class_weekday, class_time, class_type):
+    client = Client(account_sid, auth_token)
+    variables = {
+        "user_name": user_id,
+        "class_weekday": class_weekday,
+        "class_time": class_time,
+        "class_type": class_type
+    }
+    
+    message = client.messages.create(
+      from_=twilio_number,
+      content_sid='HXee3cf6439091a385009b6bb7a5314ded',
+      content_variables = json.dumps(variables),
+      to='whatsapp:+34658595387',
+    )
+
     
 def sent_test_reminder():
     client = Client(account_sid, auth_token)
@@ -172,7 +194,8 @@ def sent_test_reminder():
     
 def notify_appointments():   
     print("Enviando notificaciones)") 
-    sent_test_reminder()
+    #sent_test_reminder()
+    send_test_reminder("Alvaro", "viernes", "12:00h", "sevillanas")
     res_cursor  =  db.get_tomorrow_reservations()
     
     #res_cursor  =  db.get_all_reservations()
