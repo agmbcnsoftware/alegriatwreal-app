@@ -181,7 +181,7 @@ def notify_appointments():
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
     #schedule.every().minute.at(":00").do(get_appointments_from_mail)
-    schedule.every(120).minutes.do(get_appointments_from_mail)
+    schedule.every(1).minutes.do(get_appointments_from_mail)
     schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
@@ -281,9 +281,8 @@ if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
     #threading.Thread(target=start_conversations_processing).start()
-    #threading.Thread(target=start_appointment_notifications).start()
-    #threading.Thread(target=send_first_message_to_admin).start()
-    
+    threading.Thread(target=start_appointment_notifications).start()
+    #threading.Thread(target=send_first_message_to_admin).start()    
     print("Yeah")
     
     
