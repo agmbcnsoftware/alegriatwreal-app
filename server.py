@@ -121,6 +121,21 @@ def get_appointments_from_mail():
                 print("No se pudo gestionar el mail de:" + nombre)
                 traceback.print_exc()
                 
+def send_remider_by_whatsapp(user_name, class_type, class_date, class_time):
+  # Diccionario para traducir días de la semana
+    days_translation = {
+        "Monday": "lunes",
+        "Tuesday": "martes",
+        "Wednesday": "miércoles",
+        "Thursday": "jueves",
+        "Friday": "viernes",
+        "Saturday": "sábado",
+        "Sunday": "domingo"
+    }
+    date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
+    class_weekday_eng = date_object.strftime("%A")
+    class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
+                
 def create_reminder_text(user_name, class_type, class_date, class_time):
     template = (
         "¡Hola <user_name>!\n\n¿Cómo estas?\n\nTan sólo quería saludarte, y recordarte que te esperamos "
