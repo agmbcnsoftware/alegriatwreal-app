@@ -241,7 +241,7 @@ def messages():
 @app.route("/download", methods=["GET"])
 @auth.login_required
 def download_database():
-    database_path = "GraciaBot.db"  # Cambia al nombre de tu archivo SQLite
+    database_path = os.getenv("DB_PATH")  # Cambia al nombre de tu archivo SQLite
     try:
         return send_file(
             database_path,

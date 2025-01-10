@@ -2,7 +2,6 @@ import sqlite3
 import os
 
 # Ruta para la base de datos
-DB_PATH = "GraciaBot.db"
 
 database_name = os.getenv("DB_PATH")
 
