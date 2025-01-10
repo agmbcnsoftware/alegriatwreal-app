@@ -11,8 +11,7 @@ client = Client(account_sid, auth_token)
 
 message = client.messages.create(
   from_='whatsapp:+34609959967',
-  content_sid='HXb5b62575e6e4ff6129ad7c8efe1f983e',
-  content_variables='{"1":"12/1","2":"3pm"}',
+  content_sid='HXcd2b1e54c65066d6b80c7d24b28eb6d2',
   to='whatsapp:+34658595387'
 )
 
