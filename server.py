@@ -146,10 +146,12 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
     message = client.messages.create(
       from_=twilio_number,
       content_sid='HXee3cf6439091a385009b6bb7a5314ded',
-      content_variables= content_variables,
+      content_variables = content_variables,
       to='whatsapp:+34658595387'
     ) 
 
+def send_test_reminder(user_id, class_weekday, )    
+    
 def sent_test_reminder():
     client = Client(account_sid, auth_token)
     
@@ -185,8 +187,7 @@ def notify_appointments():
         db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
-        
-        
+                
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
     #schedule.every().minute.at(":00").do(get_appointments_from_mail)
