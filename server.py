@@ -85,7 +85,7 @@ conversations = {}
 db = messages_database
 eml = emails
 date_ops = date_operations
-#db.initialize_db()
+db.initialize_db()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
@@ -301,10 +301,10 @@ def webhook():
 
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
-    threading.Thread(target=start_web_server).start()
+    #threading.Thread(target=start_web_server).start()
     #threading.Thread(target=start_conversations_processing).start()
-    threading.Thread(target=start_appointment_notifications).start()
-    threading.Thread(target=send_first_message_to_admin).start()
+    #threading.Thread(target=start_appointment_notifications).start()
+    #threading.Thread(target=send_first_message_to_admin).start()
     
     print("Yeah")
     

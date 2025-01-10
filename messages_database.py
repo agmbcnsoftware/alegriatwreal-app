@@ -4,9 +4,11 @@ import os
 # Ruta para la base de datos
 DB_PATH = "GraciaBot.db"
 
+database_name = os.getenv("DB_PATH")
+
 # Inicializa la conexión con la base de datos
 def get_connection():
-    return sqlite3.connect(DB_PATH)
+    return sqlite3.connect(database_name)
   
 def update_db_structure():
   print("Actualizando tablas")
