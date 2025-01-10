@@ -164,7 +164,7 @@ def sent_test_reminder():
       from_=twilio_number,
       content_sid='HXee3cf6439091a385009b6bb7a5314ded',
       #content_variables= content_variables,
-      content_variables = { "user_name": "Marta","class_weekday": "jueves","class_time": "18:45","class_type": "Sevillanas"}
+      content_variables = '{ "user_name":"Marta","class_weekday":"jueves","class_time":"18:45","class_type":"Sevillanas"}',
       to='whatsapp:+34658595387',
     )
     
@@ -188,7 +188,7 @@ def notify_appointments():
         
         
 def start_appointment_notifications():
-    schedule.every().minute.at(":20").do(notify_appointments)
+    #schedule.every().minute.at(":20").do(notify_appointments)
     #schedule.every().minute.at(":00").do(get_appointments_from_mail)
     schedule.every(120).minutes.do(get_appointments_from_mail)
     schedule.every().day.at("09:00").do(notify_appointments)
@@ -252,7 +252,12 @@ def webhook():
         if (incoming_message == "Olvidame"):
             db.delete_messages_from_user(from_number)
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
-        
+        if (incoming_message == "Reservation_OK"):
+            print("Ha aceptado la clase de prueba")
+            incoming_message = "No podré acudir a la clase de prueba de mañana"
+        if (incoming_message == "Reservation_NOK"):
+            print("NO ha aceptado la clase de prueba")
+            incoming_message = "No podré acudir a la clase de prueba de mañana"
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)
