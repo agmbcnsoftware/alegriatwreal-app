@@ -45,15 +45,6 @@ print(base_context[0:40])
 # Credenciales (usuario: admin, contraseña: password)
 USER_CREDENTIALS = {}
 
-#Send a first message
-message = twilio_client.messages.create(
-    to="whatsapp:+34658595387",
-    from_="whatsapp:+34609959967",
-    body="Hello there! Just started to work",
-)
-
-print(message.body)
-
 def load_users_from_encrypted_file():
     # Leer y desencriptar el archivo
     try:
@@ -195,19 +186,6 @@ def start_appointment_notifications():
     while True:
         schedule.run_pending()
         time.sleep(1)
-
-
-def send_first_message_to_admin():
-    #Send a first message
-    print("Voy a nenviar mensaje")
-    message = twilio_client.messages.create(
-    to="whatsapp:+34658595387",
-    from_= twilio_number,
-    body ="Hello there! Just started to work",
-    )
-    print("Enviado mensajeeeeeeeeeeeeeeeeeeeeeeeee")
-    print(message.body)
-     
       
 @app.route("/")
 @auth.login_required
@@ -301,7 +279,7 @@ def webhook():
 
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
-    #threading.Thread(target=start_web_server).start()
+    threading.Thread(target=start_web_server).start()
     #threading.Thread(target=start_conversations_processing).start()
     #threading.Thread(target=start_appointment_notifications).start()
     #threading.Thread(target=send_first_message_to_admin).start()
