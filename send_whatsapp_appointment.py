@@ -12,8 +12,8 @@ client = Client(account_sid, auth_token)
 
 content_variables = {
     "user_name": "Marta",           # Nombre
-    ""
-    "class_time": "jueves a las 18:45",  # Fecha y hora
+    "class_weekday": "jueves"
+    "class_time": "18:45",  # Fecha y hora
     "class_type": "Sevillanas"    # Clase
 }
 

@@ -121,7 +121,7 @@ def get_appointments_from_mail():
                 print("No se pudo gestionar el mail de:" + nombre)
                 traceback.print_exc()
                 
-def send_remider_by_whatsapp(user_name, class_type, class_date, class_time):
+def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time):
   # Diccionario para traducir días de la semana
     days_translation = {
         "Monday": "lunes",
@@ -135,57 +135,34 @@ def send_remider_by_whatsapp(user_name, class_type, class_date, class_time):
     date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
     class_weekday_eng = date_object.strftime("%A")
     class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
-                
-def create_reminder_text(user_name, class_type, class_date, class_time):
-    template = (
-        "¡Hola <user_name>!\n\n¿Cómo estas?\n\nTan sólo quería saludarte, y recordarte que te esperamos "
-        "mañana <class_weekday> a las <class_time> para tu clase de prueba de <class_type>.\n\n"
-        "Recuerda que si a la salida te apuntas, accederás a la oferta de matrícula a 20€ en lugar de 60.\n\n"
-        "Si tienes cualquier consulta, no dudes en escribirme y estaré encantada de atenderte.\n\n"
-        "¡Un abrazo y hasta mañana!💃🏽✨"
-    )
     
-    # Diccionario para traducir días de la semana
-    days_translation = {
-        "Monday": "lunes",
-        "Tuesday": "martes",
-        "Wednesday": "miércoles",
-        "Thursday": "jueves",
-        "Friday": "viernes",
-        "Saturday": "sábado",
-        "Sunday": "domingo"
+    content_variables = {
+    "user_name": "Marta",           # Nombre
+    "class_weekday": "jueves",      # Día de la semana
+    "class_time": "18:45",          # Fecha y hora
+    "class_type": "Sevillanas"      # Clase
     }
-    
-    date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
-    class_weekday_eng = date_object.strftime("%A")
-    class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
-    
-    # Reemplazar las claves con los valores proporcionados
-    message = (template
-               .replace("<user_name>", user_name)
-               .replace("<class_type>", class_type)
-               .replace("<class_weekday>", class_weekday_spa)
-               .replace("<class_time>", class_time))
 
-    return message
+    message = client.messages.create(
+      from_=twilio_number,
+      content_sid='HXee3cf6439091a385009b6bb7a5314ded',
+      content_variables= content_variables,
+      to='whatsapp:+34658595387'
+    ) 
+
            
 def notify_appointments():   
     print("Enviando notificaciones)") 
+    send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
+    res_cursor  =  db.get_tomorrow_reservations()
     
-    #res_cursor  =  db.get_tomorrow_reservations()
-    res_cursor  =  db.get_all_reservations()
+    #res_cursor  =  db.get_all_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
-        #Creo el texto que voy a enviar poor whatsapp
-        reminder_message = create_reminder_text(user_name, class_type, class_date, class_time)
-        # ATENCION PONGO A PIÑON MI NUMERO 
-        whatsapp_number = admin_number
-        message = twilio_client.messages.create(
-            from_=twilio_number,
-            body = reminder_message,
-            to = whatsapp_number
-        )
+        #Envío whatsapp al usuario
+        send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
+               
         #Queda pendiente avisar también al adminsitrador por whatsapp
         # El mensaje sería "Avisado: nombre, numero de whatsapp y clase"
         db.set_reservation_to_sent(reservation_id)
