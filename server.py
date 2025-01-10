@@ -76,7 +76,7 @@ conversations = {}
 db = messages_database
 eml = emails
 date_ops = date_operations
-db.initialize_db()
+#db.initialize_db()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
 # repasar el estado de las conversaciones y notificar al administrador, finalmente un proceso que 
