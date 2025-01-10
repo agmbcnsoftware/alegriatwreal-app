@@ -138,22 +138,16 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
     class_weekday_eng = date_object.strftime("%A")
     class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
     variables = {
-        "user_name": user_id,
-        "class_weekday": class_weekday,
+        "user_name": user_name,
+        "class_weekday": class_weekday_spa,
         "class_time": class_time,
         "class_type": class_type
-    }
-    content_variables = {
-    "user_name": "Marta",           # Nombre
-    "class_weekday": "jueves",      # Día de la semana
-    "class_time": "18:45",          # Fecha y hora
-    "class_type": "Sevillanas"      # Clase
     }
 
     message = client.messages.create(
       from_=twilio_number,
       content_sid='HXee3cf6439091a385009b6bb7a5314ded',
-      content_variables = content_variables,
+      content_variables = json.dumps(variables),
       to=whatsapp_number
     ) 
 
