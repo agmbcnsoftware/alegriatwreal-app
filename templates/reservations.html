@@ -26,7 +26,7 @@
                         <th>Apellidos</th>
                         <th>Teléfono</th>
                         <th>Clase</th>
-                        <th>Clase2</th>
+                        <th>Horario</th>
                         <th>Día</th>
                         <th>Hora</th>
                         <th>Enviado</th>
@@ -38,7 +38,7 @@
                         <td>{{ reservation[0] }}</td>
                         <td>{{ reservation[1] }}</td>
                         <td>{{ reservation[2] }}</td>
-                        <td>{{ reservation[3] }}</td>
+                        <td>{{ reservation[3].replace("whatsapp:", "") }}</td>
                         <td>{{ reservation[4] }}</td>
                         <td>{{ reservation[5] }}</td>
                         <td>{{ reservation[6] }}</td>
