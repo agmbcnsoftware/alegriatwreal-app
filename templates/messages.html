@@ -31,7 +31,7 @@
                 <tbody>
                     {% for messages in messages %}
                     <tr>
-                        <td>{{ messages[0] }}</td>
+                        <td>{{ messages[0].replace("whatsapp:", "") }}</td>
                         <td>{{ messages[1] }}</td>
                         <td>{{ messages[2] }}</td>
                         <td>{{ messages[3] }}</td>
