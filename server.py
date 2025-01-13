@@ -125,6 +125,7 @@ def get_appointments_from_mail():
                 
 def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time):
   # Diccionario para traducir días de la semana
+    client = Client(account_sid, auth_token)
     days_translation = {
         "Monday": "lunes",
         "Tuesday": "martes",
