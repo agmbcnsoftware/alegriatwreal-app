@@ -118,7 +118,7 @@ def get_all_messages():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        SELECT u.name, m.message, m.timestamp, m.sender
+        SELECT u.name, m.whatsapp_number, m.message, m.timestamp, m.sender
         FROM messages m
         JOIN users u ON m.user_id = u.id
         ORDER BY m.timestamp ASC

@@ -166,25 +166,6 @@ def send_test_reminder(user_id, class_weekday, class_time, class_type):
       content_variables = json.dumps(variables),
       to='whatsapp:+34658595387',
     )
-
-    
-def sent_test_reminder():
-    client = Client(account_sid, auth_token)
-    
-    content_variables = {
-    "user_name": "Marta",
-    "class_weekday": "jueves",
-    "class_time": "18:45",
-    "class_type": "Sevillanas"
-    }
-
-    message = client.messages.create(
-      from_=twilio_number,
-      content_sid='HXee3cf6439091a385009b6bb7a5314ded',
-      #content_variables= content_variables,
-      content_variables = '{ "user_name":"Marta","class_weekday":"jueves","class_time":"18:45","class_type":"Sevillanas"}',
-      to='whatsapp:+34658595387',
-    )
     
 def notify_appointments():   
     print("Enviando notificaciones)") 
