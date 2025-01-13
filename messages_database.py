@@ -102,8 +102,6 @@ def get_or_create_user(from_number, name=None):
 
 # Inserta un nuevo mensaje
 def insert_message(user_id, from_number, whatsapp_profile, message, sender):
-    print("Inserting message. Whatsapp number: ",from_number )
-    print("and ")
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM messages WHERE whatsapp_number = ?", (from_number,))

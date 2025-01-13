@@ -152,7 +152,7 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
       to=whatsapp_number
     ) 
 
-def send_test_reminder(user_id, class_weekday, class_time, class_type):
+def send_reminder_by_whatsapp_to_admin(user_id, class_weekday, class_time, class_type):
     client = Client(account_sid, auth_token)
     variables = {
         "user_name": user_id,
@@ -170,8 +170,7 @@ def send_test_reminder(user_id, class_weekday, class_time, class_type):
     
 def notify_appointments():   
     print("Enviando notificaciones)") 
-    #sent_test_reminder()
-    send_test_reminder("Alvaro", "viernes", "12:00h", "sevillanas")
+    
     res_cursor  =  db.get_tomorrow_reservations()
     
     #res_cursor  =  db.get_all_reservations()
@@ -181,8 +180,7 @@ def notify_appointments():
         #Envío whatsapp al usuario
         send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
                
-        #Queda pendiente avisar también al adminsitrador por whatsapp
-        # El mensaje sería "Avisado: nombre, numero de whatsapp y clase"
+      
         db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
@@ -190,7 +188,7 @@ def notify_appointments():
 def start_appointment_notifications():
     #schedule.every().minute.at(":20").do(notify_appointments)
     #schedule.every().minute.at(":00").do(get_appointments_from_mail)
-    schedule.every(120).minutes.do(get_appointments_from_mail)
+    schedule.every(10).minutes.do(get_appointments_from_mail)
     schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
@@ -254,10 +252,10 @@ def webhook():
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         if (incoming_message == "Reservation_OK"):
             print("Ha aceptado la clase de prueba")
-            incoming_message = "No podré acudir a la clase de prueba de mañana"
+            incoming_message = "Reservé para hacer una clase de prueba. He recibido recordatorio de que mañana tengo la clase de prueba y confirmo que iré"
         if (incoming_message == "Reservation_NOK"):
             print("NO ha aceptado la clase de prueba")
-            incoming_message = "No podré acudir a la clase de prueba de mañana"
+            incoming_message = "Reservé para hacer una clase de prueba. He recibido un recordatorio de que mañana tengo la clase de prueba y no puedo ir"
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)
