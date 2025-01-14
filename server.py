@@ -192,8 +192,9 @@ def reservations():
 @app.route("/messages")
 @auth.login_required
 def messages():
-    # Suponemos que tienes una función para obtener los mensajes
-    messages = db.get_all_messages()  # Ejecuta la consulta y obtiene los resultados
+    filter_option = request.args.get("filter", "today")  # Obtén el filtro, por defecto "all"
+    messages = db.get_filtered_messages(filter_option)      # Obtén mensajes filtrado
+
     return render_template("messages.html", messages=messages)
 
 @app.route("/download", methods=["GET"])
