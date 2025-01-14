@@ -166,11 +166,15 @@ def notify_appointments():
     reservations = res_cursor.fetchall()
     for res in reservations:
         reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
-        #Envío whatsapp al usuario
-        send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
-        #Envío whatsapp al administrador
-        send_reminder_by_whatsapp_to_admin(user_id, class_weekday, class_time, class_type)          
-        db.set_reservation_to_sent(reservation_id)
+        try:
+            #Envío whatsapp al usuario
+            send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
+            #Envío whatsapp al administrador
+            send_reminder_by_whatsapp_to_admin(user_id, class_weekday, class_time, class_type)          
+            #Marco la notificación comio enviada
+            db.set_reservation_to_sent(reservation_id)
+        except Exception as e:
+            traceback.print_exc()
         time.sleep(1) 
     print("Notificaciones enviadas")   
                 
