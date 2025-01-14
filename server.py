@@ -155,7 +155,6 @@ def notify_appointments():
         try:
             #Envío whatsapp al usuario
             send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
-            #send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time):
             #Envío whatsapp al administrador
             send_reminder_by_whatsapp_to_admin(user_name, class_type, class_date, class_time)          
             #Marco la notificación comio enviada
