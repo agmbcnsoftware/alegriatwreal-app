@@ -77,7 +77,7 @@ def get_spanish_weekday(class_date):
         "Saturday": "sábado",
         "Sunday": "domingo"
     }
-    date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
+    date_object = datetime.strptime(class_date, "%Y-%m-%d")
     class_weekday_eng = date_object.strftime("%A")
     class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)  
     return class_weekday_spa

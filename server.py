@@ -7,7 +7,6 @@ import os
 import threading
 import schedule
 import time
-import datetime
 import messages_database
 import emails
 import date_operations
@@ -180,8 +179,8 @@ def notify_appointments():
                 
 def start_appointment_notifications():
 
-    schedule.every(10).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("15:39").do(notify_appointments)
+    schedule.every(1).minutes.do(get_appointments_from_mail)
+    schedule.every().day.at("17:20").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
