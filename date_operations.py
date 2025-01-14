@@ -67,4 +67,17 @@ def get_next_weekday_time(schedule_string, holidays_file=None):
     # Retornar en el formato deseado
     return next_datetime.strftime("%Y-%m-%d"), next_datetime.strftime("%H:%M")
 
-
+def get_spanish_weekday(class_date):
+    days_translation = {
+        "Monday": "lunes",
+        "Tuesday": "martes",
+        "Wednesday": "miércoles",
+        "Thursday": "jueves",
+        "Friday": "viernes",
+        "Saturday": "sábado",
+        "Sunday": "domingo"
+    }
+    date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
+    class_weekday_eng = date_object.strftime("%A")
+    class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)  
+    return class_weekday_spa

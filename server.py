@@ -153,10 +153,12 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
     ) 
 
 def send_reminder_by_whatsapp_to_admin(user_id, class_weekday, class_time, class_type):
+    class_weekday_spa = date_ops.get_spanish_weekday(class_date)
+    
     client = Client(account_sid, auth_token)
     variables = {
         "user_name": user_id,
-        "class_weekday": class_weekday,
+        "class_weekday": class_weekday_spa,
         "class_time": class_time,
         "class_type": class_type
     }
@@ -180,7 +182,7 @@ def notify_appointments():
         #Envío whatsapp al usuario
         #send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
         #Envío whatsapp al administrador
-        send_reminder_by_whatsapp_to_admin (user_name, class_type, class_date, class_time)           
+        send_reminder_by_whatsapp_to_admin(user_id, class_weekday, class_time, class_type)          
         db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
@@ -188,7 +190,7 @@ def notify_appointments():
 def start_appointment_notifications():
 
     schedule.every(10).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("14:46").do(notify_appointments)
+    schedule.every().day.at("14:57").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
