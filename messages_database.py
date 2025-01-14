@@ -265,7 +265,7 @@ def get_tomorrow_reservations():
         SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time
         FROM trial_class_reservations
         WHERE class_date = DATE('now', '+1 day')
-          AND reminder_sent = 0;
+          AND reminder_sent = 1;
         """)
         
         return cursor     
