@@ -142,8 +142,7 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
     ) 
 
 def send_reminder_by_whatsapp_to_admin(user_id, class_weekday, class_time, class_type):
-    class_weekday_spa = date_ops.get_spanish_weekday(class_date)
-    
+    class_weekday_spa = date_ops.get_spanish_weekday(class_date)    
     client = Client(account_sid, auth_token)
     variables = {
         "user_name": user_id,
@@ -281,9 +280,7 @@ def webhook():
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
-    #threading.Thread(target=start_conversations_processing).start()
-    threading.Thread(target=start_appointment_notifications).start()
-    #threading.Thread(target=send_first_message_to_admin).start()    
+    threading.Thread(target=start_appointment_notifications).start()    
     print("Yeah")
     
     
