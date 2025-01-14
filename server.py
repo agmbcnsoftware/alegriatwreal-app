@@ -126,18 +126,7 @@ def get_appointments_from_mail():
 def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time):
   # Diccionario para traducir días de la semana
     client = Client(account_sid, auth_token)
-    days_translation = {
-        "Monday": "lunes",
-        "Tuesday": "martes",
-        "Wednesday": "miércoles",
-        "Thursday": "jueves",
-        "Friday": "viernes",
-        "Saturday": "sábado",
-        "Sunday": "domingo"
-    }
-    date_object = datetime.datetime.strptime(class_date, "%Y-%m-%d")
-    class_weekday_eng = date_object.strftime("%A")
-    class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)   
+    class_weekday_spa = date_ops.get_spanish_weekday(class_date)   
     variables = {
         "user_name": user_name,
         "class_weekday": class_weekday_spa,
@@ -174,7 +163,6 @@ def notify_appointments():
     print("Enviando notificaciones)") 
     
     res_cursor  =  db.get_tomorrow_reservations()
-    
     #res_cursor  =  db.get_all_reservations()
     reservations = res_cursor.fetchall()
     for res in reservations:
@@ -190,7 +178,7 @@ def notify_appointments():
 def start_appointment_notifications():
 
     schedule.every(10).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("14:57").do(notify_appointments)
+    schedule.every().day.at("14:59").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
