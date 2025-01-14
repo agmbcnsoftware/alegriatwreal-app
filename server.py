@@ -140,7 +140,7 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
       to=whatsapp_number
     ) 
 
-def send_reminder_by_whatsapp_to_admin(user_name, class_weekday, class_time, class_type):
+def send_reminder_by_whatsapp_to_admin(user_name, class_type, class_date, class_time):
     whatsapp_number = admin_number
     send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
     
@@ -168,7 +168,7 @@ def notify_appointments():
 def start_appointment_notifications():
 
     schedule.every(120).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("17:31").do(notify_appointments)
+    schedule.every().day.at("17:34").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
