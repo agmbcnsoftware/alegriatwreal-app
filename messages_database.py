@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from datetime import datetime, timedelta
 
 # Ruta para la base de datos
 
@@ -203,7 +204,45 @@ def set_user_messages_processed(from_number):
             print("insertado antes del commit")
             conn.commit()  
             
-        # Si no existe, lo crea
+def get_filtered_messages(filter_option):
+    
+    query = "SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM messages"
+    params = []
+    
+    # Obtener fechas basadas en la opción de filtro
+    now = datetime.now()
+    
+    if filter_option == "today":
+        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = now
+        query += " WHERE timestamp BETWEEN ? AND ?"
+        params = [start_date, end_date]
+    elif filter_option == "yesterday":
+        start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = start_date + timedelta(days=1)
+        query += " WHERE timestamp BETWEEN ? AND ?"
+        params = [start_date, end_date]
+    elif filter_option == "last7days":
+        start_date = now - timedelta(days=7)
+        end_date = now
+        query += " WHERE timestamp BETWEEN ? AND ?"
+        params = [start_date, end_date]
+    elif filter_option == "lastmonth":
+        start_date = now - timedelta(days=30)
+        end_date = now
+        query += " WHERE timestamp BETWEEN ? AND ?"
+        params = [start_date, end_date]
+    elif filter_option == "all":
+        # Sin condiciones adicionales, selecciona todos los mensajes
+        pass
+    else:
+        raise ValueError(f"Opción de filtro no válida: {filter_option}")
+
+    # Ejecutar la consulta
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        return cursor.fetchall()
         
 def get_unprocessed_users():
     
