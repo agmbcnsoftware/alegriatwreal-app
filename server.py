@@ -178,9 +178,9 @@ def notify_appointments():
     for res in reservations:
         reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
         #Envío whatsapp al usuario
-        send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
+        #send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
         #Envío whatsapp al administrador
-        send_reminder_by_whatsapp_to_admin(whatsapp_number, user_name, class_type, class_date, class_time)            
+        send_reminder_by_whatsapp_to_admin (user_name, class_type, class_date, class_time)           
         db.set_reservation_to_sent(reservation_id)
         time.sleep(1) 
     print("Notificaciones enviadas")   
@@ -188,7 +188,7 @@ def notify_appointments():
 def start_appointment_notifications():
 
     schedule.every(10).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("09:00").do(notify_appointments)
+    schedule.every().day.at("14:46").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
