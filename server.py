@@ -192,11 +192,11 @@ def reservations():
 @app.route("/messages")
 @auth.login_required
 def messages():
-    filter_option = request.args.get("filter", "today")  # Obtén el filtro, por defecto "hoy"
-    messages = db.get_filtered_messages(filter_option)      # Obtén mensajes filtrado
+    filter_option = request.args.get("filter", "today")  # Por defecto "hoy"
+    messages = db.get_filtered_messages(filter_option)  # Obtén los mensajes filtrados
 
-    return render_template("messages.html", messages=messages)
-
+    return render_template("messages.html", messages=messages, filter_option=filter_option)
+  
 @app.route("/download", methods=["GET"])
 @auth.login_required
 def download_database():
