@@ -23,11 +23,11 @@
             <form id="filter-form" method="get" action="/messages">
                 <label for="date-filter">Filtrar por:</label>
                 <select id="date-filter" name="filter">
+                    <option value="all" selected>Todos</option>
                     <option value="today">Hoy</option>
                     <option value="yesterday">Ayer</option>
                     <option value="last7days">Últimos siete días</option>
                     <option value="lastmonth">Último mes</option>
-                    <option value="all" selected>Todos</option>
                 </select>
                 <button type="submit">Aplicar</button>
             </form>

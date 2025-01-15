@@ -192,7 +192,7 @@ def reservations():
 @app.route("/messages")
 @auth.login_required
 def messages():
-    filter_option = request.args.get("filter", "today")  # Obtén el filtro, por defecto "all"
+    filter_option = request.args.get("filter", "today")  # Obtén el filtro, por defecto "hoy"
     messages = db.get_filtered_messages(filter_option)      # Obtén mensajes filtrado
 
     return render_template("messages.html", messages=messages)
