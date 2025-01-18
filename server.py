@@ -166,8 +166,8 @@ def notify_appointments():
                 
 def start_appointment_notifications():
 
-    schedule.every(120).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("17:34").do(notify_appointments)
+    schedule.every(10).minutes.do(get_appointments_from_mail)
+    schedule.every().day.at("09:00").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
