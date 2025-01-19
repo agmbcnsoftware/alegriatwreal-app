@@ -62,6 +62,12 @@ def load_users_from_encrypted_file():
     except Exception as e:
         print("Error al cargar usuarios:", e)
         raise
+        
+def get_reservation_url(class_type)
+    if class_type == "FLAMENCO"
+        return ""
+    if class_type == "RUMBA"
+    if class_type == "SEVILLANAS"
 
 @auth.verify_password
 def verify_password(username, password):
@@ -123,11 +129,9 @@ def get_appointments_from_mail():
             # Captura la excepción y muestra la traza
                 print("No se pudo gestionar el mail de:" + nombre)
                 traceback.print_exc()
-                
-    
+                    
 def notify_appointments():   
-    print("Enviando notificaciones)") 
-    
+    print("Enviando notificaciones)")     
     res_cursor  =  db.get_tomorrow_reservations()
     #res_cursor  =  db.get_all_reservations()
     reservations = res_cursor.fetchall()
@@ -146,7 +150,6 @@ def notify_appointments():
     print("Notificaciones enviadas")   
                 
 def start_appointment_notifications():
-
     schedule.every(10).minutes.do(get_appointments_from_mail)
     schedule.every().day.at("09:00").do(notify_appointments)
     while True:
@@ -216,7 +219,11 @@ def webhook():
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         if (incoming_message == "Reservation_NOK"):
             print("NO ha aceptado la clase de prueba")
-            
+            db.get_reservations_from_user(from_number)
+            reservations = res_cursor.fetchall()
+            for res in reservations:
+                reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
+                
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
