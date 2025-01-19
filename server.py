@@ -212,10 +212,11 @@ def webhook():
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         if (incoming_message == "Reservation_OK"):
             print("Ha aceptado la clase de prueba")
-            incoming_message = "Reservé para hacer una clase de prueba. He recibido recordatorio de que mañana tengo la clase de prueba y confirmo que iré"
+            sw.say_thanks()
+            return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         if (incoming_message == "Reservation_NOK"):
             print("NO ha aceptado la clase de prueba")
-            incoming_message = "Reservé para hacer una clase de prueba. He recibido un recordatorio de que mañana tengo la clase de prueba y no puedo ir"
+            return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)
