@@ -12,6 +12,7 @@ import emails
 import date_operations
 import traceback
 import json
+import send_whatsapps
 
 
 app = Flask(__name__)
@@ -77,6 +78,7 @@ conversations = {}
 db = messages_database
 eml = emails
 date_ops = date_operations
+sw = send_whatsapps
 #db.initialize_db()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
@@ -122,27 +124,6 @@ def get_appointments_from_mail():
                 print("No se pudo gestionar el mail de:" + nombre)
                 traceback.print_exc()
                 
-def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time):
-  # Diccionario para traducir días de la semana
-    client = Client(account_sid, auth_token)
-    class_weekday_spa = date_ops.get_spanish_weekday(class_date)   
-    variables = {
-        "user_name": user_name,
-        "class_weekday": class_weekday_spa,
-        "class_time": class_time,
-        "class_type": class_type
-    }
-
-    message = client.messages.create(
-      from_=twilio_number,
-      content_sid='HXee3cf6439091a385009b6bb7a5314ded',
-      content_variables = json.dumps(variables),
-      to=whatsapp_number
-    ) 
-
-def send_reminder_by_whatsapp_to_admin(user_name, class_type, class_date, class_time):
-    whatsapp_number = admin_number
-    send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
     
 def notify_appointments():   
     print("Enviando notificaciones)") 
@@ -154,9 +135,9 @@ def notify_appointments():
         reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
         try:
             #Envío whatsapp al usuario
-            send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
+            sw.send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time)
             #Envío whatsapp al administrador
-            send_reminder_by_whatsapp_to_admin(user_name, class_type, class_date, class_time)          
+            sw.send_reminder_by_whatsapp_to_admin(user_name, class_type, class_date, class_time)          
             #Marco la notificación comio enviada
             db.set_reservation_to_sent(reservation_id)
         except Exception as e:
