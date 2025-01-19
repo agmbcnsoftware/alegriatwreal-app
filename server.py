@@ -63,11 +63,13 @@ def load_users_from_encrypted_file():
         print("Error al cargar usuarios:", e)
         raise
         
-def get_reservation_url(class_type)
-    if class_type == "FLAMENCO"
-        return ""
-    if class_type == "RUMBA"
-    if class_type == "SEVILLANAS"
+def get_reservation_url(class_type):
+    if class_type == "FLAMENCO":
+        return "https://graciaflamenca.es/web/formulario-clase-gratuita-de-flamenco/"
+    if class_type == "RUMBA":
+        return "https://graciaflamenca.es/web/formulario-clase-gratuita-de-rumba/"
+    if class_type == "SEVILLANAS":
+        return "https://graciaflamenca.es/web/formulario-clase-gratuita-de-sevillanas/"
 
 @auth.verify_password
 def verify_password(username, password):
@@ -223,7 +225,8 @@ def webhook():
             reservations = res_cursor.fetchall()
             for res in reservations:
                 reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
-                
+                link = get_reservation_url(class_type)
+            sw.say_pitty(link)
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
