@@ -14,5 +14,5 @@ def delete_reservations_from_user(from_number):
 
 
 #db.print_all_reservations()    
-delete_reservations_from_user("whatsapp:+34617558126")
+delete_reservations_from_user("whatsapp:+34625740413")
 db.print_all_reservations() 
