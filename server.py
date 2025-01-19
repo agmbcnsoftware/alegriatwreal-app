@@ -216,6 +216,7 @@ def webhook():
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         if (incoming_message == "Reservation_NOK"):
             print("NO ha aceptado la clase de prueba")
+            
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
