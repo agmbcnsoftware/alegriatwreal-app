@@ -104,7 +104,7 @@ def get_appointments_from_mail():
             try:
             #Obtengo la información contenida y la inserto en variables
                 extracted_data = eml.extract_info(clean_body)
-                print(extracted_data)
+                #print(extracted_data)
                 nombre = extracted_data.get("Nombre", "No especificado")
                 apellidos = extracted_data.get("Apellidos", "No especificado")
                 whatsapp_number = "whatsapp:" + extracted_data.get("Teléfono", "No especificado")
