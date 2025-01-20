@@ -28,6 +28,6 @@ def delete_reservations_from_user_date(from_number, class_date):
 
 #db.print_all_reservations()    
 #delete_reservations_from_user("whatsapp:+34625740413")
-#delete_reservations_from_user_date("whatsapp:+34625740413", class_date)
+delete_reservations_from_user_date("whatsapp:+34667285233", "2025-01-27")
 #db.print_all_reservations() 
 #send_whatsapps.send_reminder_by_whatsapp("whatsapp:+34658595387", "Alvaro", "SEVILLANAS", "2024-01-22", "14:55")
