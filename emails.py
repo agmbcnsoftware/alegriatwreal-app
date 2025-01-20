@@ -33,10 +33,10 @@ def safe_decode(content):
         return content.decode("utf-8", errors="replace")  # Reemplaza caracteres inválidos
 
 
-def fetch_emails(mail, folder="Test"):
+def fetch_emails(mail, label="inbox"):
     try:
         mail.select(folder)
-        status, messages = mail.search(None, "ALL")
+        status, messages = mail.select(f'"{label}"')
         if status != "OK":
             print("No se pudieron recuperar los correos")
             return []

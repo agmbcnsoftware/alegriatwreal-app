@@ -102,7 +102,7 @@ def get_appointments_from_mail():
    #Obteniendo nuevos citas para clase de prueba desde correo electrónico
     mail = eml.connect_to_email_server(email_server, email_address, email_pwd)
     if mail:
-        emails = eml.fetch_emails(mail)
+        emails = eml.fetch_emails(mail, label="Clase de prueba")
         mail.logout()  # Cerrar la sesión
         # Procesar los correos recuperados
         # Integración con el bucle que recorre los correos
@@ -152,7 +152,7 @@ def notify_appointments():
     print("Notificaciones enviadas")   
                 
 def start_appointment_notifications():
-    schedule.every(10).minutes.do(get_appointments_from_mail)
+    schedule.every(1).minutes.do(get_appointments_from_mail)
     schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
