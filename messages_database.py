@@ -344,8 +344,8 @@ def get_or_create_reservation(user_id, user_name, user_surname, whatsapp_number,
         # Intenta buscar el usuario
         cursor.execute("""
         SELECT id FROM trial_class_reservations 
-        WHERE user_id = ? AND whatsapp_number = ? AND class_type = ? AND  class_date = ? AND class_time = ?
-        """, (user_id, whatsapp_number, class_type, class_date, class_time))
+        WHERE user_id = ? AND whatsapp_number = ? AND class_type = ? AND class_time = ?
+        """, (user_id, whatsapp_number, class_type, class_time))
         result = cursor.fetchone()
         if result:
             print("Numero encontrado, id: ", result[0])
