@@ -35,7 +35,7 @@ def safe_decode(content):
 
 def fetch_emails(mail, label="inbox"):
     try:
-        mail.select(folder)
+        #mail.select(folder)
         status, messages = mail.select(f'"{label}"')
         if status != "OK":
             print("No se pudieron recuperar los correos")
