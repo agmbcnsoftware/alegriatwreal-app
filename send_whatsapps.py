@@ -1,6 +1,10 @@
 # Download the helper library from https://www.twilio.com/docs/python/install
 import os
 from twilio.rest import Client
+import date_operations
+import json
+
+admin_number = "whatsapp:+34658595387"
 
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
@@ -21,7 +25,7 @@ def send_hello():
 def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date, class_time):
   # Diccionario para traducir días de la semana
     client = Client(account_sid, auth_token)
-    class_weekday_spa = date_ops.get_spanish_weekday(class_date)   
+    class_weekday_spa = date_operations.get_spanish_weekday(class_date)   
     variables = {
         "user_name": user_name,
         "class_weekday": class_weekday_spa,
