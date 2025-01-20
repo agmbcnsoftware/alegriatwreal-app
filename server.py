@@ -215,13 +215,13 @@ def webhook():
         if (incoming_message == "Olvidame"):
             db.delete_messages_from_user(from_number)
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
-        if (incoming_message == "Reservation_OK"):
+        if (incoming_message == "Genial! Allí estaré"):
             print("Ha aceptado la clase de prueba")
             sw.say_thanks()
             return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
-        if (incoming_message == "Reservation_NOK"):
+        if (incoming_message == "Lástima. No puedo ir"):
             print("NO ha aceptado la clase de prueba")
-            db.get_reservations_from_user(from_number)
+            res_cursor = db.get_reservations_from_user(from_number)
             reservations = res_cursor.fetchall()
             for res in reservations:
                 reservation_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time = res
