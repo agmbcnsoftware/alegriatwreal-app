@@ -210,7 +210,7 @@ def webhook():
         incoming_message = data.get("Body", "").strip()
         from_number = data.get("From")  # Número del remitente
         profile_name = data.get("ProfileName", "").strip() # Nombre que se ha puesto en WhatsApp
-        
+        print(incoming_message)
         # Si el mensaje tiene el literal Olvídame eliminamos todos los mensajes del usuario y ya está
         if (incoming_message == "Olvidame"):
             db.delete_messages_from_user(from_number)
