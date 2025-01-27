@@ -260,7 +260,10 @@ def webhook():
     except Exception as e:
         print("Error:", e)
         return jsonify({"error": "An error occurred"}), 500
-          
+       
+def start_streamlit_app():
+    # Ejecuta Streamlit como un comando del sistema
+    os.system("streamlit run formCampaign.py --server.port 8501 --server.headless true")
 
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
