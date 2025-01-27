@@ -13,7 +13,6 @@ import date_operations
 import traceback
 import json
 import send_whatsapps
-import campaignsForm
 
 
 app = Flask(__name__)
@@ -261,17 +260,13 @@ def webhook():
     except Exception as e:
         print("Error:", e)
         return jsonify({"error": "An error occurred"}), 500
-
-def start_streamlit_app():
-    # Ejecuta Streamlit como un comando del sistema
-    os.system("streamlit run campaignsForm.py --server.port 8501 --server.headless true")      
-      
+          
 
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
     threading.Thread(target=start_appointment_notifications).start()
-    threading.Thread(target=start_streamlit_app).start()
+    #threading.Thread(target=start_streamlit_app).start()
     print("Yeah")
     
     
