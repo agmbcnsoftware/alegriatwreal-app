@@ -13,7 +13,6 @@ import date_operations
 import traceback
 import json
 import send_whatsapps
-#import pandas as pd
 
 
 app = Flask(__name__)
@@ -153,8 +152,8 @@ def notify_appointments():
     print("Notificaciones enviadas")   
                 
 def start_appointment_notifications():
-    schedule.every(10).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("08:00").do(notify_appointments)
+    schedule.every(12).minutes.do(get_appointments_from_mail)
+    schedule.every().day.at("10:55").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -197,64 +196,6 @@ def download_database():
     except Exception as e:
         return f"Error al descargar el archivo: {e}", 500
 
-@app.route("/campaigns", methods=["GET", "POST"])
-@auth.login_required
-def campaigns():
-    if request.method == "POST":
-        # Lógica para manejar el archivo subido, selección y procesamiento
-        pass
-
-    return render_template("campaigns.html")
-  
-@app.route("/upload_excel", methods=["POST"])
-def upload_excel():
-    file = request.files.get("excel_file")
-    if not file:
-        return "No se subió ningún archivo", 400
-
-    # Leer el archivo Excel
-    df = pd.read_excel(file)
-
-    # Obtener encabezados y primeras 10 filas
-    headers = list(df.columns)
-    rows = df.head(10).values.tolist()
-
-    return jsonify({"headers": headers, "rows": rows})
-
-@app.route("/process_excel", methods=["POST"])
-def process_excel():
-    file = request.files.get("excel_file")
-    col1 = request.form.get("col1")
-    col2 = request.form.get("col2")
-    col3 = request.form.get("col3")
-
-    if not file or not col1 or not col2 or not col3:
-        return "Faltan parámetros", 400
-
-    # Leer el archivo Excel
-    df = pd.read_excel(file)
-
-    # Verificar que las columnas seleccionadas existen
-    if not all(col in df.columns for col in [col1, col2, col3]):
-        return "Columnas seleccionadas no válidas", 400
-
-    # Iterar por las filas y enviar mensajes
-    for _, row in df.iterrows():
-        p1, p2, p3 = row[col1], row[col2], row[col3]
-        send_whatsapp(p1, p2, p3)
-
-    return "Mensajes enviados con éxito", 200
-
-#
-#--------------------------
-#
-
-def send_whatsapp(p1, p2, p3):
-    # Aquí iría la lógica para enviar WhatsApp
-    print(f"Enviando WhatsApp: {p1}, {p2}, {p3}")
-#
-#--------------------------
-#
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
@@ -328,7 +269,7 @@ if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
     threading.Thread(target=start_appointment_notifications).start()
-    #threading.Thread(target=start_streamlit_app).start()
+    threading.Thread(target=start_streamlit_app).start()
     print("Yeah")
     
     
