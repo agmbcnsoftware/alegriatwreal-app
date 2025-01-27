@@ -269,7 +269,7 @@ if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
     threading.Thread(target=start_appointment_notifications).start()
-    threading.Thread(target=start_streamlit_app).start()
+    #threading.Thread(target=start_streamlit_app).start()
     print("Yeah")
     
     
