@@ -1,112 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enviar WhatsApp</title>
-    <link rel="stylesheet" href="/static/style.css" />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campañas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
     <div class="container">
-      <h1>Enviar Mensajes de WhatsApp</h1>
-      <!-- Formulario para subir la Excel -->
-      <form
-        id="upload-form"
-        method="post"
-        action="/upload_excel"
-        enctype="multipart/form-data"
-      >
-        <label for="excel-file">Subir archivo Excel:</label>
-        <input
-          type="file"
-          id="excel-file"
-          name="excel_file"
-          accept=".xlsx, .xls"
-          required
-        />
-        <button type="submit">Subir y Cargar</button>
-      </form>
+        <!-- Menú lateral -->
+        <div class="sidebar">
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/reservations">Reservas</a></li>
+                <li><a href="/messages">Mensajes</a></li>
+                <li><a href="/campaigns">Campañas</a></li>
+                <li><a href="/database">Base de Datos</a></li>
+            </ul>
+        </div>
+        
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <h1>Campañas</h1>
+            <form id="upload-form" action="/campaigns" method="post" enctype="multipart/form-data">
+                <label for="file-upload">Subir archivo Excel:</label>
+                <input type="file" id="file-upload" name="file-upload" accept=".xlsx">
+                <button type="submit">Cargar y Procesar</button>
+            </form>
 
-      <div class="sidebar">
-        <ul>
-          <li><a href="/">Inicio</a></li>
-          <li><a href="/reservations">Reservas</a></li>
-          <li><a href="/messages">Mensajes</a></li>
-          <li><a href="/campaigns">Campañas</a></li>
-          <li><a href="/database">Base de Datos</a></li>
-        </ul>
-      </div>
-
-      <!-- Selección de columnas y vista previa -->
-      <div id="column-selection" style="display: none">
-        <h2>Seleccionar columnas:</h2>
-        <form id="selection-form" method="post" action="/process_excel">
-          <label for="col1">Columna 1:</label>
-          <select id="col1" name="col1" required></select>
-
-          <label for="col2">Columna 2:</label>
-          <select id="col2" name="col2" required></select>
-
-          <label for="col3">Columna 3:</label>
-          <select id="col3" name="col3" required></select>
-
-          <h3>Vista previa (primeras 10 filas):</h3>
-          <table id="preview-table" border="1">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-
-          <button type="submit">Enviar WhatsApp</button>
-        </form>
-      </div>
+            <!-- Aquí añadirás más lógica para mostrar las columnas, seleccionar valores, etc. -->
+        </div>
     </div>
-
-    <script>
-      // Mostrar encabezados y primeras filas
-      document.getElementById("upload-form").onsubmit = async function (e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-
-        const response = await fetch("/upload_excel", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const headers = data.headers;
-          const rows = data.rows;
-
-          // Rellenar los selectores con encabezados
-          const selects = ["col1", "col2", "col3"];
-          selects.forEach((id) => {
-            const select = document.getElementById(id);
-            select.innerHTML = headers
-              .map((header) => `<option value="${header}">${header}</option>`)
-              .join("");
-          });
-
-          // Mostrar las primeras filas
-          const previewTable = document.getElementById("preview-table");
-          const thead = previewTable.querySelector("thead");
-          const tbody = previewTable.querySelector("tbody");
-
-          thead.innerHTML = `<tr>${headers
-            .map((header) => `<th>${header}</th>`)
-            .join("")}</tr>`;
-          tbody.innerHTML = rows
-            .map(
-              (row) =>
-                `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
-            )
-            .join("");
-
-          // Mostrar la sección de selección
-          document.getElementById("column-selection").style.display = "block";
-        } else {
-          alert("Error al procesar el archivo.");
-        }
-      };
-    </script>
-  </body>
+</body>
 </html>

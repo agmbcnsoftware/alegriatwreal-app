@@ -13,6 +13,7 @@ import date_operations
 import traceback
 import json
 import send_whatsapps
+#import pandas as pd
 
 
 app = Flask(__name__)
@@ -152,8 +153,8 @@ def notify_appointments():
     print("Notificaciones enviadas")   
                 
 def start_appointment_notifications():
-    schedule.every(12).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("10:55").do(notify_appointments)
+    schedule.every(10).minutes.do(get_appointments_from_mail)
+    schedule.every().day.at("08:00").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -196,7 +197,15 @@ def download_database():
     except Exception as e:
         return f"Error al descargar el archivo: {e}", 500
 
-      
+@app.route("/campaigns", methods=["GET", "POST"])
+@auth.login_required
+def campaigns():
+    if request.method == "POST":
+        # Lógica para manejar el archivo subido, selección y procesamiento
+        pass
+
+    return render_template("campaigns.html")
+  
 @app.route("/upload_excel", methods=["POST"])
 def upload_excel():
     file = request.files.get("excel_file")
