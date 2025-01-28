@@ -17,6 +17,7 @@ import csv
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Esto genera una clave secreta aleatoria
 # Configurar autenticación básica
 auth = HTTPBasicAuth()
 
@@ -219,9 +220,9 @@ def process_csv(file_path):
 def campaigns():
     column_headers = []
     preview_data = None
-    message = ""
-    file_uploaded = False
+    file_path = None
 
+    # Manejo del archivo subido y columnas disponibles
     if request.method == "POST":
         # Subir archivo CSV
         if "file-upload" in request.files:
@@ -229,25 +230,45 @@ def campaigns():
             if file.filename.endswith(".csv"):
                 file_path = os.path.join("/tmp", file.filename)
                 file.save(file_path)
-                column_headers, preview_data = process_csv(file_path)
-                file_uploaded = True
-                request.session = {"uploaded_file": file_path}  # Guardar para usar en el envío
+                column_headers, _ = process_csv(file_path)
+                request.session = {"uploaded_file": file_path, "columns": column_headers}
             else:
                 flash("Por favor, sube un archivo válido con extensión .csv.", "error")
 
+        # Seleccionar columnas y mostrar las primeras filas
+        elif "preview-columns" in request.form:
+            file_path = request.session.get("uploaded_file")
+            column_headers = request.session.get("columns")
+            selected_cols = [
+                request.form.get("col1"),
+                request.form.get("col2"),
+                request.form.get("col3"),
+            ]
+
+            if file_path and all(selected_cols):
+                with open(file_path, newline='', encoding="utf-8") as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    preview_data = []
+                    for i, row in enumerate(reader):
+                        if i < 3:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
+                            preview_data.append({col: row[col] for col in selected_cols})
+                        else:
+                            break
+
         # Enviar mensajes
         elif "send-messages" in request.form:
-            col1 = request.form.get("col1")
-            col2 = request.form.get("col2")
-            col3 = request.form.get("col3")
             file_path = request.session.get("uploaded_file")
+            selected_cols = [
+                request.form.get("col1"),
+                request.form.get("col2"),
+                request.form.get("col3"),
+            ]
 
-            if col1 and col2 and col3 and file_path:
+            if file_path and all(selected_cols):
                 with open(file_path, newline='', encoding="utf-8") as csvfile:
                     reader = csv.DictReader(csvfile)
                     for row in reader:
-                        p1, p2, p3 = row[col1], row[col2], row[col3]
-                        send_whatsapp(p1, p2, p3)
+                        send_whatsapp(row[selected_cols[0]], row[selected_cols[1]], row[selected_cols[2]])
                 flash("Mensajes enviados con éxito.", "success")
             else:
                 flash("Selecciona las columnas y carga un archivo válido.", "error")
@@ -256,9 +277,8 @@ def campaigns():
         "campaigns.html",
         column_headers=column_headers,
         preview_data=preview_data,
-        file_uploaded=file_uploaded,
-        message=message,
     )
+
       
 @app.route("/webhook", methods=["POST"])
 def webhook():
