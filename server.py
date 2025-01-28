@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, make_response, send_file, render_template, Response
+from flask import Flask, jsonify, request, make_response, send_file, render_template, flash, session, Response
 from flask_httpauth import HTTPBasicAuth
 from twilio.rest import Client
 from openai import OpenAI
@@ -216,11 +216,11 @@ def process_csv(file_path):
     return headers, preview_data
 
 # Ruta para gestionar campañas
+
 @app.route("/campaigns", methods=["GET", "POST"])
 def campaigns():
     column_headers = []
     preview_data = None
-    file_path = None
 
     # Manejo del archivo subido y columnas disponibles
     if request.method == "POST":
@@ -230,15 +230,17 @@ def campaigns():
             if file.filename.endswith(".csv"):
                 file_path = os.path.join("/tmp", file.filename)
                 file.save(file_path)
+
                 column_headers, _ = process_csv(file_path)
-                request.session = {"uploaded_file": file_path, "columns": column_headers}
+                session["uploaded_file"] = file_path
+                session["columns"] = column_headers
             else:
                 flash("Por favor, sube un archivo válido con extensión .csv.", "error")
 
         # Seleccionar columnas y mostrar las primeras filas
         elif "preview-columns" in request.form:
-            file_path = request.session.get("uploaded_file")
-            column_headers = request.session.get("columns")
+            file_path = session.get("uploaded_file")
+            column_headers = session.get("columns")
             selected_cols = [
                 request.form.get("col1"),
                 request.form.get("col2"),
@@ -257,7 +259,7 @@ def campaigns():
 
         # Enviar mensajes
         elif "send-messages" in request.form:
-            file_path = request.session.get("uploaded_file")
+            file_path = session.get("uploaded_file")
             selected_cols = [
                 request.form.get("col1"),
                 request.form.get("col2"),
@@ -269,6 +271,7 @@ def campaigns():
                     reader = csv.DictReader(csvfile)
                     for row in reader:
                         send_whatsapp(row[selected_cols[0]], row[selected_cols[1]], row[selected_cols[2]])
+                        time.sleep(0.5)
                 flash("Mensajes enviados con éxito.", "success")
             else:
                 flash("Selecciona las columnas y carga un archivo válido.", "error")
@@ -279,7 +282,8 @@ def campaigns():
         preview_data=preview_data,
     )
 
-      
+
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     print("Received webhook")
