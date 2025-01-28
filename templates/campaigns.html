@@ -29,28 +29,28 @@
 
             <!-- Formulario para cargar archivo CSV -->
             <form method="post" enctype="multipart/form-data">
-                <label for="file-upload">Subir archivo CSV:</label>
+                <label for="file-upload">1.Subir archivo CSV:</label>
                 <input type="file" id="file-upload" name="file-upload" accept=".csv">
                 <button type="submit">Cargar</button>
             </form>
 
             <!-- Mostrar columnas disponibles -->
             {% if column_headers %}
-                <h2>Selecciona las columnas</h2>
+                <h2>2.Selecciona las columnas</h2>
                 <form method="post">
-                    <label for="col1">Columna 1:</label>
+                    <label for="col1">Teléfono:</label>
                     <select id="col1" name="col1">
                         {% for header in column_headers %}
                             <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
-                    <label for="col2">Columna 2:</label>
+                    <label for="col2">Variable 1:</label>
                     <select id="col2" name="col2">
                         {% for header in column_headers %}
                             <option value="{{ header }}">{{ header }}</option>
                         {% endfor %}
                     </select>
-                    <label for="col3">Columna 3:</label>
+                    <label for="col3">Variable 2:</label>
                     <select id="col3" name="col3">
                         {% for header in column_headers %}
                             <option value="{{ header }}">{{ header }}</option>

@@ -202,6 +202,16 @@ def download_database():
 def send_whatsapp(p1, p2, p3):
     print(f"Enviando mensaje: {p1}, {p2}, {p3}")
 
+def normalize_phone_number(phone):
+    # Normaliza el número de teléfono
+    phone = str(phone).strip().replace(" ", "")  # Elimina espacios adicionales
+    if len(phone) == 9 and phone.isdigit():
+        return f"whatsapp:+34{phone}"
+    elif phone.startswith("+"):
+        return f"whatsapp:{phone}"
+    else:
+        return None
+
 # Procesar archivo CSV para obtener encabezados y primeras filas
 def process_csv(file_path):
     with open(file_path, newline='', encoding="utf-8") as csvfile:
@@ -270,8 +280,9 @@ def campaigns():
                 with open(file_path, newline='', encoding="utf-8") as csvfile:
                     reader = csv.DictReader(csvfile)
                     for row in reader:
-                        send_whatsapp(row[selected_cols[0]], row[selected_cols[1]], row[selected_cols[2]])
-                        time.sleep(0.5)
+                        phone = normalize_phone_number(row[selected_cols[0]])
+                        send_whatsapp(phone, row[selected_cols[1]], row[selected_cols[2]])
+                        time.sleep(0.1)
                 flash("Mensajes enviados con éxito.", "success")
             else:
                 flash("Selecciona las columnas y carga un archivo válido.", "error")
