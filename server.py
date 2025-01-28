@@ -262,7 +262,7 @@ def campaigns():
                     reader = csv.DictReader(csvfile)
                     preview_data = []
                     for i, row in enumerate(reader):
-                        if i < 3:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
+                        if i < 5:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
                             preview_data.append({col: row[col] for col in selected_cols})
                         else:
                             break
@@ -282,7 +282,7 @@ def campaigns():
                     for row in reader:
                         phone = normalize_phone_number(row[selected_cols[0]])
                         send_whatsapp(phone, row[selected_cols[1]], row[selected_cols[2]])
-                        time.sleep(0.1)
+                        time.sleep(0.5)
                 flash("Mensajes enviados con éxito.", "success")
             else:
                 flash("Selecciona las columnas y carga un archivo válido.", "error")
