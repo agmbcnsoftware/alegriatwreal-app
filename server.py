@@ -152,7 +152,7 @@ def notify_appointments():
     print("Notificaciones enviadas")   
                 
 def start_appointment_notifications():
-    schedule.every(12).minutes.do(get_appointments_from_mail)
+    schedule.every(15).minutes.do(get_appointments_from_mail)
     schedule.every().day.at("10:55").do(notify_appointments)
     while True:
         schedule.run_pending()
@@ -197,6 +197,49 @@ def download_database():
         return f"Error al descargar el archivo: {e}", 500
 
 
+@app.route("/campaigns", methods=["GET", "POST"])
+@auth.login_required
+def campaigns():
+    preview_data = None
+    column_headers = []
+    message = ""
+
+    if request.method == "POST":
+        if "file-upload" in request.files:
+            file = request.files["file-upload"]
+
+            if file.filename.endswith(".xlsx"):
+                # Cargar Excel y obtener los datos
+                df = pd.read_excel(file)
+                preview_data = df.head(10).to_dict(orient="records")  # Primeras filas
+                column_headers = df.columns.tolist()  # Cabeceras de las columnas
+
+            else:
+                message = "Por favor, sube un archivo válido con extensión .xlsx."
+
+        elif "send-data" in request.form:
+            # Procesar datos enviados
+            selected_cols = [
+                request.form.get("col1"),
+                request.form.get("col2"),
+                request.form.get("col3"),
+            ]
+            if all(selected_cols):
+                # Procesar las filas y enviar los datos
+                df = pd.read_excel(session["uploaded_file"])
+                for _, row in df.iterrows():
+                    send_whatsapp(row[selected_cols[0]], row[selected_cols[1]], row[selected_cols[2]])
+                message = "Mensajes enviados con éxito."
+            else:
+                message = "Por favor, selecciona las tres columnas antes de enviar."
+
+    return render_template(
+        "campaigns.html",
+        preview_data=preview_data,
+        column_headers=column_headers,
+        message=message,
+    )      
+      
 @app.route("/webhook", methods=["POST"])
 def webhook():
     print("Received webhook")
