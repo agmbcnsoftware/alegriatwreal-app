@@ -13,6 +13,7 @@ import date_operations
 import traceback
 import json
 import send_whatsapps
+import csv
 
 
 app = Flask(__name__)
@@ -196,49 +197,68 @@ def download_database():
     except Exception as e:
         return f"Error al descargar el archivo: {e}", 500
 
+# Función simulada para enviar mensajes
+def send_whatsapp(p1, p2, p3):
+    print(f"Enviando mensaje: {p1}, {p2}, {p3}")
 
+# Procesar archivo CSV para obtener encabezados y primeras filas
+def process_csv(file_path):
+    with open(file_path, newline='', encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        headers = reader.fieldnames  # Obtener los nombres de las columnas
+        preview_data = []
+        for i, row in enumerate(reader):
+            if i < 10:  # Mostrar solo las primeras 10 filas
+                preview_data.append(row)
+            else:
+                break
+    return headers, preview_data
+
+# Ruta para gestionar campañas
 @app.route("/campaigns", methods=["GET", "POST"])
-@auth.login_required
 def campaigns():
-    preview_data = None
     column_headers = []
+    preview_data = None
     message = ""
+    file_uploaded = False
 
     if request.method == "POST":
+        # Subir archivo CSV
         if "file-upload" in request.files:
             file = request.files["file-upload"]
-
-            if file.filename.endswith(".xlsx"):
-                # Cargar Excel y obtener los datos
-                df = pd.read_excel(file)
-                preview_data = df.head(10).to_dict(orient="records")  # Primeras filas
-                column_headers = df.columns.tolist()  # Cabeceras de las columnas
-
+            if file.filename.endswith(".csv"):
+                file_path = os.path.join("/tmp", file.filename)
+                file.save(file_path)
+                column_headers, preview_data = process_csv(file_path)
+                file_uploaded = True
+                request.session = {"uploaded_file": file_path}  # Guardar para usar en el envío
             else:
-                message = "Por favor, sube un archivo válido con extensión .xlsx."
+                flash("Por favor, sube un archivo válido con extensión .csv.", "error")
 
-        elif "send-data" in request.form:
-            # Procesar datos enviados
-            selected_cols = [
-                request.form.get("col1"),
-                request.form.get("col2"),
-                request.form.get("col3"),
-            ]
-            if all(selected_cols):
-                # Procesar las filas y enviar los datos
-                df = pd.read_excel(session["uploaded_file"])
-                for _, row in df.iterrows():
-                    send_whatsapp(row[selected_cols[0]], row[selected_cols[1]], row[selected_cols[2]])
-                message = "Mensajes enviados con éxito."
+        # Enviar mensajes
+        elif "send-messages" in request.form:
+            col1 = request.form.get("col1")
+            col2 = request.form.get("col2")
+            col3 = request.form.get("col3")
+            file_path = request.session.get("uploaded_file")
+
+            if col1 and col2 and col3 and file_path:
+                with open(file_path, newline='', encoding="utf-8") as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        p1, p2, p3 = row[col1], row[col2], row[col3]
+                        send_whatsapp(p1, p2, p3)
+                flash("Mensajes enviados con éxito.", "success")
             else:
-                message = "Por favor, selecciona las tres columnas antes de enviar."
+                flash("Selecciona las columnas y carga un archivo válido.", "error")
 
     return render_template(
         "campaigns.html",
-        preview_data=preview_data,
         column_headers=column_headers,
+        preview_data=preview_data,
+        file_uploaded=file_uploaded,
         message=message,
-    )      
+    )
       
 @app.route("/webhook", methods=["POST"])
 def webhook():
