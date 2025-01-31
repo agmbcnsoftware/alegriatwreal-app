@@ -261,7 +261,7 @@ def campaigns():
                     reader = csv.DictReader(csvfile)
                     preview_data = []
                     for i, row in enumerate(reader):
-                        if i < 5:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
+                        if i < 10:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
                             preview_data.append({col: row[col] for col in selected_cols})
                         else:
                             break
