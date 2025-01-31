@@ -26,23 +26,6 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-          
-          <form id="template-form">
-             <label for="template-select">Selecciona un template:</label>
-               <select id="template-select" name="template_id">
-               <option value="">-- Seleccionar --</option>
-                  {% for template in templates %}
-               <option value="{{ template['Id'] }}">{{ template['Name'] }}</option>
-               {% endfor %}
-              </select>
-          </form>
-
-         <label for="body-text">Mensaje:</label>
-         <textarea id="body-text" rows="4" cols="50" readonly></textarea>
-
-         <label for="buttons-text">Botones:</label>
-         <textarea id="buttons-text" rows="2" cols="50" readonly></textarea>
-          
 
             <!-- Formulario para cargar archivo CSV -->
             <form method="post" enctype="multipart/form-data">
@@ -109,31 +92,4 @@
         </div>
     </div>
 </body>
-  
-<script>
-document.getElementById("template-select").addEventListener("change", function() {
-    let templateId = this.value;
-
-    if (templateId) {
-        fetch("/campaigns", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ template_id: templateId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("body-text").value = data.Body;
-            document.getElementById("buttons-text").value = data.Buttons;
-        })
-        .catch(error => console.error("Error:", error));
-    } else {
-        document.getElementById("body-text").value = "";
-        document.getElementById("buttons-text").value = "";
-    }
-});
-</script>  
-  
-
 </html>
-
-

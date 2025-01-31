@@ -6,12 +6,6 @@ import json
 
 admin_number = "whatsapp:+34658595387"
 
-def load_templates():
-    """Carga los templates desde un archivo JSON"""
-    with open("whatsapp_templates.json", "r", encoding="utf-8") as file:
-        return json.load(file)
-
-
 # Find your Account SID and Auth Token at twilio.com/console
 # and set the environment variables. See http://twil.io/secure
 account_sid = os.environ["TWILIO_ACCOUNT_SID"]
