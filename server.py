@@ -15,7 +15,6 @@ import json
 import send_whatsapps
 import csv
 
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Esto genera una clave secreta aleatoria
 # Configurar autenticación básica
@@ -267,6 +266,7 @@ def campaigns():
                         else:
                             break
 
+                          
         # Enviar mensajes
         elif "send-messages" in request.form:
             file_path = session.get("uploaded_file")

@@ -86,10 +86,19 @@
                     <input type="hidden" name="col1" value="{{ request.form.col1 }}">
                     <input type="hidden" name="col2" value="{{ request.form.col2 }}">
                     <input type="hidden" name="col3" value="{{ request.form.col3 }}">
-                    <button type="submit" name="send-messages">Enviar Mensajes</button>
+                    <button type="submit" name="send-messages" onclick="return confirmSend(event)">Enviar Mensajes</button>
                 </form>
             {% endif %}
         </div>
     </div>
+  <script>
+function confirmSend(event) {
+    if (!confirm("¿Estás seguro de que quieres enviar los mensajes?")) {
+        event.preventDefault();  // Detiene el envío del formulario si el usuario cancela
+        return false;
+    }
+    return true;  // Permite que el formulario se envíe si el usuario acepta
+}
+</script>
 </body>
 </html>
