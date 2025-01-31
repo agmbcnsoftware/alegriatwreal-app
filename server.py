@@ -231,21 +231,29 @@ def process_csv(file_path):
 def campaigns():
     column_headers = []
     preview_data = None
+    
+    if request.method == "POST" and "template_id" in request.form:
+        selected_template_id = request.form.get("template_id")
+        selected_template = next((t for t in templates if str(t["Id"]) == selected_template_id), None)
+
+        if selected_template:
+            return jsonify({
+                "Body": selected_template["Body"],
+                "Buttons": selected_template["Buttons"]
+            })
 
     # Manejo del archivo subido y columnas disponibles
-    if request.method == "POST":
-        # Subir archivo CSV
-        if "file-upload" in request.files:
-            file = request.files["file-upload"]
-            if file.filename.endswith(".csv"):
-                file_path = os.path.join("/tmp", file.filename)
-                file.save(file_path)
+    if request.method == "POST" and "csv_file" in request.files:
+        file = request.files["file-upload"]
+        if file.filename.endswith(".csv"):
+            file_path = os.path.join("/tmp", file.filename)
+            file.save(file_path)
 
-                column_headers, _ = process_csv(file_path)
-                session["uploaded_file"] = file_path
-                session["columns"] = column_headers
-            else:
-                flash("Por favor, sube un archivo válido con extensión .csv.", "error")
+            column_headers, _ = process_csv(file_path)
+            session["uploaded_file"] = file_path
+            session["columns"] = column_headers
+        else:
+            flash("Por favor, sube un archivo válido con extensión .csv.", "error")
 
         # Seleccionar columnas y mostrar las primeras filas
         elif "preview-columns" in request.form:
@@ -257,15 +265,15 @@ def campaigns():
                 request.form.get("col3"),
             ]
 
-            if file_path and all(selected_cols):
-                with open(file_path, newline='', encoding="utf-8") as csvfile:
-                    reader = csv.DictReader(csvfile)
-                    preview_data = []
-                    for i, row in enumerate(reader):
-                        if i < 5:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
-                            preview_data.append({col: row[col] for col in selected_cols})
-                        else:
-                            break
+        if file_path and all(selected_cols):
+            with open(file_path, newline='', encoding="utf-8") as csvfile:
+                reader = csv.DictReader(csvfile)
+                preview_data = []
+                for i, row in enumerate(reader):
+                    if i < 5:  # Mostrar solo las primeras 3 filas de las columnas seleccionadas
+                        preview_data.append({col: row[col] for col in selected_cols})
+                    else:
+                        break
 
         # Enviar mensajes
         elif "send-messages" in request.form:
