@@ -26,6 +26,23 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
+          
+          <form id="template-form">
+             <label for="template-select">Selecciona un template:</label>
+               <select id="template-select" name="template_id">
+               <option value="">-- Seleccionar --</option>
+                  {% for template in templates %}
+               <option value="{{ template['Id'] }}">{{ template['Name'] }}</option>
+               {% endfor %}
+              </select>
+          </form>
+
+         <label for="body-text">Mensaje:</label>
+         <textarea id="body-text" rows="4" cols="50" readonly></textarea>
+
+         <label for="buttons-text">Botones:</label>
+         <textarea id="buttons-text" rows="2" cols="50" readonly></textarea>
+          
 
             <!-- Formulario para cargar archivo CSV -->
             <form method="post" enctype="multipart/form-data">
@@ -93,3 +110,5 @@
     </div>
 </body>
 </html>
+
+
