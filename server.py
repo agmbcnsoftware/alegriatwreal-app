@@ -231,6 +231,7 @@ def process_csv(file_path):
 def campaigns():
     column_headers = []
     preview_data = None
+    templates = sw.load_templates()
     
     if request.method == "POST" and "template_id" in request.form:
         selected_template_id = request.form.get("template_id")
@@ -256,7 +257,7 @@ def campaigns():
             flash("Por favor, sube un archivo válido con extensión .csv.", "error")
 
         # Seleccionar columnas y mostrar las primeras filas
-        elif "preview-columns" in request.form:
+        if "preview-columns" in request.form:
             file_path = session.get("uploaded_file")
             column_headers = session.get("columns")
             selected_cols = [
