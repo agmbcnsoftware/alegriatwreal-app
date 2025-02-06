@@ -281,7 +281,25 @@ def get_all_reservations():
         FROM trial_class_reservations;
         """)
         
-        return cursor  
+        return cursor 
+      
+def get_filtered_reservations():    
+    query = "SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time, reminder_sent, created_at FROM trial_class_reservations"
+    params = []
+    
+    # Obtener fechas basadas en la opción de filtro
+    now = datetime.now()
+    
+    if filter_option == "next_reservations":
+        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        query += " WHERE start_date >= timestamp BETWEEN ? AND ?"
+        params = [start_date, end_date]
+    elif filter_option == "yesterday":
+        start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = start_date + timedelta(days=1)
+        query += " WHERE timestamp BETWEEN ? AND ?"
+        params = [start_date, end_date]
+  
 
 def get_today_reservations():
     with get_connection() as conn:
