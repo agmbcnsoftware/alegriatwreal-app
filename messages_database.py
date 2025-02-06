@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 # Ruta para la base de datos
 
@@ -283,22 +283,30 @@ def get_all_reservations():
         
         return cursor 
       
-def get_filtered_reservations():    
+def get_filtered_reservations(filter_option):    
     query = "SELECT id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time, reminder_sent, created_at FROM trial_class_reservations"
     params = []
     
     # Obtener fechas basadas en la opción de filtro
+    today = date.today().isoformat()
     now = datetime.now()
     
     if filter_option == "next_reservations":
-        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        query += " WHERE start_date >= timestamp BETWEEN ? AND ?"
-        params = [start_date, end_date]
-    elif filter_option == "yesterday":
+        query += " WHERE class_date >= ?"
+        params = [today]
+    elif filter_option == "yesterday_reservations":
         start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         end_date = start_date + timedelta(days=1)
-        query += " WHERE timestamp BETWEEN ? AND ?"
+        query += " WHERE created_at BETWEEN ? AND ?"
         params = [start_date, end_date]
+    elif filter_option == "all":
+        # Sin condiciones adicionales, selecciona todos los mensajes
+        pass
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        return cursor.fetchall()   
   
 
 def get_today_reservations():
