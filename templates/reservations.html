@@ -20,17 +20,16 @@
             <h1>Reservas</h1> 
           
           <!-- Filtros -->
-          <form id="filter-form" method="get" action="/messages" style="margin-bottom: 20px;>
+          <form id="filter-form" method="get" action="/reservations" style="margin-bottom: 20px;>                                                                           
               <label for="date-filter">Filtrar por:</label>
               <select id="date-filter" name="filter">
                   <option value="next_reservations" {% if filter_option == "next_reservations" %}selected{% endif %}>Próximas reservas</option>
-                  <option value="today" {% if filter_option == "today" %}selected{% endif %}>Reservas pedidas ayer</option>
-                  <option value="yesterday" {% if filter_option == "yesterday" %}selected{% endif %}>Ayer</option>
-                  <option value="last7days" {% if filter_option == "last7days" %}selected{% endif %}>Últimos siete días</option>
-                  <option value="lastmonth" {% if filter_option == "lastmonth" %}selected{% endif %}>Último mes</option>
+                  <option value="yesterday_reservations" {% if filter_option == "yesterday_reservations" %}selected{% endif %}>Reservas pedidas ayer</option>
+                  <option value="all" {% if filter_option == "all" %}selected{% endif %}>Todas</option>
               </select>
               <button type="submit">Aplicar</button>
           </form>
+          <!-- Tabla -->                          
             <table>
                 <thead>
                     <tr>
