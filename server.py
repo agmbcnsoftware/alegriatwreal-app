@@ -175,7 +175,7 @@ def reservations():
     # Suponemos que `get_all_reservations` devuelve un cursor iterable
     filter_option = request.args.get("filter", "next_reservations")  # Por defecto "hoy"
     reservations = db.get_filtered_reservations(filter_option)  # Implementa esta función
-    return render_template("reservations.html", reservations=reservations)
+    return render_template("reservations.html", reservations=reservations, filter_option=filter_option)
   
 @app.route("/messages")
 @auth.login_required

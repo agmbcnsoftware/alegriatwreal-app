@@ -296,9 +296,9 @@ def get_filtered_reservations(filter_option):
         params = [today]
     elif filter_option == "yesterday_reservations":
         start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-        end_date = start_date + timedelta(days=1)
-        query += " WHERE created_at BETWEEN ? AND ?"
-        params = [start_date, end_date]
+        query += " WHERE created_at >= ?"
+        params = [start_date]
+        print(query)
     elif filter_option == "all":
         # Sin condiciones adicionales, selecciona todos los mensajes
         pass
