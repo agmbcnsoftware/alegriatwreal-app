@@ -24,7 +24,7 @@
               <label for="date-filter">Filtrar por:</label>
               <select id="date-filter" name="filter">
                   <option value="next_reservations" {% if filter_option == "next_reservations" %}selected{% endif %}>Próximas reservas</option>
-                  <option value="yesterday_reservations" {% if filter_option == "yesterday_reservations" %}selected{% endif %}>Reservas pedidas ayer</option>
+                  <option value="yesterday_reservations" {% if filter_option == "yesterday_reservations" %}selected{% endif %}>Reservas pedidas desde ayer</option>
                   <option value="all" {% if filter_option == "all" %}selected{% endif %}>Todas</option>
               </select>
               <button type="submit">Aplicar</button>

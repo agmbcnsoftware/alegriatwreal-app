@@ -298,7 +298,6 @@ def get_filtered_reservations(filter_option):
         start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         query += " WHERE created_at >= ?"
         params = [start_date]
-        print(query)
     elif filter_option == "all":
         # Sin condiciones adicionales, selecciona todos los mensajes
         pass
