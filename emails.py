@@ -40,8 +40,16 @@ def fetch_emails(mail, label):
         if status != "OK":
             print("No se pudieron recuperar los correos")
             return []
+        status, data = mail.search(None, "ALL")
+        if status != "OK":
+            print("Error al buscar los correos")
+            return []
         
-        email_ids = messages[0].split()
+        #email_ids = messages[0].split()  # IDs de los correos
+        email_ids = data[0].split()  # IDs de los correos
+        print(f"Número de correos encontrados en {label}: {len(email_ids)}")
+        print(f"IDs de los correos: {email_ids}")  # Imprime los IDs obtenidos
+        #email_ids = messages[0].split()
         emails = []
 
         for email_id in email_ids:
