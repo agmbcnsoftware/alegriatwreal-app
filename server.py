@@ -103,7 +103,7 @@ def get_appointments_from_mail():
    #Obteniendo nuevos citas para clase de prueba desde correo electrónico
     mail = eml.connect_to_email_server(email_server, email_address, email_pwd)
     if mail:
-        emails = eml.fetch_emails(mail, label="Inbox")
+        emails = eml.fetch_emails(mail, label="Clase de prueba")
         mail.logout()  # Cerrar la sesión
         # Procesar los correos recuperados
         # Integración con el bucle que recorre los correos
