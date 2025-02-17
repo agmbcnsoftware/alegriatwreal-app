@@ -92,7 +92,7 @@ def get_or_create_user(from_number, name=None):
         cursor.execute("SELECT id FROM users WHERE whatsapp_number = ?", (from_number,))
         result = cursor.fetchone()
         if result:
-            print("Numero encontrado, id: ", result[0])
+            #print("Numero encontrado, id: ", result[0])
             return result[0]  # Devuelve el ID del usuario existente
         # Si no existe, lo crea tanto en tabla de usuarios como tabla de usuarios con mensajes pendientes de procesar
         #cursor.execute("INSERT INTO processed_user_messages (whatsapp_number) VALUES (?)", (from_number,))
@@ -373,7 +373,7 @@ def get_or_create_reservation(user_id, user_name, user_surname, whatsapp_number,
         """, (user_id, whatsapp_number, class_type, class_time))
         result = cursor.fetchone()
         if result:
-            print("Numero encontrado, id: ", result[0])
+            #print("Numero encontrado, id: ", result[0])
             return result[0] 
         cursor.execute("""
         INSERT INTO trial_class_reservations (user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time)

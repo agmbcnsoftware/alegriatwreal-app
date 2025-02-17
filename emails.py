@@ -47,14 +47,14 @@ def fetch_emails(mail, label):
         
         #email_ids = messages[0].split()  # IDs de los correos
         email_ids = data[0].split()  # IDs de los correos
-        print(f"Número de correos encontrados en {label}: {len(email_ids)}")
-        print(f"IDs de los correos: {email_ids}")  # Imprime los IDs obtenidos
+        #print(f"Número de correos encontrados en {label}: {len(email_ids)}")
+        #print(f"IDs de los correos: {email_ids}")  # Imprime los IDs obtenidos
         #email_ids = messages[0].split()
         emails = []
 
         for email_id in email_ids:
             # Recuperar correo
-            print("Recupero un mail")
+            #print("Recupero un mail")
             status, msg_data = mail.fetch(email_id, "(RFC822)")
             if status != "OK":
                 print(f"No se pudo recuperar el correo con ID {email_id}")
@@ -71,7 +71,7 @@ def fetch_emails(mail, label):
                         else email_subject
                     )
                     email_from = msg.get("From")
-                    print(email_subject)
+                    #print(email_subject)
                     # Procesar el cuerpo del correo
                     if msg.is_multipart():
                         for part in msg.walk():
