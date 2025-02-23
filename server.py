@@ -360,8 +360,25 @@ def webhook():
     except Exception as e:
         print("Error:", e)
         return jsonify({"error": "An error occurred"}), 500
-       
 
+@app.route("/campaignswebhook", methods=["POST"])
+def campaignswebhook():
+    print("Received a campaign webhook")
+    try:
+        data = request.form
+        if not data:
+            return jsonify({"error": "No data received"}), 400
+        # Extraer información del mensaje
+        incoming_message = data.get("Body", "").strip()
+        print(incoming_message)    
+        #to_number = data.get("telefono")  # Número del remitente
+      
+        return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": "An error occurred"}), 500
+        
+        
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
     threading.Thread(target=start_web_server).start()
