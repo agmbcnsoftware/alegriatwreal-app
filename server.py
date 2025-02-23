@@ -365,10 +365,21 @@ def webhook():
 def campaignswebhook():
     print("Received a campaign webhook")
     try:
-        # Obtener los datos del body
-        data = request.form
+         # Ver todos los encabezados para ver si llega el que esperas
+        print("Headers received:", dict(request.headers))
+        
+         # Verificar si el cuerpo llega correctamente
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form
+
+        print("Raw data received:", data)
+
         if not data:
+            print("No data received in the request body")
             return jsonify({"error": "No data received"}), 400
+        
 
         # Obtener el nombre del template desde los encabezados
         template_name = request.headers.get("Template", "default_template")  # Usa un nombre por defecto si no se envía
