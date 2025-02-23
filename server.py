@@ -365,19 +365,25 @@ def webhook():
 def campaignswebhook():
     print("Received a campaign webhook")
     try:
+        # Obtener los datos del body
         data = request.form
         if not data:
             return jsonify({"error": "No data received"}), 400
+
+        # Obtener el nombre del template desde los encabezados
+        template_name = request.headers.get("Template", "default_template")  # Usa un nombre por defecto si no se envía
+        
         # Extraer información del mensaje
         incoming_message = data.get("Body", "").strip()
-        print(incoming_message)    
-        #to_number = data.get("telefono")  # Número del remitente
-      
-        return jsonify({"message": "Webhook processed and response sent successfully!"}), 200
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"error": "An error occurred"}), 500
         
+        print(f"Incoming Message: {incoming_message}")
+        print(f"Template Name: {template_name}")
+
+        return jsonify({"message": "Webhook received successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+  
         
 if __name__ == "__main__":
     # Inicia ambos hilos en paralelo
