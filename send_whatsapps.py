@@ -37,7 +37,7 @@ def send_reminder_by_whatsapp(whatsapp_number, user_name, class_type, class_date
 
     message = client.messages.create(
       from_=twilio_number,
-      content_sid='HXee3cf6439091a385009b6bb7a5314ded',
+      content_sid='HX367017145e56f0e972cd76bdde7087fc',
       content_variables = json.dumps(variables),
       to=whatsapp_number
     ) 
