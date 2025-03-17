@@ -23,7 +23,15 @@ def delete_reservations_from_user_date(from_number, class_date):
         conn.commit()
         print(f"Mensajes eliminados para el número: {from_number} y fecha: {class_date}")
         
-        
+def update_reservation_date(reservation_id):
+    with get_connection() as conn:
+        cursor = conn.cursor()     
+        cursor.execute("""
+        UPDATE trial_class_reservations
+        SET reminder_sent = 0, class_date = updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?;
+        """, (reservation_id,))
+        conn.commit()
 
 
 #db.print_all_reservations()    
