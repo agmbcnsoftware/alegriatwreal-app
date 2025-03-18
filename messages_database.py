@@ -292,7 +292,7 @@ def get_filtered_reservations(filter_option):
     now = datetime.now()
     
     if filter_option == "next_reservations":
-        query += " WHERE class_date >= ?"
+        query += " WHERE class_date >= ? ORDER BY class_date ASC"
         params = [today]
     elif filter_option == "yesterday_reservations":
         start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
