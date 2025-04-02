@@ -386,7 +386,7 @@ def insert_new_prospect(user_id, user_name, user_surname, whatsapp_number, user_
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO propects_reservations (user_id, user_name, user_surname, whatsapp_number, class_weekday_hour, class_type, class_date, class_time)
+        INSERT INTO prospects_reservation (user_id, user_name, user_surname, whatsapp_number, user_email, class_type, class_date)
         VALUES ( ?, ?, ?, ?, ?, ?, ?)
          """, (user_id, user_name, user_surname, whatsapp_number, user_email, class_type, class_date))
         conn.commit()
