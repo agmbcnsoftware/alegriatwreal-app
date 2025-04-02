@@ -381,3 +381,12 @@ def get_or_create_reservation(user_id, user_name, user_surname, whatsapp_number,
          """, (user_id, user_name, user_surname, whatsapp_number, class_type, class_weekday_hour, class_date, class_time))
         conn.commit()
         return cursor.lastrowid
+
+def insert_new_prospect(user_id, user_name, user_surname, whatsapp_number, user_email, class_type, class_date):
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        INSERT INTO propects_reservations (user_id, user_name, user_surname, whatsapp_number, class_weekday_hour, class_type, class_date, class_time)
+        VALUES ( ?, ?, ?, ?, ?, ?, ?)
+         """, (user_id, user_name, user_surname, whatsapp_number, user_email, class_type, class_date))
+        conn.commit()

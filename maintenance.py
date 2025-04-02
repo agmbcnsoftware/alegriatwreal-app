@@ -8,7 +8,7 @@ def create_prospects_table():
     with db.get_connection() as conn:
         #Crear la tabla de prospects
         cursor = conn.cursor()
-            cursor.execute("""
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS prospects_reservation (
             id INTEGER PRIMARY KEY AUTOINCREMENT,        -- Identificador único para cada usuario
             user_id INTEGER NOT NULL,                    -- ID del usuario relacionado
@@ -65,11 +65,12 @@ def update_reservation_date(reservation_id, reservation_date):
         """, (reservation_date, reservation_id,))
         conn.commit()
         
-def 
+
 
 #db.print_all_reservations()    
 #delete_reservations_from_user("whatsapp:+34625740413")
 #delete_reservations_from_user_date("whatsapp:+34667285233", "2025-01-27")
-update_reservation_date(105, '2025-03-26')
+#update_reservation_date(105, '2025-03-26')
 #db.print_all_reservations() 
 #send_whatsapps.send_reminder_by_whatsapp("whatsapp:+34658595387", "Alvaro", "SEVILLANAS", "2024-01-22", "14:55")
+create_prospects_table()
