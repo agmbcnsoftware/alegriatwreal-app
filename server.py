@@ -128,7 +128,7 @@ def get_appointments_from_mail():
                 # Inserto la información que me llega en los emails en base de datos
                 user_id = db. get_or_create_user(whatsapp_number, nombre)
                 db.get_or_create_reservation(user_id, nombre, apellidos, whatsapp_number, clase, horario, class_date, class_time)
-                insert_new_prospect(user_id, nombre, user_surname, whatsapp_number, correo, clase, class_date)
+                db.insert_new_prospect(user_id, nombre, apellidos, whatsapp_number, correo, clase, class_date)
             except Exception as e:
             # Captura la excepción y muestra la traza
                 print("No se pudo gestionar el mail de:" + nombre)
