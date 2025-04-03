@@ -343,7 +343,7 @@ def webhook():
             #print(messages) 
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
-        response = openai_client.chat.completions.create(model="gpt-4", messages = messages)
+        response = openai_client.chat.completions.create(model="gpt-4o", messages = messages)
         #gpt-4 gpt-4o-mini
         for choice in response.choices:
             messages.append({"role": "assistant", "content": choice.message.content})
