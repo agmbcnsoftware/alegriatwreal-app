@@ -156,7 +156,7 @@ def notify_appointments():
 def start_appointment_notifications():
     #get_appointments_from_mail()
     schedule.every(15).minutes.do(get_appointments_from_mail)
-    schedule.every().day.at("08:01").do(notify_appointments)
+    schedule.every().day.at("08:02").do(notify_appointments)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -343,7 +343,8 @@ def webhook():
             #print(messages) 
         
         #Genero la petción a opeAI, invocando el objeto response le paso como argument
-        response = openai_client.chat.completions.create(model="gpt-4o-mini", messages = messages)
+        response = openai_client.chat.completions.create(model="gpt-4", messages = messages)
+        #gpt-4 gpt-4o-mini
         for choice in response.choices:
             messages.append({"role": "assistant", "content": choice.message.content})
         response_message = response.choices[0].message.content
