@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import re
 
 def load_holidays():
@@ -84,11 +84,9 @@ def get_spanish_weekday(class_date):
   
 def replace_datetime_placeholder(text, time_diff=0):
     # Obtener la fecha y hora actual en UTC
-    current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+    current_time_utc = datetime.now(timezone.utc)
    
-    
-    # Ajustar según la diferencia horaria proporcionada
-    adjusted_time = current_time_utc + datetime.timedelta(hours=time_diff)
+    adjusted_time = current_time_utc + timedelta(hours=time_diff)
     
     # Calcular el offset para el formato ISO
     offset_hours = abs(time_diff)
@@ -98,6 +96,7 @@ def replace_datetime_placeholder(text, time_diff=0):
     # Formatear la fecha y hora según el formato requerido
     formatted_datetime = f"[DateTime: {adjusted_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}{offset_str}]"
     
-   
+    # Reemplazar la clave {datetime} con la fecha y hora formateada
     result = text.replace("{datetime}", formatted_datetime)
+    
     return result

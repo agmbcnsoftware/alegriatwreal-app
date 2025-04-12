@@ -333,9 +333,12 @@ def webhook():
         #Tengo a este cliente en base de datos? busco conversaciones por su número
         # Si lo tengo las cargo
         user_id = db.get_or_create_user(from_number)
-        db.insert_message(user_id, from_number, profile_name, incoming_message, "user")     
+        db.insert_message(user_id, from_number, profile_name, incoming_message, "user") 
+        #Actualizo la fecha y hora que hay en el prompt para que Alegria sepa que día y hora es
+        time_diff = +2
+        base_context_with_date = date_ops.replace_datetime_placeholder(base_context, time_diff)
         #Cargo la información básica, el prompt pra la IA desde cero
-        messages = [{"role": "system", "content" : base_context}]
+        messages = [{"role": "system", "content" : base_context_with_date}]
         #Obtengo de la base de datos los mensajes del usuario
         cursor = db.get_messages_by_user(from_number)
         for message, sender, timestamp in cursor.fetchall():            
