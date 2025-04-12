@@ -73,4 +73,4 @@ def update_reservation_date(reservation_id, reservation_date):
 #update_reservation_date(105, '2025-03-26')
 #db.print_all_reservations() 
 #send_whatsapps.send_reminder_by_whatsapp("whatsapp:+34658595387", "Alvaro", "SEVILLANAS", "2024-01-22", "14:55")
-create_prospects_table()
+#create_prospects_table()
