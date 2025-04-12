@@ -81,3 +81,23 @@ def get_spanish_weekday(class_date):
     class_weekday_eng = date_object.strftime("%A")
     class_weekday_spa =  days_translation.get(class_weekday_eng,class_weekday_eng)  
     return class_weekday_spa
+  
+def replace_datetime_placeholder(text, time_diff=0):
+    # Obtener la fecha y hora actual en UTC
+    current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+   
+    
+    # Ajustar según la diferencia horaria proporcionada
+    adjusted_time = current_time_utc + datetime.timedelta(hours=time_diff)
+    
+    # Calcular el offset para el formato ISO
+    offset_hours = abs(time_diff)
+    offset_sign = "+" if time_diff >= 0 else "-"
+    offset_str = f"{offset_sign}{offset_hours:02d}:00"
+    
+    # Formatear la fecha y hora según el formato requerido
+    formatted_datetime = f"[DateTime: {adjusted_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}{offset_str}]"
+    
+   
+    result = text.replace("{datetime}", formatted_datetime)
+    return result

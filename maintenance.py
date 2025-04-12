@@ -1,6 +1,7 @@
 import sqlite3
 import messages_database
 import send_whatsapps
+import date_operations as date_ops
 
 db = messages_database
 
@@ -74,3 +75,12 @@ def update_reservation_date(reservation_id, reservation_date):
 #db.print_all_reservations() 
 #send_whatsapps.send_reminder_by_whatsapp("whatsapp:+34658595387", "Alvaro", "SEVILLANAS", "2024-01-22", "14:55")
 #create_prospects_table()
+# Ejemplo de uso:
+texto_largo = """Este es un texto de ejemplo que contiene una clave {datetime} 
+que será reemplazada por la fecha y hora actual."""
+
+# Para UTC-4 (por ejemplo, si el sistema está en UTC-4)
+time_diff = +2
+texto_con_fecha_fecha_corregida = date_ops.replace_datetime_placeholder(texto_largo, time_diff)
+print("Texto con fecha corregida:")
+print(texto_con_fecha_fecha_corregida)
