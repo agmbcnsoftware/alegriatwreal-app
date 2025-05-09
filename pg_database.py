@@ -1,18 +1,20 @@
 import psycopg2
 from psycopg2 import pool
 
+pg_host = os.getenv("PG_HOST")
+pg_user = os.getenv("DB_USER")
+pg_pwd = os.getenv("DB_PWD")
+pg_port = os.getenv("DB_PORT")
+
 def get_db_connection():
     conn = psycopg2.connect(
-        host='crossover.proxy.rlwy.net',  # Tu host
-        port=55419,                       # Puerto específico
-        database='railway',             # Reemplaza con el nombre de tu base de datos
-        user='postgres',                  # Tu usuario
-        password='tu_contraseña'          # Reemplaza con tu contraseña
+        host = pg_host,  # Tu host
+        port = pg_port,                       # Puerto específico
+        database ='railway',             # Reemplaza con el nombre de tu base de datos
+        user = pg_user,                  # Tu usuario
+        password = pg_pwd          # Reemplaza con tu contraseña
     )
     conn.autocommit = True
     
     # Establecer el esquema específico
-    with conn.cursor() as cur:
-        cur.execute("SET search_path TO Alegria")  # Reemplaza 'tu_esquema' con el nombre de tu esquema
-    
-    return conn
+   
