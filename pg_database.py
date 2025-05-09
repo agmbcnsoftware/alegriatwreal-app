@@ -22,7 +22,7 @@ def get_db_connection():
    
 def get_filtered_messages2(filter_option):
     
-    query = "SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM 'Alegria'.messages"
+    query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
     params = []
     print("n8nMensajes")
     # Obtener fechas basadas en la opción de filtro
@@ -60,7 +60,7 @@ def get_filtered_messages2(filter_option):
     # Ejecutar la consulta
     conn = get_db_connection()
     cursor = conn.cursor()
-    query = "SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM 'Alegria'.messages"
+    query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
     #cursor.execute(query, params)
     cursor.execute(query)
     results = cursor.fetchall()
@@ -70,9 +70,9 @@ def get_filtered_messages2(filter_option):
   
   
   #--------------------------
-  def get_filtered_messages(filter_option):
+def get_filtered_messages(filter_option):
     
-    query = "SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM 'Alegria'.messages"
+    query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
     params = []
     print("n8nMensajes")
     # Obtener fechas basadas en la opción de filtro
@@ -81,7 +81,7 @@ def get_filtered_messages2(filter_option):
     # Ejecutar la consulta
     conn = get_db_connection()
     cursor = conn.cursor()
-    query = "SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM 'Alegria'.messages"
+    
     #cursor.execute(query, params)
     cursor.execute(query)
     results = cursor.fetchall()
