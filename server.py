@@ -8,6 +8,7 @@ import threading
 import schedule
 import time
 import messages_database
+import pg_database
 import emails
 import date_operations
 import traceback
@@ -88,6 +89,7 @@ db = messages_database
 eml = emails
 date_ops = date_operations
 sw = send_whatsapps
+pgdb = pg_database
 #db.initialize_db()
 
 # El sistema tiene tres procesos, 1) la web app 2) un proceso que se arrancará a ciertas horas para
@@ -186,6 +188,14 @@ def messages():
     messages = db.get_filtered_messages(filter_option)  # Obtén los mensajes filtrados
 
     return render_template("messages.html", messages=messages, filter_option=filter_option)
+
+@app.route("/n8nmessages")
+@auth.login_required
+def n8nmessages():
+    filter_option = request.args.get("filter", "today")  # Por defecto "hoy"
+    messages = pgdb.get_filtered_messages(filter_option)  # Obtén los mensajes filtrados
+
+    return render_template("n8nmessages.html", messages=messages, filter_option=filter_option)
   
 @app.route("/download", methods=["GET"])
 @auth.login_required

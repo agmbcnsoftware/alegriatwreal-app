@@ -1,5 +1,7 @@
 import psycopg2
 from psycopg2 import pool
+from datetime import datetime, timedelta
+import os
 
 pg_host = os.getenv("PG_HOST")
 pg_user = os.getenv("DB_USER")
@@ -18,3 +20,46 @@ def get_db_connection():
     
     # Establecer el esquema específico
    
+def get_filtered_messages(filter_option):
+    
+    query = "SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM analytics.messages"
+    params = []
+    print("n8nMensajes")
+    # Obtener fechas basadas en la opción de filtro
+    now = datetime.now()
+    
+    if filter_option == "today":
+        start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = now
+        query += " WHERE timestamp BETWEEN %s AND %s"
+        params = [start_date, end_date]
+    elif filter_option == "yesterday":
+        start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        end_date = start_date + timedelta(days=1)
+        query += " WHERE timestamp BETWEEN %s AND %s"
+        params = [start_date, end_date]
+    elif filter_option == "last7days":
+        start_date = now - timedelta(days=7)
+        end_date = now
+        query += " WHERE timestamp BETWEEN %s AND %s"
+        params = [start_date, end_date]
+    elif filter_option == "lastmonth":
+        start_date = now - timedelta(days=30)
+        end_date = now
+        query += " WHERE timestamp BETWEEN %s AND %s"
+        params = [start_date, end_date]
+    elif filter_option == "all":
+        # Sin condiciones adicionales, selecciona todos los mensajes
+        pass
+    else:
+        raise ValueError(f"Opción de filtro no válida: {filter_option}")
+    print("Query:")
+    print(query)
+    # Ejecutar la consulta
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return results
