@@ -194,7 +194,6 @@ def messages():
 def n8nmessages():
     filter_option = request.args.get("filter", "today")  # Por defecto "hoy"
     messages = pgdb.get_filtered_messages(filter_option)  # Obtén los mensajes filtrados
-    print(messages)
     return render_template("n8nmessages.html", messages=messages, filter_option=filter_option)
   
 @app.route("/download", methods=["GET"])
