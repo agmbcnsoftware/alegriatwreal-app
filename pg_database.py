@@ -76,14 +76,21 @@ def get_filtered_messages(filter_option):
     query = 'SELECT u.whatsapp_number, u.whatsapp_profile, m.message, m.timestamp, m.sender FROM "Alegria".messages m JOIN "Alegria".users u ON m.user_id = u.id ORDER BY m.timestamp DESC'
     params = []
     print("n8nMensajes")
+    
     # Obtener fechas basadas en la opción de filtro
     print("Query:")
     print(query)
     # Ejecutar la consulta
     try:
+        print()
         conn = get_db_connection()
         cursor = conn.cursor()
+        print("Antes del fechtall")
+        cursor.execute(query)
         results = cursor.fetchall()
+        print("despues de fetchall)")
+        conn.commit() 
+        print(f"Contenido de results: {results}")
         return results
     
     except Exception as e:
