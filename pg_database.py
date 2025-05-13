@@ -9,16 +9,19 @@ pg_pwd = os.getenv("DB_PWD")
 pg_port = os.getenv("DB_PORT")
 
 def get_db_connection():
+  
     conn = psycopg2.connect(
-        host = pg_host,  # Tu host
-        port = pg_port,                       # Puerto específico
+        host = 'crossover.proxy.rlwy.net',  # Tu host
+        port = 55419,                       # Puerto específico
         database ='railway',             # Reemplaza con el nombre de tu base de datos
-        user = pg_user,                  # Tu usuario
-        password = pg_pwd          # Reemplaza con tu contraseña
+        user = 'postgres',                  # Tu usuario
+        password = 'kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt'          # Reemplaza con tu contraseña
     )
     conn.autocommit = True
     
     # Establecer el esquema específico
+    
+    #postgresql://postgres:kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt@crossover.proxy.rlwy.net:55419/railway
    
 def get_filtered_messages2(filter_option):
     
@@ -82,8 +85,9 @@ def get_filtered_messages(filter_option):
     print(query)
     # Ejecutar la consulta
     try:
-        print()
+        print("antes de abrir conexion")
         conn = get_db_connection()
+        print("despues abrir conexion")
         cursor = conn.cursor()
         print("Antes del fechtall")
         cursor.execute(query)
@@ -98,12 +102,6 @@ def get_filtered_messages(filter_option):
         # También puedes registrar el error en un archivo log
         return None
     
-    finally:
-        # Asegurarse de cerrar cursor y conexión incluso si hay error
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-  
+   
  
         
