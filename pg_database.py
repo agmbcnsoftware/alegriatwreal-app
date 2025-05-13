@@ -73,6 +73,22 @@ def get_filtered_messages2(filter_option):
 def get_filtered_messages(filter_option):
     
     query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
+     SELECT 
+    m.id AS message_id,
+    m.message,
+    m.timestamp,
+    m.sender,
+    u.id AS user_id,
+    u.first_name,
+    u.last_name,
+    u.whatsapp_number AS telefono,
+    u.email
+FROM 
+    messages m
+JOIN 
+    users u ON m.user_id = u.id
+ORDER BY 
+    m.timestamp DESC;
     params = []
     print("n8nMensajes")
     # Obtener fechas basadas en la opción de filtro
@@ -89,4 +105,4 @@ def get_filtered_messages(filter_option):
     conn.close()
     return results
   
-  
+ 
