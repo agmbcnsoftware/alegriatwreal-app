@@ -72,37 +72,31 @@ def get_filtered_messages2(filter_option):
   #--------------------------
 def get_filtered_messages(filter_option):
     
-    query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
-     SELECT 
-    m.id AS message_id,
-    m.message,
-    m.timestamp,
-    m.sender,
-    u.id AS user_id,
-    u.first_name,
-    u.last_name,
-    u.whatsapp_number AS telefono,
-    u.email
-FROM 
-    messages m
-JOIN 
-    users u ON m.user_id = u.id
-ORDER BY 
-    m.timestamp DESC;
+    #query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
+    query = 'SELECT u.whatsapp_number, u.whatsapp_profile, m.message, m.timestamp, m.sender FROM "Alegria".messages m JOIN "Alegria".users u ON m.user_id = u.id ORDER BY m.timestamp DESC'
     params = []
     print("n8nMensajes")
     # Obtener fechas basadas en la opción de filtro
     print("Query:")
     print(query)
     # Ejecutar la consulta
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        results = cursor.fetchall()
+        return results
     
-    #cursor.execute(query, params)
-    cursor.execute(query)
-    results = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return results
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {str(e)}")
+        # También puedes registrar el error en un archivo log
+        return None
+    
+    finally:
+        # Asegurarse de cerrar cursor y conexión incluso si hay error
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
   
  
+        
