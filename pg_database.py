@@ -4,20 +4,21 @@ from datetime import datetime, timedelta
 import os
 
 pg_host = os.getenv("PG_HOST")
-pg_user = os.getenv("DB_USER")
-pg_pwd = os.getenv("DB_PWD")
-pg_port = os.getenv("DB_PORT")
+pg_user = os.getenv("PG_USER")
+pg_pwd = os.getenv("PG_PWD")
+pg_port = os.getenv("PG_PORT")
 
 def get_db_connection():
     try:
         conn = psycopg2.connect(
-            host = 'crossover.proxy.rlwy.net',  # Tu host
+            host = pg_host,  # Tu host
             port = 55419,                       # Puerto específico
             database ='railway',             # Reemplaza con el nombre de tu base de datos
             user = 'postgres',                  # Tu usuario
-            password = 'kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt'          # Reemplaza con tu contraseña
+            password = pg_pwd          # Reemplaza con tu contraseña
         )
         print("Conexión establecida exitosamente")
+        
         conn.autocommit = True
         cursor = conn.cursor()
         cursor.execute('SELECT version();')
