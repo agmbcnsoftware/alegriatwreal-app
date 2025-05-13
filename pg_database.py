@@ -9,19 +9,23 @@ pg_pwd = os.getenv("DB_PWD")
 pg_port = os.getenv("DB_PORT")
 
 def get_db_connection():
-  
-    conn = psycopg2.connect(
-        host = 'crossover.proxy.rlwy.net',  # Tu host
-        port = 55419,                       # Puerto específico
-        database ='railway',             # Reemplaza con el nombre de tu base de datos
-        user = 'postgres',                  # Tu usuario
-        password = 'kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt'          # Reemplaza con tu contraseña
-    )
-    conn.autocommit = True
-    
+    try:
+        conn = psycopg2.connect(
+            host = 'crossover.proxy.rlwy.net',  # Tu host
+            port = 55419,                       # Puerto específico
+            database ='railway',             # Reemplaza con el nombre de tu base de datos
+            user = 'postgres',                  # Tu usuario
+            password = 'kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt'          # Reemplaza con tu contraseña
+        )
+        conn.autocommit = True
+    except Exception as e:
+        print(f"Error al conectar a la base de datos: {str(e)}")
+        raise
+        
     # Establecer el esquema específico
     
     #postgresql://postgres:kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt@crossover.proxy.rlwy.net:55419/railway
+    
    
 def get_filtered_messages2(filter_option):
     
@@ -85,7 +89,7 @@ def get_filtered_messages(filter_option):
     print(query)
     # Ejecutar la consulta
     try:
-        print("antes de abrir conexion")
+        print("antes de abro con nexion")
         conn = get_db_connection()
         print("despues abrir conexion")
         cursor = conn.cursor()
