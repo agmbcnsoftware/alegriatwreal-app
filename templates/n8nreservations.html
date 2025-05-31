@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/reservations">Reservas</a></li>
+                <li><a href="/n8nreservations">Reservasn8n</a></li>
+                <li><a href="/messages">Mensajes</a></li>
+                <li><a href="/database">Base de Datos</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h1>Reservas</h1> 
+          
+          <!-- Filtros -->
+          <form id="filter-form" method="get" action="/n8nreservations" style="margin-bottom: 20px;>                                                                           
+              <label for="date-filter">Filtrar por:</label>
+              <select id="date-filter" name="filter">
+                  <option value="next_reservations" {% if filter_option == "next_reservations" %}selected{% endif %}>Próximas reservas</option>
+                  <option value="yesterday_reservations" {% if filter_option == "yesterday_reservations" %}selected{% endif %}>Reservas pedidas desde ayer</option>
+                  <option value="all" {% if filter_option == "all" %}selected{% endif %}>Todas</option>
+              </select>
+              <button type="submit">Aplicar</button>
+          </form>
+          <!-- Tabla -->                          
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Teléfono</th>
+                        <th>Clase</th>
+                        <th>Horario</th>
+                        <th>Día</th>
+                        <th>Hora</th>
+                        <th>Enviado</th>
+                        <th>Fecha de petición</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation[0] }}</td>
+                        <td>{{ reservation[1] }}</td>
+                        <td>{{ reservation[2] }}</td>
+                        <td>{{ reservation[3].replace("whatsapp:", "") }}</td>
+                        <td>{{ reservation[4] }}</td>
+                        <td>{{ reservation[5] }}</td>
+                        <td>{{ reservation[6] }}</td>
+                        <td>{{ reservation[7] }}</td>
+                        <td>{{ reservation[8] }}</td>
+                        <td>{{ reservation[9] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

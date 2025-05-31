@@ -88,5 +88,27 @@ def get_filtered_messages(filter_option):
         return None
     
    
- 
+def get_filtered_reservations(filter_option):    
+    query = "SELECT r.id, u.first_name, u.last_name, u.whatsapp_number, r.class_type, r.class_schedule, r.class_date, r.reminder_sent, r.created_at FROM trial_class_reservations"
+    params = []
+    
+    # Obtener fechas basadas en la opción de filtro
+    today = date.today().isoformat()
+    now = datetime.now()
+    
+    if filter_option == "next_reservations":
+        query += " WHERE class_date >= ? ORDER BY class_date ASC"
+        params = [today]
+    elif filter_option == "yesterday_reservations":
+        start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        query += " WHERE created_at >= ?"
+        params = [start_date]
+    elif filter_option == "all":
+        # Sin condiciones adicionales, selecciona todos los mensajes
+        pass
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(query, params)
+        return cursor.fetchall()   
         
