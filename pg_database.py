@@ -89,7 +89,7 @@ def get_filtered_messages(filter_option):
     
    
 def get_filtered_reservations(filter_option):    
-    query = "SELECT r.id, u.first_name, u.last_name, u.whatsapp_number, r.class_type, r.class_schedule, r.class_date, r.reminder_sent, r.created_at FROM trial_class_reservations"
+    query = 'SELECT r.id, u.first_name, u.last_name, u.whatsapp_number, r.class_type, r.class_schedule, r.class_date, r.reminder_sent, r.created_at FROM "Alegria".trial_class_reservations r JOIN "Alegria".users u ON r.user_id = u.id'
     params = []
     
     # Obtener fechas basadas en la opción de filtro
