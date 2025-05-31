@@ -1,6 +1,6 @@
 import psycopg2
 from psycopg2 import pool
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import os
 
 pg_host = os.getenv("PG_HOST")
@@ -96,19 +96,29 @@ def get_filtered_reservations(filter_option):
     today = date.today().isoformat()
     now = datetime.now()
     
-    if filter_option == "next_reservations":
-        query += " WHERE class_date >= ? ORDER BY class_date ASC"
-        params = [today]
-    elif filter_option == "yesterday_reservations":
-        start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-        query += " WHERE created_at >= ?"
-        params = [start_date]
-    elif filter_option == "all":
-        # Sin condiciones adicionales, selecciona todos los mensajes
-        pass
+    #if filter_option == "next_reservations":
+    #    query += " WHERE class_date >= ? ORDER BY class_date ASC"
+    #    params = [today]
+    #elif filter_option == "yesterday_reservations":
+    #    start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    #    query += " WHERE created_at >= ?"
+    #    params = [start_date]
+    #elif filter_option == "all":
+    #    # Sin condiciones adicionales, selecciona todos los mensajes
+    #    pass
     
-    with get_connection() as conn:
+    print(query)
+    # Ejecutar la consulta
+    try:
+        
+        conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(query, params)
-        return cursor.fetchall()   
+        cursor.execute(query,params)
+        results = cursor.fetchall()
+        return results
+    
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {str(e)}")
+        # También puedes registrar el error en un archivo log
+        return None
         
