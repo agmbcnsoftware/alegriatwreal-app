@@ -105,7 +105,8 @@ def get_filtered_reservations(filter_option):
         params = [yesterday]
     elif filter_option == 'all':
         params = []
-    
+   
+    query += " ORDER BY r.created_at DESC"
     print(query)
     # Ejecutar la consulta
     try:
