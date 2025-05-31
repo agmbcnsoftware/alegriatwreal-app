@@ -96,16 +96,15 @@ def get_filtered_reservations(filter_option):
     today = date.today().isoformat()
     now = datetime.now()
     
-    #if filter_option == "next_reservations":
-    #    query += " WHERE class_date >= ? ORDER BY class_date ASC"
-    #    params = [today]
-    #elif filter_option == "yesterday_reservations":
-    #    start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
-    #    query += " WHERE created_at >= ?"
-    #    params = [start_date]
-    #elif filter_option == "all":
-    #    # Sin condiciones adicionales, selecciona todos los mensajes
-    #    pass
+    if filter_option == 'next_reservations':
+        query += " WHERE r.class_date >= %s"
+        params = [today]
+    elif filter_option == 'yesterday_reservations':
+        yesterday = (now - timedelta(days=1)).date().isoformat()
+        query += " WHERE r.created_at >= %s"
+        params = [yesterday]
+    elif filter_option == 'all':
+        params = []
     
     print(query)
     # Ejecutar la consulta
