@@ -16,6 +16,7 @@ import json
 import send_whatsapps
 import csv
 
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Esto genera una clave secreta aleatoria
 # Configurar autenticación básica
