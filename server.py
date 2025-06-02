@@ -21,7 +21,6 @@ app.secret_key = os.urandom(24)  # Esto genera una clave secreta aleatoria
 # Configurar autenticación básica
 auth = HTTPBasicAuth()
 
-
 # Cargo variable del entorno
 account_sid = os.getenv("TWILIO_ACCOUNT_SID")
 auth_token = os.getenv("TWILIO_AUTH_TOKEN")
