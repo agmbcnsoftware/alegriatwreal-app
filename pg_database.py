@@ -69,7 +69,7 @@ def get_filtered_messages(filter_option):
     else:
         raise ValueError(f"Opción de filtro no válida: {filter_option}")
     
-    query +=' ORDER BY m.timestamp DESC'
+    query +=' ORDER BY m.timestamp ASC'
     # Obtener fechas basadas en la opción de filtro
     print("Query:")
     print(query)
