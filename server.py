@@ -21,6 +21,29 @@ pgdb = pg_database
 def home():
     return render_template("index.html")
 
+@app.route("/test-pgdb")
+def test_pgdb():
+    try:
+        print("=== PROBANDO MÓDULO PGDB ===")
+        vars_info = pgdb.get_variables_info()
+        
+        html = f"""
+        <h1>Variables desde pg_database.py</h1>
+        <ul>
+            <li><b>Host:</b> {vars_info['pg_host']}</li>
+            <li><b>User:</b> {vars_info['pg_user']}</li>
+            <li><b>Port:</b> {vars_info['pg_port']}</li>
+            <li><b>Database:</b> {vars_info['pg_database']}</li>
+            <li><b>Password set:</b> {vars_info['pg_pwd_set']}</li>
+            <li><b>Password length:</b> {vars_info['pg_pwd_length']}</li>
+        </ul>
+        """
+        return html
+        
+    except Exception as e:
+        print(f"❌ Error con módulo pgdb: {e}")
+        return f"<h1>❌ Error: {e}</h1>"
+
 @app.route("/test-db")
 def test_db():
     try:
