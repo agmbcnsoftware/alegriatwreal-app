@@ -21,6 +21,18 @@ pgdb = pg_database
 def home():
     return render_template("index.html")
 
+@app.route("/test-query")
+def test_query():
+    try:
+        result = pgdb.test_simple_query()
+        if result["success"]:
+            tables_html = "<br>".join([str(table[0]) for table in result["tables"]])
+            return f"<h1>✅ Query exitosa</h1><h3>Tablas en esquema 'Alegria':</h3>{tables_html}"
+        else:
+            return f"<h1>❌ Error en query: {result['error']}</h1>"
+    except Exception as e:
+        return f"<h1>❌ Error: {e}</h1>"
+
 @app.route("/test-connection")
 def test_connection():
     try:
