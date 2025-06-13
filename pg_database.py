@@ -47,7 +47,7 @@ def test_simple_query():
         cursor = conn.cursor()
         
         # Query simple para ver qué tablas hay
-        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = "Alegria";")
+        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'Alegria';")
         tables = cursor.fetchall()
         
         conn.close()
