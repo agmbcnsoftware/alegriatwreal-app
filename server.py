@@ -32,9 +32,12 @@ def n8nreservations():
         
 @app.route("/n8nmessages")
 def n8nmessages():
-    filter_option = request.args.get("filter", "today")
-    messages = pgdb.get_filtered_messages(filter_option)
-    return render_template("n8nmessages.html", messages=messages, filter_option=filter_option)
+    try:
+        print("=== TEST MENSAJES ===")
+        return "<h1>Test mensajes funcionando</h1>"
+    except Exception as e:
+        print(f"Error en test mensajes: {e}")
+        return f"Error: {e}", 500
 
 # ============ FUNCIONES AUXILIARES ============
 
