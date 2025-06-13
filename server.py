@@ -21,6 +21,17 @@ pgdb = pg_database
 def home():
     return render_template("index.html")
 
+@app.route("/test-connection")
+def test_connection():
+    try:
+        result = pgdb.test_connection_only()
+        if result["success"]:
+            return f"<h1>✅ {result['message']}</h1>"
+        else:
+            return f"<h1>❌ Error: {result['error']}</h1>"
+    except Exception as e:
+        return f"<h1>❌ Error: {e}</h1>"
+
 @app.route("/test-pgdb")
 def test_pgdb():
     try:
