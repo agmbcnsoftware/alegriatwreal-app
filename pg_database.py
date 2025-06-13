@@ -10,6 +10,17 @@ pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt"
 pg_port = "5432"
 pg_database = "railway"
 
+def get_variables_info():
+    """Función simple para mostrar variables sin conectar"""
+    return {
+        'pg_host': pg_host,
+        'pg_user': pg_user,
+        'pg_port': pg_port,
+        'pg_database': pg_database,
+        'pg_pwd_set': bool(pg_pwd),
+        'pg_pwd_length': len(pg_pwd) if pg_pwd else 0
+    }
+
 def get_db_connection():
     pg_host = "crossover.proxy.rlwy.net"
     pg_user = "postgres"
