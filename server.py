@@ -13,7 +13,6 @@ def add_header(response):
     return response
 
 # Instancias de módulos
-db = messages_database
 pgdb = pg_database
 
 # ============ RUTAS DE LA APLICACIÓN ============
