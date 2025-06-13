@@ -4,9 +4,7 @@ import json
 import csv
 import messages_database
 import pg_database
-import emails
-import date_operations
-import send_whatsapps
+
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Esto genera una clave secreta aleatoria
@@ -19,9 +17,6 @@ def add_header(response):
 
 # Instancias de módulos
 db = messages_database
-eml = emails
-date_ops = date_operations
-sw = send_whatsapps
 pgdb = pg_database
 
 # ============ RUTAS DE LA APLICACIÓN ============
