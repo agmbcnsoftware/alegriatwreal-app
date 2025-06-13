@@ -21,6 +21,21 @@ pgdb = pg_database
 def home():
     return render_template("index.html")
 
+@app.route("/test-db")
+def test_db():
+    try:
+        print("=== PROBANDO CONEXIÓN DB ===")
+        conn = pgdb.get_db_connection()
+        if conn:
+            print("✅ Conexión exitosa")
+            conn.close()
+            return "<h1>✅ Conexión a DB exitosa</h1>"
+        else:
+            return "<h1>❌ No se pudo conectar</h1>"
+    except Exception as e:
+        print(f"❌ Error de conexión: {e}")
+        return f"<h1>❌ Error: {e}</h1>"
+
 @app.route("/n8nreservations")
 def n8nreservations():
     try:
