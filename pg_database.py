@@ -11,6 +11,11 @@ pg_port = "5432"
 pg_database = "railway"
 
 def get_db_connection():
+    pg_host = "crossover.proxy.rlwy.net"
+    pg_user = "postgres"
+    pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt"
+    pg_port = "5432"
+    pg_database = "railway"
     print(f"=== DEBUGGING VARIABLES ===")
     print(f"PG_HOST: '{pg_host}' (tipo: {type(pg_host)})")
     print(f"PG_PORT: '{pg_port}' (tipo: {type(pg_port)})")
