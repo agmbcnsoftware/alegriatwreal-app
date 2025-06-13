@@ -4,11 +4,11 @@ from datetime import datetime, timedelta, date
 import os
 
 # Variables de entorno
-pg_host = os.getenv("PG_HOST")
-pg_user = os.getenv("PG_USER")
-pg_pwd = os.getenv("PG_PWD")
-pg_port = os.getenv("PG_PORT")
-pg_database = os.getenv("PG_DATABASE", "railway")  # Por defecto 'railway'
+pg_host = "crossover.proxy.rlwy.net"
+pg_user = "postgres"
+pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt
+pg_port = "5432"
+pg_database = "railway"
 
 def get_db_connection():
     print(f"=== DEBUGGING VARIABLES ===")
