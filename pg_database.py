@@ -6,7 +6,7 @@ import os
 # Variables de entorno
 pg_host = "crossover.proxy.rlwy.net"
 pg_user = "postgres"
-pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt
+pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt"
 pg_port = "5432"
 pg_database = "railway"
 
