@@ -7,7 +7,7 @@ import os
 pg_host = "crossover.proxy.rlwy.net"
 pg_user = "postgres"
 pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt"
-pg_port = "5432"
+pg_port = "55419"
 pg_database = "railway"
 
 def get_variables_info():
