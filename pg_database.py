@@ -39,7 +39,23 @@ def test_connection_only():
     except Exception as e:
         print(f"❌ Error de conexión: {e}")
         return {"success": False, "error": str(e)}
-
+        
+def test_simple_query():
+    """Probar una query simple para ver si la DB responde"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Query simple para ver qué tablas hay
+        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = "Alegria";")
+        tables = cursor.fetchall()
+        
+        conn.close()
+        return {"success": True, "tables": tables}
+    except Exception as e:
+        print(f"❌ Error en query: {e}")
+        return {"success": False, "error": str(e)}
+        
 def get_db_connection():
     pg_host = "crossover.proxy.rlwy.net"
     pg_user = "postgres"
