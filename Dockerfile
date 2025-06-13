@@ -14,3 +14,4 @@ EXPOSE 8000
 
 # Comando de inicio
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "server:application"]
+
