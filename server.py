@@ -28,15 +28,11 @@ def home():
   
 @app.route("/n8nreservations")
 def n8nreservations():
-    filter_option = request.args.get("filter", "next_reservations")
-    reservations = pgdb.get_filtered_reservations(filter_option)
-    return render_template("n8nreservations.html", reservations=reservations, filter_option=filter_option)
+    return "<h1>Reservas N8N - Funcionando!</h1>"
 
-@app.route("/n8nmessages")
+@app.route("/n8nmessages") 
 def n8nmessages():
-    filter_option = request.args.get("filter", "today")
-    messages = pgdb.get_filtered_messages(filter_option)
-    return render_template("n8nmessages.html", messages=messages, filter_option=filter_option)
+    return "<h1>Mensajes N8N - Funcionando!</h1>"
 
 # ============ FUNCIONES AUXILIARES ============
 
