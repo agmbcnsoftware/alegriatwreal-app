@@ -3,21 +3,30 @@ from psycopg2 import pool
 from datetime import datetime, timedelta, date
 import os
 
+# Variables de entorno
 pg_host = os.getenv("PG_HOST")
 pg_user = os.getenv("PG_USER")
 pg_pwd = os.getenv("PG_PWD")
 pg_port = os.getenv("PG_PORT")
+pg_database = os.getenv("PG_DATABASE", "railway")  # Por defecto 'railway'
 
 def get_db_connection():
+    print(f"=== Intentando conectar a la DB ===")
+    print(f"Host: {pg_host}")
+    print(f"Port: {pg_port}")
+    print(f"Database: {pg_database}")
+    print(f"User: {pg_user}")
+    print(f"Password configurado: {'Sí' if pg_pwd else 'No'}")
+    
     try:
         conn = psycopg2.connect(
-            host = pg_host,  # Tu host
-            port = 55419,                       # Puerto específico
-            database ='railway',             # Reemplaza con el nombre de tu base de datos
-            user = 'postgres',                  # Tu usuario
-            password = pg_pwd          # Reemplaza con tu contraseña
+            host=pg_host,
+            port=pg_port,
+            database=pg_database,
+            user=pg_user,
+            password=pg_pwd
         )
-        print("Conexión establecida exitosamente")
+        print("✅ Conexión establecida exitosamente")
         
         conn.autocommit = True
         cursor = conn.cursor()
@@ -28,97 +37,102 @@ def get_db_connection():
         return conn
       
     except Exception as e:
-        print(f"Error al conectar a la base de datos: {str(e)}")
+        print(f"❌ Error al conectar a la base de datos: {str(e)}")
         raise
-        
-    # Establecer el esquema específico
-    
 
 def get_filtered_messages(filter_option):
+    print(f"=== get_filtered_messages llamada con: {filter_option} ===")
     
-    #query = 'SELECT whatsapp_number, whatsapp_profile, message, timestamp, sender FROM "Alegria".messages'
     query = 'SELECT u.whatsapp_number, u.whatsapp_profile, m.message, m.timestamp, m.sender FROM "Alegria".messages m JOIN "Alegria".users u ON m.user_id = u.id'
     params = []
     now = datetime.now()
     
     if filter_option == "today":
-        print("Today")
+        print("Filtro: Today")
         start_date = now.replace(hour=0, minute=0, second=0, microsecond=0)
         end_date = now
         query += " WHERE m.timestamp BETWEEN %s AND %s"
         params = [start_date, end_date]
     elif filter_option == "yesterday":
-        print("Yesterday")
+        print("Filtro: Yesterday")
         start_date = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         end_date = start_date + timedelta(days=1)
         query += " WHERE m.timestamp BETWEEN %s AND %s"
         params = [start_date, end_date]
     elif filter_option == "last7days":
+        print("Filtro: Last 7 days")
         start_date = now - timedelta(days=7)
         end_date = now
         query += " WHERE m.timestamp BETWEEN %s AND %s"
         params = [start_date, end_date]
     elif filter_option == "lastmonth":
+        print("Filtro: Last month")
         start_date = now - timedelta(days=30)
         end_date = now
         query += " WHERE m.timestamp BETWEEN %s AND %s"
         params = [start_date, end_date]
     elif filter_option == "all":
-        # Sin condiciones adicionales, selecciona todos los mensajes
+        print("Filtro: All")
         pass
     else:
+        print(f"❌ Opción de filtro no válida: {filter_option}")
         raise ValueError(f"Opción de filtro no válida: {filter_option}")
     
-    query +=' ORDER BY m.timestamp ASC'
-    # Obtener fechas basadas en la opción de filtro
-    print("Query:")
-    print(query)
-    # Ejecutar la consulta
+    query += ' ORDER BY m.timestamp ASC'
+    print(f"Query ejecutada: {query}")
+    print(f"Parámetros: {params}")
+    
     try:
-        
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(query,params)
+        cursor.execute(query, params)
         results = cursor.fetchall()
+        print(f"✅ Resultados obtenidos: {len(results)} filas")
+        conn.close()
         return results
     
     except Exception as e:
-        print(f"Error al ejecutar la consulta: {str(e)}")
-        # También puedes registrar el error en un archivo log
+        print(f"❌ Error al ejecutar la consulta: {str(e)}")
         return None
+
+def get_filtered_reservations(filter_option):
+    print(f"=== get_filtered_reservations llamada con: {filter_option} ===")
     
-   
-def get_filtered_reservations(filter_option):    
     query = 'SELECT r.id, u.first_name, u.last_name, u.whatsapp_number, r.class_type, r.class_schedule, r.class_date, r.reminder_sent, r.created_at FROM "Alegria".trial_class_reservations r JOIN "Alegria".users u ON r.user_id = u.id'
     params = []
     
-    # Obtener fechas basadas en la opción de filtro
     today = date.today().isoformat()
     now = datetime.now()
     
     if filter_option == 'next_reservations':
+        print("Filtro: Next reservations")
         query += " WHERE r.class_date >= %s"
         params = [today]
     elif filter_option == 'yesterday_reservations':
+        print("Filtro: Yesterday reservations")
         yesterday = (now - timedelta(days=1)).date().isoformat()
         query += " WHERE r.created_at >= %s"
         params = [yesterday]
     elif filter_option == 'all':
-        params = []
+        print("Filtro: All reservations")
+        pass
+    else:
+        print(f"❌ Opción de filtro no válida: {filter_option}")
    
     query += " ORDER BY r.created_at DESC"
-    print(query)
-    # Ejecutar la consulta
+    print(f"Query ejecutada: {query}")
+    print(f"Parámetros: {params}")
+    
     try:
-        
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(query,params)
+        cursor.execute(query, params)
         results = cursor.fetchall()
+        print(f"✅ Resultados obtenidos: {len(results)} filas")
+        conn.close()
         return results
     
     except Exception as e:
-        print(f"Error al ejecutar la consulta: {str(e)}")
-        # También puedes registrar el error en un archivo log
+        print(f"❌ Error al ejecutar la consulta: {str(e)}")
         return None
         
