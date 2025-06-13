@@ -21,6 +21,25 @@ def get_variables_info():
         'pg_pwd_length': len(pg_pwd) if pg_pwd else 0
     }
 
+def test_connection_only():
+    """Probar solo la conexión sin queries"""
+    try:
+        print(f"Intentando conectar a {pg_host}:{pg_port}")
+        conn = psycopg2.connect(
+            host=pg_host,
+            port=int(pg_port),
+            database=pg_database,
+            user=pg_user,
+            password=pg_pwd,
+            connect_timeout=10  # Timeout de 10 segundos
+        )
+        print("✅ Conexión establecida")
+        conn.close()
+        return {"success": True, "message": "Conexión exitosa"}
+    except Exception as e:
+        print(f"❌ Error de conexión: {e}")
+        return {"success": False, "error": str(e)}
+
 def get_db_connection():
     pg_host = "crossover.proxy.rlwy.net"
     pg_user = "postgres"
