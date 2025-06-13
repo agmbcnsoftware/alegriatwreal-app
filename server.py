@@ -27,10 +27,19 @@ def home():
 
 @app.route("/n8nreservations")
 def n8nreservations():
+    print("=== Iniciando ruta n8nreservations ===")
     filter_option = request.args.get("filter", "next_reservations")
-    reservations = pgdb.get_filtered_reservations(filter_option)
-    return render_template("n8nreservations.html", reservations=reservations, filter_option=filter_option)
-
+    print(f"Filter option: {filter_option}")
+    
+    try:
+        print("Intentando obtener reservations...")
+        reservations = pgdb.get_filtered_reservations(filter_option)
+        print(f"Reservations obtenidas: {len(reservations) if reservations else 'None'}")
+        return render_template("n8nreservations.html", reservations=reservations, filter_option=filter_option)
+    except Exception as e:
+        print(f"ERROR en n8nreservations: {e}")
+        return f"Error: {e}", 500
+        
 @app.route("/n8nmessages")
 def n8nmessages():
     filter_option = request.args.get("filter", "today")
