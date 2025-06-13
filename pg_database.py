@@ -11,13 +11,14 @@ pg_port = os.getenv("PG_PORT")
 pg_database = os.getenv("PG_DATABASE", "railway")  # Por defecto 'railway'
 
 def get_db_connection():
-     print(f"=== DEBUGGING VARIABLES ===")
+    print(f"=== DEBUGGING VARIABLES ===")
     print(f"PG_HOST: '{pg_host}' (tipo: {type(pg_host)})")
     print(f"PG_PORT: '{pg_port}' (tipo: {type(pg_port)})")
     print(f"PG_USER: '{pg_user}' (tipo: {type(pg_user)})")
     print(f"PG_DATABASE: '{pg_database}' (tipo: {type(pg_database)})")
     print(f"PG_PWD existe: {bool(pg_pwd)} (longitud: {len(pg_pwd) if pg_pwd else 0})")
     print(f"=== FIN DEBUG ===")
+
     try:
         conn = psycopg2.connect(
             host=pg_host,
