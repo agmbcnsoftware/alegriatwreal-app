@@ -1,5 +1,4 @@
-import psycopg2
-from psycopg2 import pool
+import pg8000.native
 from datetime import datetime, timedelta, date
 import os
 
