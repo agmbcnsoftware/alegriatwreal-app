@@ -21,17 +21,7 @@ pgdb = pg_database
 def home():
     return render_template("index.html")
 
-@app.route("/test-query")
-def test_query():
-    try:
-        result = pgdb.test_simple_query()
-        if result["success"]:
-            tables_html = "<br>".join([str(table[0]) for table in result["tables"]])
-            return f"<h1>✅ Query exitosa</h1><h3>Tablas en esquema 'Alegria':</h3>{tables_html}"
-        else:
-            return f"<h1>❌ Error en query: {result['error']}</h1>"
-    except Exception as e:
-        return f"<h1>❌ Error: {e}</h1>"
+
 
 @app.route("/test-connection")
 def test_connection():
@@ -44,30 +34,6 @@ def test_connection():
     except Exception as e:
         return f"<h1>❌ Error: {e}</h1>"
 
-@app.route("/test-pgdb")
-def test_pgdb():
-    try:
-        print("=== PROBANDO MÓDULO PGDB ===")
-        vars_info = pgdb.get_variables_info()
-        
-        html = f"""
-        <h1>Variables desde pg_database.py</h1>
-        <ul>
-            <li><b>Host:</b> {vars_info['pg_host']}</li>
-            <li><b>User:</b> {vars_info['pg_user']}</li>
-            <li><b>Port:</b> {vars_info['pg_port']}</li>
-            <li><b>Database:</b> {vars_info['pg_database']}</li>
-            <li><b>Password set:</b> {vars_info['pg_pwd_set']}</li>
-            <li><b>Password length:</b> {vars_info['pg_pwd_length']}</li>
-        </ul>
-        """
-        return html
-        
-    except Exception as e:
-        print(f"❌ Error con módulo pgdb: {e}")
-        return f"<h1>❌ Error: {e}</h1>"
-
-@app.route("/test-db")
 def test_db():
     try:
         print("=== PROBANDO CONEXIÓN DB ===")
@@ -99,18 +65,6 @@ def n8nmessages():
     except Exception as e:
         print(f"Error en test mensajes: {e}")
         return f"Error: {e}", 500
-
-# ============ FUNCIONES AUXILIARES ============
-
-def normalize_phone_number(phone):
-    """Normaliza el número de teléfono"""
-    phone = str(phone).strip().replace(" ", "")
-    if len(phone) == 9 and phone.isdigit():
-        return f"whatsapp:+34{phone}"
-    elif phone.startswith("+"):
-        return f"whatsapp:{phone}"
-    else:
-        return None
 
 # ============ CONFIGURACIÓN PARA RAILWAY ============
 
