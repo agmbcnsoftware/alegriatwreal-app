@@ -21,46 +21,12 @@ def get_variables_info():
         'pg_pwd_length': len(pg_pwd) if pg_pwd else 0
     }
 
-def test_connection_only():
-    """Probar solo la conexión sin queries"""
-    try:
-        print(f"Intentando conectar a {pg_host}:{pg_port}")
-        conn = psycopg2.connect(
-            host=pg_host,
-            port=int(pg_port),
-            database=pg_database,
-            user=pg_user,
-            password=pg_pwd,
-            connect_timeout=10  # Timeout de 10 segundos
-        )
-        print("✅ Conexión establecida")
-        conn.close()
-        return {"success": True, "message": "Conexión exitosa"}
-    except Exception as e:
-        print(f"❌ Error de conexión: {e}")
-        return {"success": False, "error": str(e)}
-        
-def test_simple_query():
-    """Probar una query simple para ver si la DB responde"""
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Query simple para ver qué tablas hay
-        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'Alegria';")
-        tables = cursor.fetchall()
-        
-        conn.close()
-        return {"success": True, "tables": tables}
-    except Exception as e:
-        print(f"❌ Error en query: {e}")
-        return {"success": False, "error": str(e)}
         
 def get_db_connection():
     pg_host = "crossover.proxy.rlwy.net"
     pg_user = "postgres"
     pg_pwd = "kNcuqlRsCPWmtqiMzDtmxhhyTYomOjTt"
-    pg_port = "5432"
+    pg_port = "55419"
     pg_database = "railway"
     print(f"=== DEBUGGING VARIABLES ===")
     print(f"PG_HOST: '{pg_host}' (tipo: {type(pg_host)})")
@@ -71,12 +37,9 @@ def get_db_connection():
     print(f"=== FIN DEBUG ===")
 
     try:
-        conn = psycopg2.connect(
-            host=pg_host,
-            port=pg_port,
-            database=pg_database,
-            user=pg_user,
-            password=pg_pwd
+        conn = pg8000.native.Connection(
+        host=pg_host, port=pg_port, database=pg_database,
+        user=pg_user, password=pg_password
         )
         print("✅ Conexión establecida exitosamente")
         
